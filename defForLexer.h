@@ -2,7 +2,14 @@
 #define DEFFORLEXER_H
 
 
-#define MAX_LEXEME_LEN  10
+#define LEXEME_MAX_LEN 100
+#define BUFFER_SIZE 10000
+
+int retractCount;
+int lineNumber;
+int dfaState;
+char[LEXEME_MAX_LEN] lexeme;
+
 
 
 typedef enum {
