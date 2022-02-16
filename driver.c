@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include "defForLexer.h"
 
 
 int main()
