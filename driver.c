@@ -1,9 +1,13 @@
 #include<stdio.h>
 #include "defForLexer.h"
+#include "lexer.h"
 
 
 int main()
 {
-    printf("hello world");
+    FILE *sourceCode;
+    sourceCode =fopen("sourceCode.txt","r");
+    intializeLexer(sourceCode);
+    fclose(sourceCode);
     return 0;
 }
