@@ -2,9 +2,8 @@
 #define LEXER_H
 
 #include "defForLexer.h"
-#include <stdio.h>
 
-
+TOKEN makeToken();
 
 
 #endif
