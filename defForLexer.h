@@ -10,6 +10,8 @@
 int retractCount;
 int lineNumber;
 int dfaState;
+int forwardBufferPointer;
+int lexemeBeginPointer;
 char lexeme[LEXEME_MAX_LEN];
 char buffer[BUFFER_SIZE];
 
