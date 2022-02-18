@@ -26,8 +26,17 @@ void populateBuffer()
 {
     //fread(&buffer[forwardBufferPointer], 1, BUFFER_SIZE / 2, sourceCode);
     //shreyas will implement rest
-    //suppose if lexeme begin is at 5 and forward is at 10 , Now if the populate fxn is called then all the data
-    //from index 5 to 10 should shift to 0 to 4 and now from index 5 new data from source code needs to added
+    int s = 0;
+    while(lexemeBeginPointer < BUFFER_SIZE){
+        buffer[s++] = buffer[lexemeBeginPointer];
+        lexemeBeginPointer++;
+    }
+    forwardBufferPointer = s;
+    lexemeBeginPointer = 0;
+    int n = fread(&buffer[forwardBufferPointer], 1, BUFFER_SIZE - s, sourceCode);
+    if(n != BUFFER_SIZE - s){
+        buffer[forwardBufferPointer + n] = EOF;
+    }
 }
 
 void intializeLexer(FILE *inputFile)
