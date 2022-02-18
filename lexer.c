@@ -42,3 +42,19 @@ void intializeLexer(FILE *sourceCode)
 }
 
 
+char getCharFromBuffer(FILE *sourceCode)
+{
+    if(forwardBufferPointer == BUFFER_SIZE-1)
+    {
+        populateBuffer(sourceCode);
+    }
+
+    forwardBufferPointer++;
+    return buffer[forwardBufferPointer];
+
+}
+
+void retract(int retractNum)
+{
+    forwardBufferPointer -= retractNum;
+}
