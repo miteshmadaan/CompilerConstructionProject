@@ -31,11 +31,11 @@ void populateBuffer()
         buffer[s++] = buffer[lexemeBeginPointer];
         lexemeBeginPointer++;
     }
-    forwardBufferPointer = s;
+    forwardBufferPointer = s-1;
     lexemeBeginPointer = 0;
-    int n = fread(&buffer[forwardBufferPointer], 1, BUFFER_SIZE - s, sourceCode);
+    int n = fread(&buffer[s], 1, BUFFER_SIZE - s, sourceCode);
     if(n != BUFFER_SIZE - s){
-        buffer[forwardBufferPointer + n] = EOF;
+        buffer[s + n] = EOF;
     }
 }
 
