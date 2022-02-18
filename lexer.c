@@ -48,9 +48,9 @@ char getCharFromBuffer(FILE *sourceCode)
     {
         populateBuffer(sourceCode);
     }
-
+    char ch = buffer[forwardBufferPointer];
     forwardBufferPointer++;
-    return buffer[forwardBufferPointer];
+    return ch;
 
 }
 
