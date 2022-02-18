@@ -42,6 +42,23 @@ void intializeLexer(FILE *inputFile)
     populateBuffer(sourceCode);
 }
 
+char getCharFromBuffer()
+{
+    if(forwardBufferPointer == BUFFER_SIZE-1)
+    {
+        populateBuffer(sourceCode);
+    }
+
+    char ch = buffer[forwardBufferPointer];
+    forwardBufferPointer++;
+    return ch;
+}
+
+void retract(int retractNum)
+{
+    forwardBufferPointer -= retractNum;
+}
+
 //Contains DFA
 TOKEN getNextTokenFromDFA(){
     char ch;
