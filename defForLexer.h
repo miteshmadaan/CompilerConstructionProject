@@ -14,7 +14,7 @@ int forwardBufferPointer;
 int lexemeBeginPointer;
 char lexeme[LEXEME_MAX_LEN];
 char buffer[BUFFER_SIZE];
-
+FILE *sourceCode;
 
 typedef enum {
 #include "tokenTypes.txt"

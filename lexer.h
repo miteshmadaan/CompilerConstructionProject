@@ -5,10 +5,10 @@
 
 TOKEN makeToken();
 void intializeLexer(FILE *sourceCode);
-void tokenizeSource(FILE *sourceCode);//Calls the DFA
-char getCharFromBuffer(FILE *sourceCode);
-TOKEN getNextTokenFromDFA(FILE *sourceCode);//Contains DFA
-void populateBuffer(FILE *sourceCode);
+void tokenizeSource();//Calls the DFA
+char getCharFromBuffer();
+TOKEN getNextTokenFromDFA();//Contains DFA
+void populateBuffer();
 void retract(int retractNum);
 
 
