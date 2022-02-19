@@ -454,4 +454,5 @@ TOKEN getNextTokenFromDFA(){
                 return makeToken(TK_ERROR);
                 break;    
         }
+    }
 }
