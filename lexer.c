@@ -10,7 +10,7 @@
 
 
 //This function is called when the dfa identifies a lexeme as toke and now needs to return it as token struct
-TOKEN makeToken()
+TOKEN makeToken(tokenType tokenType)
 {
     TOKEN token;
     token.lineNumber = lineNumber;
@@ -71,9 +71,7 @@ void retract(int retractNum)
 //Contains DFA
 TOKEN getNextTokenFromDFA(){
     char ch;
-    TOKEN token;
     while(1){
-        token.lineNumber = lineNumber;
 
         switch(dfaState){
             //cases here!
@@ -168,16 +166,122 @@ TOKEN getNextTokenFromDFA(){
                     dfaState = 61; //error report state new state
                 }
                 break;
-                
-                
-                
-                
+            
+            case 24:
+                dfaState = 0;
+                return makeToken(TK_SQL);
+                break;
+
+            case 25:
+                dfaState = 0;
+                return makeToken(TK_SQR);
+                break;  
+
+            case 26:
+                dfaState = 0;
+                return makeToken(TK_OP);
+                break;
+
+            case 27:
+                dfaState = 0;
+                return makeToken(TK_CL);
+                break;  
+           
+            case 28:
+                dfaState = 0;
+                return makeToken(TK_COMMA);
+                break;
+            
+            case 29:
+                dfaState = 0;
+                return makeToken(TK_SEM);
+                break;
+            
+            case 30:
+                dfaState = 0;
+                return makeToken(TK_COLON);
+                break;
+            
+            case 31:
+                dfaState = 0;
+                return makeToken(TK_DOT);
+                break;
+
+            case 32:
+                ch = getCharFromBuffer();
+                if(ch=='\n'){
+                    lineNumber++;
+                    dfaState = 33;
+                }
+                else{
+                    dfaState = 32;
+                }
+                break;
+
+            case 33:
+                dfaState = 0;
+                break;
+
+            case 34:
+                if( (ch==' ') || (ch=='\t') || (ch=='\n') || (ch=='\r') ){
+                    dfaState = 34;
+                    if(ch=='\n'){
+                        lineNumber++;
+                    }
+                }
+                else{
+                    dfaState = 35;   
+                }
+                break;
+            
+            case 35:
+                retract(1);
+                dfaState = 0;
+                break;
+
+            case 36:
+                ch = getCharFromBuffer();
+                if(ch =='='){
+                    dfaState = 37;
+                }
+                else{
+                    retract(1);
+                    dfaState = 61; //error report state
+                }
+                break;
+            
+            case 37:
+                dfaState = 0;
+                return makeToken(TK_NE);
+                break;
+            
+            case 38:
+                ch = getCharFromBuffer();
+                if(ch =='='){
+                    dfaState = 39;
+                }
+                else{
+                    dfaState = 40;
+                }
+                break;
+            
+            case 39:
+                dfaState = 0;
+                return makeToken(TK_GE);
+                break;
+            
+            case 40:
+                retract(1);
+                dfaState = 0;
+                return makeToken(TK_GT);
+                break;
+
+
+
+
 
         }
 
-
-
-    }
 
 
 }
