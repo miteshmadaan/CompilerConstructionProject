@@ -3,7 +3,7 @@
 
 #include "defForLexer.h"
 
-TOKEN makeToken();
+TOKEN makeToken(tokenType tokenType);
 void intializeLexer(FILE *sourceCode);
 void tokenizeSource();//Calls the DFA
 char getCharFromBuffer();

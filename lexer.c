@@ -10,7 +10,7 @@
 
 
 //This function is called when the dfa identifies a lexeme as toke and now needs to return it as token struct
-TOKEN makeToken()
+TOKEN makeToken(tokenType tokenType)
 {
     TOKEN token;
     token.lineNumber = lineNumber;
@@ -71,10 +71,7 @@ void retract(int retractNum)
 //Contains DFA
 TOKEN getNextTokenFromDFA(){
     char ch;
-    TOKEN token;
-    int tokenReady = 0;
     while(1){
-        token.lineNumber = lineNumber;
 
         switch(dfaState){
             //cases here!
@@ -173,50 +170,42 @@ TOKEN getNextTokenFromDFA(){
                 
             case 24:
                 dfaState = 0;
-                token.tokenType = TK_SQL;
-                tokenReady = 1;
+                return makeToken(TK_SQL);
                 break;
 
             case 25:
                 dfaState = 0;
-                token.tokenType = TK_SQR;
-                tokenReady = 1;
+                return makeToken(TK_SQR);
                 break;  
 
             case 26:
                 dfaState = 0;
-                token.tokenType = TK_OP;
-                tokenReady = 1;
+                return makeToken(TK_OP);
                 break;
 
             case 27:
                 dfaState = 0;
-                token.tokenType = TK_CL;
-                tokenReady = 1;
+                return makeToken(TK_CL);
                 break;  
            
             case 28:
                 dfaState = 0;
-                token.tokenType = TK_COMMA;
-                tokenReady = 1;
+                return makeToken(TK_COMMA);
                 break;
             
             case 29:
                 dfaState = 0;
-                token.tokenType = TK_SEM;
-                tokenReady = 1;
+                return makeToken(TK_SEM);
                 break;
             
             case 30:
                 dfaState = 0;
-                token.tokenType = TK_COLON;
-                tokenReady = 1;
+                return makeToken(TK_COLON);
                 break;
             
             case 31:
                 dfaState = 0;
-                token.tokenType = TK_DOT;
-                tokenReady = 1;
+                return makeToken(TK_DOT);
                 break;
 
             case 32:
@@ -264,8 +253,7 @@ TOKEN getNextTokenFromDFA(){
             
             case 37:
                 dfaState = 0;
-                token.tokenType = TK_NE;
-                tokenReady = 1;
+                return makeToken(TK_NE);
                 break;
             
             case 38:
@@ -280,15 +268,13 @@ TOKEN getNextTokenFromDFA(){
             
             case 39:
                 dfaState = 0;
-                token.tokenType = TK_GE;
-                tokenReady = 1;
+                return makeToken(TK_GE);
                 break;
             
             case 40:
                 retract(1);
                 dfaState = 0;
-                token.tokenType = TK_GT;
-                tokenReady = 1;
+                return makeToken(TK_GT);
                 break;
 
 
@@ -301,9 +287,6 @@ TOKEN getNextTokenFromDFA(){
             default:
                 break;   
         }//End of switch-case
-
-        if(tokenReady ==1){}
-            return token;
         
     }//End of while loop
 
