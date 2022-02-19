@@ -77,7 +77,6 @@ TOKEN getNextTokenFromDFA(){
             //cases here!
 
             case 0:
-                ch = getCharFromBuffer();
                 if((ch=='a') || ( ('e'<= ch) && (ch <= 'z')  ) ){
                     dfaState = 1;
                 }
@@ -164,10 +163,10 @@ TOKEN getNextTokenFromDFA(){
                     dfaState = 60;
                 }
                 else{
-                    dfaState = 61; //error report state
+                    dfaState = 61; //error report state new state
                 }
                 break;
-                
+            
             case 24:
                 dfaState = 0;
                 return makeToken(TK_SQL);
@@ -281,14 +280,8 @@ TOKEN getNextTokenFromDFA(){
 
 
 
-            case 61:
-                //report whatever from lexeme begin to just before forward pointer as an error!!
+        }
 
-            default:
-                break;   
-        }//End of switch-case
-        
-    }//End of while loop
 
 
 }
