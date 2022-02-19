@@ -19,7 +19,12 @@ FILE *sourceCode;
 typedef enum {
 #include "tokenTypes.txt"
 } tokenType;
-
+/*No error in this piece of code below:
+typedef enum {
+#include "tokenTypes.txt",
+numToken
+} tokenType;
+*/
 typedef enum {
   INT,
   FLOAT,
