@@ -16,10 +16,22 @@ TOKEN makeToken(tokenType tokenType)
     token.lineNumber = lineNumber;
 
     //decide the lexemtype, tokenType and then store the lexeme depending on the state number
-
-
+    /*
+    categories: 
+    TK_FIELD conflicts with keywords
+    TK_NUM //int lexeme
+    TK_RNUM //float lexeme
+    TK_FUNID clashes with _main
+    TK_EOF
+    TK_ERROR
+    all others //default case
+    */
 
     return token;
+}
+
+void tokenizeSource(){
+
 }
 
 void populateBuffer()
@@ -434,11 +446,12 @@ TOKEN getNextTokenFromDFA(){
                 break;
 
             case 60:
-                //needs to be implemented
+                return makeToken(TK_EOF);
                 break;
 
             case 61:
-                //needs to be implemented
+                dfaState = 0;
+                return makeToken(TK_ERROR);
                 break;    
         }
 }
