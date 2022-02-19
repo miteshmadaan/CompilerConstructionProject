@@ -276,12 +276,169 @@ TOKEN getNextTokenFromDFA(){
                 return makeToken(TK_GT);
                 break;
 
+            case 41:
+                ch = getCharFromBuffer();
+                if(ch == '=')
+                {
+                    dfaState = 43;
+                }
+                else if(ch == '-')
+                {
+                    dfaState = 44;
+                }
+                else
+                {
+                    retract(1);
+                    dfaState = 61;
+                }
+                break;
+            
+            case 42:
+                retract(1);
+                dfaState = 0;
+                return makeToken(TK_LT);
+                break;
 
+            case 43:
+                dfaState = 0;
+                return makeToken(TK_LE);
+                break;
 
+            case 44:
+                ch = getCharFromBuffer();
+                if(ch == '-')
+                {
+                    dfaState = 45;
+                }
+                else
+                {
+                    dfaState = 61;
+                }
+                break;
 
+            case 45:
+                ch = getCharFromBuffer();
+                if(ch == '-')
+                {
+                    dfaState = 46;
+                }
+                else
+                {
+                    dfaState = 61;
+                }
+                break;
 
+            case 46:
+                dfaState = 0;
+                return makeToken(TK_ASSIGNOP);
+                break;
+
+            case 47:
+                ch = getCharFromBuffer();
+                if(ch == '=')
+                {
+                    dfaState = 48;
+                }
+                else
+                {
+                    dfaState = 61;
+                }
+                break;
+
+            case 48:
+                dfaState = 0;
+                return makeToken(TK_EQ);
+                break;
+
+            case 49:
+                ch = getCharFromBuffer();
+                if(ch == '&')
+                {
+                    dfaState = 50;
+                }
+                else
+                {
+                    dfaState = 61;
+                }
+                break;
+
+            case 50:
+                ch = getCharFromBuffer();
+                if(ch == '&')
+                {
+                    dfaState = 51;
+                }
+                else
+                {
+                    dfaState = 61;
+                }
+                break;
+
+            case 51:
+                dfaState = 0;
+                return makeToken(TK_AND);
+                break;
+            
+            case 52:
+                ch = getCharFromBuffer();
+                if(ch == '@')
+                {
+                    dfaState = 51;
+                }
+                else
+                {
+                    dfaState = 61;
+                }
+                break;
+
+            case 53:
+                ch = getCharFromBuffer();
+                if(ch == '@')
+                {
+                    dfaState = 51;
+                }
+                else
+                {
+                    dfaState = 61;
+                }
+                break;
+
+            case 54:
+                dfaState = 0;
+                return makeToken(TK_OR);
+                break;
+
+            case 55:
+                dfaState = 0;
+                return makeToken(TK_NOT);
+                break;
+
+            case 56:
+                dfaState = 0;
+                return makeToken(TK_PLUS);
+                break;
+
+            case 57:
+                dfaState = 0;
+                return makeToken(TK_MINUS);
+                break;
+
+            case 58:
+                dfaState = 0;
+                return makeToken(TK_MUL);
+                break;
+
+            case 59:
+                dfaState = 0;
+                return makeToken(TK_DIV);
+                break;
+
+            case 60:
+                //needs to be implemented
+                break;
+
+            case 61:
+                //needs to be implemented
+                break;    
         }
-
-
-
 }
