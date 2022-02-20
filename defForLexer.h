@@ -4,7 +4,7 @@
 #include "driver.h"
 
 
-#define LEXEME_MAX_LEN 100
+#define LEXEME_MAX_LEN 30
 #define BUFFER_SIZE 10000
 
 int retractCount;
