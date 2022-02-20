@@ -89,6 +89,7 @@ TOKEN getNextTokenFromDFA(){
             //cases here!
 
             case 0:
+                ch = getCharFromBuffer();
                 if((ch=='a') || ( ('e'<= ch) && (ch <= 'z')  ) ){
                     dfaState = 1;
                 }
@@ -232,6 +233,7 @@ TOKEN getNextTokenFromDFA(){
 
             case 33:
                 dfaState = 0;
+                return makeToken(TK_COMMENT);
                 break;
 
             case 34:
@@ -300,8 +302,7 @@ TOKEN getNextTokenFromDFA(){
                 }
                 else
                 {
-                    retract(1);
-                    dfaState = 61;
+                    dfaState = 42;
                 }
                 break;
             
@@ -324,7 +325,9 @@ TOKEN getNextTokenFromDFA(){
                 }
                 else
                 {
-                    dfaState = 61;
+                    retract(2);
+                    dfaState = 0;
+                    return makeToken(TK_LT);
                 }
                 break;
 
@@ -336,7 +339,9 @@ TOKEN getNextTokenFromDFA(){
                 }
                 else
                 {
-                    dfaState = 61;
+                    retract(3);
+                    dfaState = 0;
+                    return makeToken(TK_LT);
                 }
                 break;
 
@@ -353,6 +358,7 @@ TOKEN getNextTokenFromDFA(){
                 }
                 else
                 {
+                    retract(1);
                     dfaState = 61;
                 }
                 break;
@@ -370,6 +376,7 @@ TOKEN getNextTokenFromDFA(){
                 }
                 else
                 {
+                    retract(1);
                     dfaState = 61;
                 }
                 break;
@@ -382,6 +389,7 @@ TOKEN getNextTokenFromDFA(){
                 }
                 else
                 {
+                    retract(1);
                     dfaState = 61;
                 }
                 break;
@@ -395,10 +403,11 @@ TOKEN getNextTokenFromDFA(){
                 ch = getCharFromBuffer();
                 if(ch == '@')
                 {
-                    dfaState = 51;
+                    dfaState = 53;
                 }
                 else
                 {
+                    retract(1);
                     dfaState = 61;
                 }
                 break;
@@ -407,10 +416,11 @@ TOKEN getNextTokenFromDFA(){
                 ch = getCharFromBuffer();
                 if(ch == '@')
                 {
-                    dfaState = 51;
+                    dfaState = 54;
                 }
                 else
                 {
+                    retract(1);
                     dfaState = 61;
                 }
                 break;
