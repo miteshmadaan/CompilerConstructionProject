@@ -178,6 +178,241 @@ TOKEN getNextTokenFromDFA(){
                     dfaState = 61; //error report state new state
                 }
                 break;
+                
+            case 1:
+                ch = getCharFromBuffer();
+                if((ch >= 'a') && (ch <= 'z')){
+                    dfaState = 1;
+                }
+                else{
+                    dfaState = 2;
+                }
+                break;
+
+            case 2:
+                retract(1);
+                dfaState = 0;
+                //lexemeBeginPointer = forwardBufferPointer;
+                return makeToken(TK_FIELDID);
+                break;
+            
+            case 3:
+                ch = getCharFromBuffer();
+                if((ch >= 'a') && (ch <= 'z')){
+                    dfaState = 1;
+                }
+                else if((ch >= '2') && (ch <= '7')){
+                    dfaState = 4;
+                }
+                else{
+                    retract(1);
+                    dfaState = 61;
+                }
+                break;
+
+            case 4:
+                ch = getCharFromBuffer();
+                if((ch >= 'b') && (ch <= 'd')){
+                    dfaState = 4;
+                }
+                else if((ch >= '2') && (ch <= '7')){
+                    dfaState = 5;
+                }
+                else{
+                    dfaState = 6;
+                }
+                break;
+
+            case 5:
+                ch = getCharFromBuffer();
+                if((ch >= '2') && (ch <= '7')){
+                    dfaState = 5;
+                }
+                else{
+                    dfaState = 6;
+                }
+                break;
+
+            case 6:
+                retract(1);
+                dfaState = 0;
+                //lexemeBeginPointer = forwardBufferPointer;
+                return makeToken(TK_ID);
+                break;
+
+            case 7:
+                ch = getCharFromBuffer();
+                if((ch >= '0') && (ch <= '9')){
+                    dfaState = 7;
+                }
+                else if(ch == '.'){
+                    dfaState = 9;
+                }
+                else{
+                    dfaState = 8;
+                }
+                break;
+
+            case 8:
+                retract(1);
+                dfaState = 0;
+                //lexemeBeginPointer = forwardBufferPointer;
+                return makeToken(TK_NUM);
+                break;
+
+            case 9:
+                ch = getCharFromBuffer();
+                if((ch >= '0') && (ch <= '9')){
+                    dfaState = 10;
+                }
+                else{
+                    retract(2);
+                    dfaState = 0;
+                    return makeToken(TK_NUM);
+                }
+                break;
+
+    
+            case 10:
+                ch = getCharFromBuffer();;
+                if((ch >= '0') && (ch <= '9')){
+                    dfaState = 11;
+                }
+                else{
+                    retract(3);
+                    dfaState = 0;
+                    return makeToken(TK_NUM);
+                }
+                break;
+
+            case 11:
+                ch = getCharFromBuffer();
+                if(ch == 'E'){
+                    dfaState = 12;
+                }
+                else{
+                    dfaState = 16;
+                }
+                break;
+            
+            case 12:
+                ch = getCharFromBuffer();
+                if((ch == '+') || (ch == '-')){
+                    dfaState = 13;
+                }
+                else if((ch >= '0') && (ch <= '9')){
+                    dfaState = 14;
+                }
+                else{
+                    retract(2);
+                    dfaState = 0;
+                    return makeToken(TK_RNUM);
+                }
+                break;
+
+            case 13:
+                ch = getCharFromBuffer();
+                if((ch >= '0') && (ch <= '9')){
+                    dfaState = 14;
+                }
+                else{
+                    retract(3);
+                    dfaState = 0;
+                    return makeToken(TK_RNUM);
+                }
+                break;
+
+            case 14: //Special Case
+                ch = getCharFromBuffer();
+                if((ch >= '0') && (ch <= '9')){
+                    dfaState = 15;
+                }
+                else{
+                    while(buffer[forwardBufferPointer] != 'E'){
+                        retract(1);
+                    }
+                    dfaState = 0;
+                    return makeToken(TK_RNUM);
+                }
+                break;
+
+            case 15:
+                ch = getCharFromBuffer();
+                dfaState = 16;
+                break;
+            
+            case 16:
+                retract(1);
+                dfaState = 0;
+                return makeToken(TK_RNUM);
+                break;
+
+            case 17:
+                ch = getCharFromBuffer();
+                if(((ch >= 'a') && (ch <= 'z')) || ((ch >= 'A') && (ch <= 'Z'))){
+                    dfaState = 18;
+                }
+                else{
+                    retract(2);
+                    dfaState = 61;
+                } 
+                break;
+            
+            case 18:
+                ch = getCharFromBuffer();
+                if(((ch >= 'a') && (ch <= 'z')) || ((ch >= 'A') && (ch <= 'Z'))){
+                    dfaState = 18;
+                }
+                else if((ch >= '0') && (ch <= '9')){
+                    dfaState = 19;
+                }
+                else{
+                    dfaState = 20;
+                }
+                break;
+
+            case 19:
+                ch = getCharFromBuffer();
+                if((ch >= '0') && (ch <= '9')){
+                    dfaState = 19;
+                }
+                else{
+                    dfaState = 20;
+                }
+                break;
+            
+            case 20:
+                retract(1);
+                dfaState = 0;
+                return makeToken(TK_FUNID);
+                break;
+
+            case 21:
+                ch = getCharFromBuffer();
+                if((ch >= 'a') && (ch <= 'z')){
+                    dfaState = 22;
+                }
+                else{
+                    retract(2);
+                    dfaState = 61;
+                }
+                break;
+
+            case 22:
+                ch = getCharFromBuffer();
+                if((ch >= 'a') && (ch <= 'z')){
+                    dfaState = 22;
+                }
+                else{
+                    dfaState = 23;
+                }
+                break;
+
+            case 23:
+                retract(1);
+                dfaState = 0;
+                return makeToken(TK_RUID);
+                break;
             
             case 24:
                 dfaState = 0;
