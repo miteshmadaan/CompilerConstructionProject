@@ -8,6 +8,58 @@
 // #include <errno.h>
 // #include <stdbool.h>
 
+int power(int base, int exponent){
+    int ans = 1;
+    while(exponent >= 1){
+        ans = ans * base;
+    }
+    return ans;
+}
+
+double customAtof(char* str){
+    double value=0.0;
+    double nonExponentialPart=0.0;
+    double exponentialPart=0.0;
+    int factor = 1;
+    char esign;
+
+    char* chptr = str;
+    while((*chptr!='.')){
+        nonExponentialPart = nonExponentialPart*10 + (*chptr - '0');
+        chptr++;
+    }
+    chptr++;
+    while((*chptr != 'E') && (*chptr != '\0')){
+        nonExponentialPart = nonExponentialPart*10 + (*chptr - '0');
+        factor*=10;
+        chptr++;
+    }
+    nonExponentialPart = nonExponentialPart/factor;
+
+    if(chptr == '\0')   return nonExponentialPart;
+    chptr++;
+
+    if((*chptr == '+') || (*chptr == '-')){
+        esign = *chptr;
+        chptr++;
+    }
+    else{
+        esign = '+';
+    }
+
+    while(*chptr != '\0'){
+        exponentialPart = exponentialPart*10 + (*chptr - '0');
+        chptr++;
+    }
+    
+    if(esign == '-'){
+        value = nonExponentialPart*power(10,exponentialPart);
+    }else{
+        value = nonExponentialPart/power(10,exponentialPart);
+    }
+
+    return value;
+}
 
 //This function is called when the dfa identifies a lexeme as toke and now needs to return it as token struct
 TOKEN makeToken(tokenType tokenTypeInput)
@@ -102,7 +154,7 @@ TOKEN makeToken(tokenType tokenTypeInput)
         case TK_RNUM:
             token.tokenType = TK_NUM;
             token.lexemeType = FLOAT;
-            token.floatLexeme = atof(lexeme);//need special attention for E types
+            token.floatLexeme = customAtof(lexeme);//need special attention for E types
             return token;
             break;
 
