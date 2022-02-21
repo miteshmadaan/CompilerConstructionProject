@@ -64,7 +64,7 @@ TOKEN makeToken(tokenType tokenTypeInput)
     switch(tokenTypeInput){
 
         case TK_FIELDID:
-            if(lexemeSize > 30){
+            if(lexemeSize > 20){
                 token.tokenType = TK_ERROR;
             }
             else{
@@ -124,7 +124,7 @@ TOKEN makeToken(tokenType tokenTypeInput)
             break;
 
         default:
-            if(lexemeSize > 30){
+            if(lexemeSize > 20){
                 token.tokenType = TK_ERROR;
             }
             else{
