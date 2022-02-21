@@ -205,8 +205,7 @@ TOKEN getNextTokenFromDFA(){
                     dfaState = 4;
                 }
                 else{
-                    retract(1);
-                    dfaState = 61;
+                   dfaState = 2;
                 }
                 break;
 
@@ -353,7 +352,7 @@ TOKEN getNextTokenFromDFA(){
                     dfaState = 18;
                 }
                 else{
-                    retract(2);
+                    retract(1);
                     dfaState = 61;
                 } 
                 break;
@@ -393,7 +392,7 @@ TOKEN getNextTokenFromDFA(){
                     dfaState = 22;
                 }
                 else{
-                    retract(2);
+                    retract(1);
                     dfaState = 61;
                 }
                 break;
