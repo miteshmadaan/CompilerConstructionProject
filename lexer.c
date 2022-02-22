@@ -1,8 +1,8 @@
 #include "driver.h"
 #include "lexer.h"
 
-// #include <stdio.h>
-// #include <stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 // #include <ctype.h>
 // #include <errno.h>
@@ -36,7 +36,7 @@ double customAtof(char* str){
     }
     nonExponentialPart = nonExponentialPart/factor;
 
-    if(chptr == '\0')   return nonExponentialPart;
+    if(*chptr == '\0')   return nonExponentialPart;
     chptr++;
 
     if((*chptr == '+') || (*chptr == '-')){
@@ -68,41 +68,12 @@ TOKEN makeToken(tokenType tokenTypeInput)
     token.lineNumber = lineNumber;
     int lexemeSize=0;
     int ptr = lexemeBeginPointer;
-    //decide the lexemtype, tokenType and then store the lexeme depending on the state number
-    /*
-    categories: 
-    TK_FIELD conflicts with keywords
-    TK_NUM //int lexeme
-    TK_RNUM //float lexeme
-    TK_FUNID clashes with _main
-    TK_EOF
-    TK_ERROR
-    TK_COMMENT
-    all others //default case
-    */
-    if(lexemeBeginPointer<=forwardBufferPointer){
-        lexemeSize = forwardBufferPointer - lexemeBeginPointer;
-        while(ptr<forwardBufferPointer){
+    
+    lexemeSize = forwardBufferPointer - lexemeBeginPointer;
+    while(ptr<forwardBufferPointer){
             if((ptr-lexemeBeginPointer) == LEXEME_MAX_LEN)   break;
             lexeme[ptr-lexemeBeginPointer] = buffer[ptr];
             ptr++;
-        }
-    }
-    else{
-        lexemeSize = forwardBufferPointer + ( BUFFER_SIZE - lexemeBeginPointer);
-        int countUntillNow = 0;
-        while(ptr<BUFFER_SIZE){
-            if((ptr-lexemeBeginPointer) == LEXEME_MAX_LEN)  break;
-            lexeme[ptr-lexemeBeginPointer] = buffer[ptr];
-            ptr++;
-            countUntillNow++;
-        }
-        ptr=0;
-        while(ptr<forwardBufferPointer){
-            if((ptr+countUntillNow) == LEXEME_MAX_LEN)  break;
-            lexeme[ptr+countUntillNow] = buffer[ptr];
-            ptr++;
-        }
     }
     lexemeBeginPointer = forwardBufferPointer;
     
@@ -121,6 +92,7 @@ TOKEN makeToken(tokenType tokenTypeInput)
             }
             else{
                 // token.tokenType = search in lookup table
+                token.tokenType = tokenTypeInput;
             }
             token.lexemeType = STRING;
             strncpy(token.strLexeme, lexeme, LEXEME_MAX_LEN);
