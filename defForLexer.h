@@ -17,8 +17,7 @@ char buffer[BUFFER_SIZE];
 FILE *sourceCode;
 
 typedef enum {
-#include "tokenTypes.txt",
-numToken
+#include "tokenTypes.txt"
 } tokenType;
 
 typedef enum {
