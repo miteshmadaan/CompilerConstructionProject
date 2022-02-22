@@ -3,18 +3,71 @@
 
 // #include <stdio.h>
 // #include <stdlib.h>
-// #include <string.h>
+#include <string.h>
 // #include <ctype.h>
 // #include <errno.h>
 // #include <stdbool.h>
 
+int power(int base, int exponent){
+    int ans = 1;
+    while(exponent >= 1){
+        ans = ans * base;
+    }
+    return ans;
+}
+
+double customAtof(char* str){
+    double value=0.0;
+    double nonExponentialPart=0.0;
+    double exponentialPart=0.0;
+    int factor = 1;
+    char esign;
+
+    char* chptr = str;
+    while((*chptr!='.')){
+        nonExponentialPart = nonExponentialPart*10 + (*chptr - '0');
+        chptr++;
+    }
+    chptr++;
+    while((*chptr != 'E') && (*chptr != '\0')){
+        nonExponentialPart = nonExponentialPart*10 + (*chptr - '0');
+        factor*=10;
+        chptr++;
+    }
+    nonExponentialPart = nonExponentialPart/factor;
+
+    if(chptr == '\0')   return nonExponentialPart;
+    chptr++;
+
+    if((*chptr == '+') || (*chptr == '-')){
+        esign = *chptr;
+        chptr++;
+    }
+    else{
+        esign = '+';
+    }
+
+    while(*chptr != '\0'){
+        exponentialPart = exponentialPart*10 + (*chptr - '0');
+        chptr++;
+    }
+    
+    if(esign == '-'){
+        value = nonExponentialPart*power(10,exponentialPart);
+    }else{
+        value = nonExponentialPart/power(10,exponentialPart);
+    }
+
+    return value;
+}
 
 //This function is called when the dfa identifies a lexeme as toke and now needs to return it as token struct
-TOKEN makeToken(tokenType tokenType)
+TOKEN makeToken(tokenType tokenTypeInput)
 {
     TOKEN token;
     token.lineNumber = lineNumber;
-
+    int lexemeSize=0;
+    int ptr = lexemeBeginPointer;
     //decide the lexemtype, tokenType and then store the lexeme depending on the state number
     /*
     categories: 
@@ -24,10 +77,118 @@ TOKEN makeToken(tokenType tokenType)
     TK_FUNID clashes with _main
     TK_EOF
     TK_ERROR
+    TK_COMMENT
     all others //default case
     */
+    if(lexemeBeginPointer<=forwardBufferPointer){
+        lexemeSize = forwardBufferPointer - lexemeBeginPointer;
+        while(ptr<forwardBufferPointer){
+            if((ptr-lexemeBeginPointer) == LEXEME_MAX_LEN)   break;
+            lexeme[ptr-lexemeBeginPointer] = buffer[ptr];
+            ptr++;
+        }
+    }
+    else{
+        lexemeSize = forwardBufferPointer + ( BUFFER_SIZE - lexemeBeginPointer);
+        int countUntillNow = 0;
+        while(ptr<BUFFER_SIZE){
+            if((ptr-lexemeBeginPointer) == LEXEME_MAX_LEN)  break;
+            lexeme[ptr-lexemeBeginPointer] = buffer[ptr];
+            ptr++;
+            countUntillNow++;
+        }
+        ptr=0;
+        while(ptr<forwardBufferPointer){
+            if((ptr+countUntillNow) == LEXEME_MAX_LEN)  break;
+            lexeme[ptr+countUntillNow] = buffer[ptr];
+            ptr++;
+        }
+    }
+    lexemeBeginPointer = forwardBufferPointer;
+    
+    if(lexemeSize<LEXEME_MAX_LEN){
+            lexeme[lexemeSize] = '\0';
+    }
+    else{
+            lexeme[LEXEME_MAX_LEN-1] = '\0';
+    }
+    
+    switch(tokenTypeInput){
 
-    return token;
+        case TK_FIELDID:
+            if(lexemeSize > 20){
+                token.tokenType = TK_ERROR;
+            }
+            else{
+                // token.tokenType = search in lookup table
+            }
+            token.lexemeType = STRING;
+            strncpy(token.strLexeme, lexeme, LEXEME_MAX_LEN);
+            return token;
+            break;
+
+        case TK_FUNID:
+            if(lexemeSize > 30){
+                token.tokenType = TK_ERROR;
+            }
+            else{
+                if(strcmp(lexeme, "_main") == 0){
+                    token.tokenType = TK_MAIN;
+                }
+                else{
+                    token.tokenType = TK_FUNID;
+                }
+            }
+            token.lexemeType = STRING;
+            strncpy(token.strLexeme, lexeme, LEXEME_MAX_LEN);
+            return token;
+            break;
+
+        case TK_NUM:
+            token.tokenType = TK_NUM;
+            token.lexemeType = INT;
+            token.intLexeme = atoi(lexeme);
+            return token;
+            break;
+
+        case TK_RNUM:
+            token.tokenType = TK_NUM;
+            token.lexemeType = FLOAT;
+            token.floatLexeme = customAtof(lexeme);//need special attention for E types
+            return token;
+            break;
+
+        case TK_ERROR:
+            token.tokenType = TK_ERROR;
+            token.lexemeType = STRING;
+            strncpy(token.strLexeme, lexeme, LEXEME_MAX_LEN);
+            return token;
+            break;
+
+        case TK_COMMENT:
+            token.tokenType = TK_COMMENT;
+            return token;
+            break;
+
+        case TK_EOF:
+            token.tokenType = TK_EOF;
+            return token;
+            break;
+
+        default:
+            if(lexemeSize > 20){
+                token.tokenType = TK_ERROR;
+            }
+            else{
+                token.tokenType = tokenTypeInput;
+            }
+            token.lexemeType = STRING;
+            strncpy(token.strLexeme, lexeme, LEXEME_MAX_LEN);
+            return token;
+            break;
+
+    }//End of switch
+    
 }
 
 void tokenizeSource(){
@@ -89,6 +250,7 @@ TOKEN getNextTokenFromDFA(){
             //cases here!
 
             case 0:
+                ch = getCharFromBuffer();
                 if((ch=='a') || ( ('e'<= ch) && (ch <= 'z')  ) ){
                     dfaState = 1;
                 }
@@ -466,6 +628,7 @@ TOKEN getNextTokenFromDFA(){
 
             case 33:
                 dfaState = 0;
+                return makeToken(TK_COMMENT);
                 break;
 
             case 34:
@@ -534,8 +697,7 @@ TOKEN getNextTokenFromDFA(){
                 }
                 else
                 {
-                    retract(1);
-                    dfaState = 61;
+                    dfaState = 42;
                 }
                 break;
             
@@ -558,7 +720,9 @@ TOKEN getNextTokenFromDFA(){
                 }
                 else
                 {
-                    dfaState = 61;
+                    retract(2);
+                    dfaState = 0;
+                    return makeToken(TK_LT);
                 }
                 break;
 
@@ -570,7 +734,9 @@ TOKEN getNextTokenFromDFA(){
                 }
                 else
                 {
-                    dfaState = 61;
+                    retract(3);
+                    dfaState = 0;
+                    return makeToken(TK_LT);
                 }
                 break;
 
@@ -587,6 +753,7 @@ TOKEN getNextTokenFromDFA(){
                 }
                 else
                 {
+                    retract(1);
                     dfaState = 61;
                 }
                 break;
@@ -604,6 +771,7 @@ TOKEN getNextTokenFromDFA(){
                 }
                 else
                 {
+                    retract(1);
                     dfaState = 61;
                 }
                 break;
@@ -616,6 +784,7 @@ TOKEN getNextTokenFromDFA(){
                 }
                 else
                 {
+                    retract(1);
                     dfaState = 61;
                 }
                 break;
@@ -629,10 +798,11 @@ TOKEN getNextTokenFromDFA(){
                 ch = getCharFromBuffer();
                 if(ch == '@')
                 {
-                    dfaState = 51;
+                    dfaState = 53;
                 }
                 else
                 {
+                    retract(1);
                     dfaState = 61;
                 }
                 break;
@@ -641,10 +811,11 @@ TOKEN getNextTokenFromDFA(){
                 ch = getCharFromBuffer();
                 if(ch == '@')
                 {
-                    dfaState = 51;
+                    dfaState = 54;
                 }
                 else
                 {
+                    retract(1);
                     dfaState = 61;
                 }
                 break;
