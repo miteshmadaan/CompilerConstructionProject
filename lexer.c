@@ -165,6 +165,35 @@ TOKEN makeToken(tokenType tokenTypeInput)
 
 void tokenizeSource(){
 
+    TOKEN tokenFromDfa;
+    // int internalLineNumber = lineNumber;
+    while(1)
+    {
+        tokenFromDfa = getNextTokenFromDFA();
+        printf("Token : %d, " , tokenFromDfa.tokenType);
+        if (tokenFromDfa.tokenType == TK_EOF)
+        {
+            printf("End Of File\nLexical Analysis completed\n");
+            break;
+        }
+        else
+        {
+            if(tokenFromDfa.lexemeType == STRING)
+            {   
+                printf("lexeme : %s, " , tokenFromDfa.strLexeme);
+            }
+            else if(tokenFromDfa.lexemeType == INT)
+            {
+                printf("lexeme : %d, " , tokenFromDfa.intLexeme);
+            }
+            else
+            {
+                printf("lexeme : %f, " , tokenFromDfa.floatLexeme);
+            }
+            printf("Line Number : %d\n" , tokenFromDfa.lineNumber);
+        }
+    }
+
 }
 
 void populateBuffer()
@@ -184,7 +213,7 @@ void populateBuffer()
     }
 }
 
-void intializeLexer(FILE *inputFile)
+void initializeLexer(FILE *inputFile)
 {
     dfaState = 0;
     lineNumber =1;
