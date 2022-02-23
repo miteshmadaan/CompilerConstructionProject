@@ -262,7 +262,7 @@ TOKEN getNextTokenFromDFA(){
                     dfaState = 1;
                 }
                 else if(('b'<=ch) && (ch <= 'd')){
-                    dfaState =2;
+                    dfaState = 3;
                 }
                 else if( (0<= (ch-'0')) && ((ch-'0') <=9) ){
                     dfaState  =7;
@@ -300,11 +300,13 @@ TOKEN getNextTokenFromDFA(){
                 else if(ch=='%'){
                     dfaState = 32;
                 }
-                else if( (ch==' ') || (ch=='\t') || (ch=='\n') || (ch=='\r') ){
+                //need to implement for \r
+                else if( (ch==' ') || (ch=='\t') || (ch=='\n') ){
                     dfaState = 34;
                     if(ch=='\n'){
                         lineNumber++;
                     }
+                    lexemeBeginPointer++;
                 }
                 else if(ch=='!'){
                     dfaState = 36;
@@ -639,11 +641,14 @@ TOKEN getNextTokenFromDFA(){
                 break;
 
             case 34:
-                if( (ch==' ') || (ch=='\t') || (ch=='\n') || (ch=='\r') ){
+                ch = getCharFromBuffer();
+                //need to implement for \r
+                if( (ch==' ') || (ch=='\t') || (ch=='\n') ){
                     dfaState = 34;
                     if(ch=='\n'){
                         lineNumber++;
                     }
+                    lexemeBeginPointer++;
                 }
                 else{
                     dfaState = 35;   
