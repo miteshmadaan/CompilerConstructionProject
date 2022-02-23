@@ -1,4 +1,4 @@
 CC = gcc
 
 all:
-	gcc -o compiler.exe driver.c lexer.c
+	gcc -o stage1.exe driver.c lexer.c

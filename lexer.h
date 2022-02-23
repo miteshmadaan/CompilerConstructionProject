@@ -4,7 +4,7 @@
 #include "defForLexer.h"
 
 TOKEN makeToken(tokenType tokenTypeInput);
-void intializeLexer(FILE *sourceCode);
+void initializeLexer(FILE *sourceCode);
 void tokenizeSource();//Calls the DFA
 char getCharFromBuffer();
 TOKEN getNextTokenFromDFA();//Contains DFA
