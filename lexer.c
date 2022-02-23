@@ -198,18 +198,24 @@ void tokenizeSource(){
 
 void populateBuffer()
 {
-    //fread(&buffer[forwardBufferPointer], 1, BUFFER_SIZE / 2, sourceCode);
-    //shreyas will implement rest
-    int s = 0;
-    while(lexemeBeginPointer < BUFFER_SIZE){
-        buffer[s++] = buffer[lexemeBeginPointer];
-        lexemeBeginPointer++;
+    if(forwardBufferPointer==0){
+        int n = fread(&buffer[0], 1, BUFFER_SIZE, sourceCode);
+        if(n != BUFFER_SIZE){
+            buffer[n] = EOF;
+        }
     }
-    forwardBufferPointer = s-1;
-    lexemeBeginPointer = 0;
-    int n = fread(&buffer[s], 1, BUFFER_SIZE - s, sourceCode);
-    if(n != BUFFER_SIZE - s){
-        buffer[s + n] = EOF;
+    else{
+        int s = 0;
+        while(lexemeBeginPointer < BUFFER_SIZE){
+            buffer[s++] = buffer[lexemeBeginPointer];
+            lexemeBeginPointer++;
+        }
+        forwardBufferPointer = s-1;
+        lexemeBeginPointer = 0;
+        int n = fread(&buffer[0], 1, BUFFER_SIZE, sourceCode);
+        if(n != BUFFER_SIZE){
+            buffer[n] = EOF;
+        }
     }
 }
 
