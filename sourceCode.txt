@@ -1,2 +1,7 @@
-         b   d 
-     c<---
+start
+abcdefgh<
+a <___ b+ 34;
+b <___ c - 3.45;;
+c <___ 3.56E02 + 3.45E+01 - 4.55E-01;
+%dfjbfjsfa
+end
