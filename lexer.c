@@ -125,8 +125,9 @@ TOKEN makeToken(tokenType tokenTypeInput)
 
         case TK_RNUM:
             token.tokenType = TK_NUM;
-            token.lexemeType = FLOAT;
-            token.floatLexeme = customAtof(lexeme);//need special attention for E types
+            token.lexemeType = STRING;
+            // token.floatLexeme = customAtof(lexeme);//need special attention for E types
+            strncpy(token.strLexeme, lexeme, LEXEME_MAX_LEN);
             return token;
             break;
 
@@ -703,7 +704,7 @@ TOKEN getNextTokenFromDFA(){
                 {
                     dfaState = 43;
                 }
-                else if(ch == '-')
+                else if(ch == '_')
                 {
                     dfaState = 44;
                 }
@@ -726,7 +727,7 @@ TOKEN getNextTokenFromDFA(){
 
             case 44:
                 ch = getCharFromBuffer();
-                if(ch == '-')
+                if(ch == '_')
                 {
                     dfaState = 45;
                 }
@@ -740,7 +741,7 @@ TOKEN getNextTokenFromDFA(){
 
             case 45:
                 ch = getCharFromBuffer();
-                if(ch == '-')
+                if(ch == '_')
                 {
                     dfaState = 46;
                 }
@@ -870,6 +871,9 @@ TOKEN getNextTokenFromDFA(){
                 dfaState = 0;
                 return makeToken(TK_ERROR);
                 break;    
+            
+            default:
+                break;
         }
     }
 }
