@@ -8,10 +8,11 @@
 // #include <errno.h>
 // #include <stdbool.h>
 
-int power(int base, int exponent){
-    int ans = 1;
+long long power(int base, int exponent){
+    long long ans = 1;
     while(exponent >= 1){
         ans = ans * base;
+        exponent--;
     }
     return ans;
 }
@@ -52,12 +53,14 @@ double customAtof(char* str){
         chptr++;
     }
     
+    long long pow = power(10,exponentialPart);
+    
     if(esign == '-'){
-        value = nonExponentialPart*power(10,exponentialPart);
+        value = nonExponentialPart/pow;
     }else{
-        value = nonExponentialPart/power(10,exponentialPart);
+        value = nonExponentialPart*pow;
     }
-
+    
     return value;
 }
 
@@ -124,10 +127,10 @@ TOKEN makeToken(tokenType tokenTypeInput)
             break;
 
         case TK_RNUM:
-            token.tokenType = TK_NUM;
-            token.lexemeType = STRING;
-            // token.floatLexeme = customAtof(lexeme);//need special attention for E types
-            strncpy(token.strLexeme, lexeme, LEXEME_MAX_LEN);
+            token.tokenType = TK_RNUM;
+            token.lexemeType = DOUBLE;
+            token.reallexeme = customAtof(lexeme);//need special attention for E types
+            // strncpy(token.strLexeme, lexeme, LEXEME_MAX_LEN);
             return token;
             break;
 
@@ -189,7 +192,7 @@ void tokenizeSource(){
             }
             else
             {
-                printf("lexeme : %f, " , tokenFromDfa.floatLexeme);
+                printf("lexeme : %0.15lf, " , tokenFromDfa.reallexeme);
             }
             printf("Line Number : %d\n" , tokenFromDfa.lineNumber);
         }
@@ -307,7 +310,6 @@ TOKEN getNextTokenFromDFA(){
                     if(ch=='\n'){
                         lineNumber++;
                     }
-                    lexemeBeginPointer++;
                 }
                 else if(ch=='!'){
                     dfaState = 36;
@@ -649,7 +651,6 @@ TOKEN getNextTokenFromDFA(){
                     if(ch=='\n'){
                         lineNumber++;
                     }
-                    lexemeBeginPointer++;
                 }
                 else{
                     dfaState = 35;   
@@ -659,6 +660,7 @@ TOKEN getNextTokenFromDFA(){
             case 35:
                 retract(1);
                 dfaState = 0;
+                lexemeBeginPointer = forwardBufferPointer;
                 break;
 
             case 36:
