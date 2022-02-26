@@ -216,9 +216,9 @@ void populateBuffer()
         }
         forwardBufferPointer = s-1;
         lexemeBeginPointer = 0;
-        int n = fread(&buffer[0], 1, BUFFER_SIZE, sourceCode);
-        if(n != BUFFER_SIZE){
-            buffer[n] = EOF;
+        int n = fread(&buffer[s], 1, BUFFER_SIZE-s, sourceCode);
+        if(n != BUFFER_SIZE-s){
+            buffer[n+s] = EOF;
         }
     }
 }
