@@ -6,6 +6,8 @@
 
 #define LEXEME_MAX_LEN 100
 #define BUFFER_SIZE 10000
+#define HASHTABLE_SIZE 109
+#define PRIME 23
 
 int retractCount;
 int lineNumber;
@@ -14,6 +16,7 @@ int forwardBufferPointer;
 int lexemeBeginPointer;
 char lexeme[LEXEME_MAX_LEN];
 char buffer[BUFFER_SIZE];
+struct entry *hashTable[HASHTABLE_SIZE];
 FILE *sourceCode;
 
 typedef enum {
@@ -37,6 +40,9 @@ typedef struct TOKEN {
   int lineNumber;
 } TOKEN;
 
-
+typedef struct entry{
+  char keyword[LEXEME_MAX_LEN];
+  tokenType tokenID;
+} entry;
 
 #endif
