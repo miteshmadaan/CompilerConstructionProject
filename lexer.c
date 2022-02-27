@@ -231,7 +231,7 @@ void initializeLexer(FILE *inputFile)
     lexemeBeginPointer =0;
     forwardBufferPointer = 0;
     sourceCode = inputFile;
-
+    //Call initialise hashTable, and populate HashTable with keywords
     populateBuffer(sourceCode);
 }
 
