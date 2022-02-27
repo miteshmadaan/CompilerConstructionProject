@@ -22,7 +22,7 @@ typedef enum {
 
 typedef enum {
   INT,
-  FLOAT,
+  DOUBLE,
   STRING
 } lexemeType;
 
@@ -32,7 +32,7 @@ typedef struct TOKEN {
   union {
     char strLexeme[LEXEME_MAX_LEN];
     int intLexeme;
-    double floatLexeme;
+    double reallexeme;
   };
   int lineNumber;
 } TOKEN;
