@@ -2,6 +2,28 @@
 #include "defForLexer.h"
 #include "lexer.h"
 
+void removeComments(FILE *inputFile)
+{
+    char ch = '\n';
+    int comment = 0;
+    while(ch != EOF)
+    {
+        if(ch == '%')
+        {
+            comment = 1;
+        }
+        else if (ch == '\n')
+        {
+            comment = 0;
+        }
+        if(comment==0)
+        {
+            printf("%c" , ch);
+        }
+        ch = fgetc(inputFile);
+    }
+    printf("\n");
+}
 
 int main(int argc, char *argv[])
 {
@@ -15,6 +37,7 @@ int main(int argc, char *argv[])
         sourceCode =fopen(argv[1],"r");
         initializeLexer(sourceCode);
         tokenizeSource();
+        //removeComments(sourceCode);
         fclose(sourceCode);
     }
     return 0;
