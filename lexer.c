@@ -64,6 +64,22 @@ double customAtof(char* str){
     return value;
 }
 
+//This function is called by hashTable operations, and returns hash value of a string
+int calcHash(char *lexeme){
+    long long power = 1;
+    long long hash = 0;
+
+    char *chptr = lexeme;
+    char ch;
+    while(chptr){
+        ch = *chptr;
+        hash = (hash + (int)ch * power )%HASHTABLE_SIZE;
+        power = power*PRIME;
+        chptr++;
+    }
+    return (hash%HASHTABLE_SIZE);
+}
+
 //This function is called when the dfa identifies a lexeme as toke and now needs to return it as token struct
 TOKEN makeToken(tokenType tokenTypeInput)
 {
