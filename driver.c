@@ -33,12 +33,45 @@ int main(int argc, char *argv[])
         printf("insufficient command line arguments");
     }
     else{
-        printf("analysing file : %s\n" , argv[1]);
-        sourceCode =fopen(argv[1],"r");
-        initializeLexer(sourceCode);
-        tokenizeSource();
-        //removeComments(sourceCode);
-        fclose(sourceCode);
+        char option = '5';
+        while(option != '0')
+        {
+            printf("Choose your option\n");
+            scanf("%c" , &option);
+            if(option =='\n')
+            {
+                scanf("%c" , &option);
+            }
+            printf("your option is %c\n" , option);
+            if(option == '1')
+            {
+                sourceCode =fopen(argv[1],"r");
+                removeComments(sourceCode);
+                fclose(sourceCode);
+            }
+            else if(option == '2')
+            {
+                printf("analysing file : %s\n" , argv[1]);
+                sourceCode =fopen(argv[1],"r");
+                initializeLexer(sourceCode);
+                tokenizeSource();
+                fclose(sourceCode);
+            }
+            else if(option == '3')
+            {
+                printf("needs to be implemented\n");
+            }
+            else if(option =='4')
+            {
+                printf("needs to be implemented\n");
+            }
+            else
+            {
+                printf("no option found\n");
+            }
+
+        }
+        printf("program exited\n");
     }
     return 0;
 }
