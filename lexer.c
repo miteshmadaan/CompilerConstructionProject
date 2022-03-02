@@ -146,7 +146,7 @@ TOKEN makeToken(tokenType tokenTypeInput)
             token.tokenType = TK_RNUM;
             token.lexemeType = DOUBLE;
             token.reallexeme = customAtof(lexeme);//need special attention for E types
-            // strncpy(token.strLexeme, lexeme, LEXEME_MAX_LEN);
+            strncpy(token.strLexeme, lexeme, LEXEME_MAX_LEN);
             return token;
             break;
 
@@ -190,27 +190,35 @@ void tokenizeSource(){
     while(1)
     {
         tokenFromDfa = getNextTokenFromDFA();
-        printf("Token : %d, " , tokenFromDfa.tokenType);
         if (tokenFromDfa.tokenType == TK_EOF)
         {
-            printf("End Of File\nLexical Analysis completed\n");
             break;
         }
+        else if(tokenFromDfa.tokenType == TK_COMMENT){
+            printf("Line no. %d\t",tokenFromDfa.lineNumber);
+            printf("Lexeme %s\t","%");
+            printf("Token TK_COMMENT\n");
+            continue;
+        }
+        else if(tokenFromDfa.tokenType == TK_ERROR){
+            printf("Line no. %d\t",tokenFromDfa.lineNumber);
+            printf("Error : Unknown Symbol<%s>\n",tokenFromDfa.strLexeme);
+        }
         else
-        {
+        {   printf("Line no. %d\t",tokenFromDfa.lineNumber);
             if(tokenFromDfa.lexemeType == STRING)
             {   
-                printf("lexeme : %s, " , tokenFromDfa.strLexeme);
+                printf("Lexeme %s\t" , tokenFromDfa.strLexeme);
             }
             else if(tokenFromDfa.lexemeType == INT)
             {
-                printf("lexeme : %d, " , tokenFromDfa.intLexeme);
+                printf("Lexeme %d\t" , tokenFromDfa.intLexeme);
             }
             else
             {
-                printf("lexeme : %0.15lf, " , tokenFromDfa.reallexeme);
+                printf("Lexeme %s\t" , tokenFromDfa.strLexeme);
             }
-            printf("Line Number : %d\n" , tokenFromDfa.lineNumber);
+            printf("Token %d\n" , tokenFromDfa.tokenType);
         }
     }
 
@@ -893,7 +901,7 @@ TOKEN getNextTokenFromDFA(){
                 {
                     dfaState = 43;
                 }
-                else if(ch == '_')
+                else if(ch == '-')
                 {
                     dfaState = 44;
                 }
@@ -916,7 +924,7 @@ TOKEN getNextTokenFromDFA(){
 
             case 44:
                 ch = getCharFromBuffer();
-                if(ch == '_')
+                if(ch == '-')
                 {
                     dfaState = 45;
                 }
@@ -930,7 +938,7 @@ TOKEN getNextTokenFromDFA(){
 
             case 45:
                 ch = getCharFromBuffer();
-                if(ch == '_')
+                if(ch == '-')
                 {
                     dfaState = 46;
                 }
