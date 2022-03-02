@@ -321,7 +321,7 @@ TOKEN getNextTokenFromDFA(){
                     dfaState = 32;
                 }
                 //need to implement for \r
-                else if( (ch==' ') || (ch=='\t') || (ch=='\n') ){
+                else if( (ch==' ') || (ch=='\t') || (ch=='\n') || (ch =='\r') ){
                     dfaState = 34;
                     if(ch=='\n'){
                         lineNumber++;
@@ -661,8 +661,7 @@ TOKEN getNextTokenFromDFA(){
 
             case 34:
                 ch = getCharFromBuffer();
-                //need to implement for \r
-                if( (ch==' ') || (ch=='\t') || (ch=='\n') ){
+                if( (ch==' ') || (ch=='\t') || (ch=='\n') || (ch == '\r') ){
                     dfaState = 34;
                     if(ch=='\n'){
                         lineNumber++;
