@@ -6,8 +6,8 @@
 
 #define LEXEME_MAX_LEN 100
 #define BUFFER_SIZE 10000
-#define HASHTABLE_SIZE 109
-#define PRIME 23
+#define HASHTABLE_SIZE 163
+#define PRIME 53
 
 int retractCount;
 int lineNumber;

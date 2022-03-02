@@ -71,7 +71,7 @@ int calcHash(char *lexeme){
 
     char *chptr = lexeme;
     char ch;
-    while(chptr){
+    while(*chptr!='\0'){
         ch = *chptr;
         hash = (hash + (int)ch * power )%HASHTABLE_SIZE;
         power = power*PRIME;
@@ -111,7 +111,7 @@ TOKEN makeToken(tokenType tokenTypeInput)
             }
             else{
                 // token.tokenType = search in lookup table
-                token.tokenType = tokenTypeInput;
+                token.tokenType = searchHashTable(lexeme);
             }
             token.lexemeType = STRING;
             strncpy(token.strLexeme, lexeme, LEXEME_MAX_LEN);
@@ -239,6 +239,176 @@ void populateBuffer()
     }
 }
 
+void initializeHashTable(){
+    for(int i = 0; i < HASHTABLE_SIZE; i++){
+        hashTable[i] = (struct entry*)malloc(sizeof(struct entry));
+    }
+}
+
+void populateHashTable(){
+    char *keyword;
+    int key;
+    keyword = "with";
+    key = calcHash(keyword);
+    strncpy(hashTable[key]->keyword, keyword, LEXEME_MAX_LEN);
+    hashTable[key]->tokenID = TK_WITH;
+
+    keyword = "parameters";
+    key = calcHash(keyword);
+    strncpy(hashTable[key]->keyword, keyword, LEXEME_MAX_LEN);
+    hashTable[key]->tokenID = TK_PARAMETERS;
+
+    keyword = "end";
+    key = calcHash(keyword);
+    strncpy(hashTable[key]->keyword, keyword, LEXEME_MAX_LEN);
+    hashTable[key]->tokenID = TK_END;
+
+    keyword = "while";
+    key = calcHash(keyword);
+    strncpy(hashTable[key]->keyword, keyword, LEXEME_MAX_LEN);
+    hashTable[key]->tokenID = TK_WHILE;
+    
+        keyword = "union";
+    key = calcHash(keyword);
+    strncpy(hashTable[key]->keyword, keyword, LEXEME_MAX_LEN);
+    hashTable[key]->tokenID = TK_UNION;
+
+    keyword = "endunion";
+    key = calcHash(keyword);
+    strncpy(hashTable[key]->keyword, keyword, LEXEME_MAX_LEN);
+    hashTable[key]->tokenID = TK_ENDUNION;
+
+    keyword = "definetype";
+    key = calcHash(keyword);
+    strncpy(hashTable[key]->keyword, keyword, LEXEME_MAX_LEN);
+    hashTable[key]->tokenID = TK_DEFINETYPE;
+
+    keyword = "as";
+    key = calcHash(keyword);
+    strncpy(hashTable[key]->keyword, keyword, LEXEME_MAX_LEN);
+    hashTable[key]->tokenID = TK_AS;
+
+    keyword = "type";
+    key = calcHash(keyword);
+    strncpy(hashTable[key]->keyword, keyword, LEXEME_MAX_LEN);
+    hashTable[key]->tokenID = TK_TYPE;
+
+    keyword = "_main";
+    key = calcHash(keyword);
+    strncpy(hashTable[key]->keyword, keyword, LEXEME_MAX_LEN);
+    hashTable[key]->tokenID = TK_MAIN;
+
+    keyword = "global";
+    key = calcHash(keyword);
+    strncpy(hashTable[key]->keyword, keyword, LEXEME_MAX_LEN);
+    hashTable[key]->tokenID = TK_GLOBAL;
+
+    keyword = "parameter";
+    key = calcHash(keyword);
+    strncpy(hashTable[key]->keyword, keyword, LEXEME_MAX_LEN);
+    hashTable[key]->tokenID = TK_PARAMETER;
+    
+        keyword = "list";
+    key = calcHash(keyword);
+    strncpy(hashTable[key]->keyword, keyword, LEXEME_MAX_LEN);
+    hashTable[key]->tokenID = TK_LIST;
+
+    keyword = "input";
+    key = calcHash(keyword);
+    strncpy(hashTable[key]->keyword, keyword, LEXEME_MAX_LEN);
+    hashTable[key]->tokenID = TK_INPUT;
+
+    keyword = "output";
+    key = calcHash(keyword);
+    strncpy(hashTable[key]->keyword, keyword, LEXEME_MAX_LEN);
+    hashTable[key]->tokenID = TK_OUTPUT;
+
+    keyword = "int";
+    key = calcHash(keyword);
+    strncpy(hashTable[key]->keyword, keyword, LEXEME_MAX_LEN);
+    hashTable[key]->tokenID = TK_INT;
+
+    keyword = "real";
+    key = calcHash(keyword);
+    strncpy(hashTable[key]->keyword, keyword, LEXEME_MAX_LEN);
+    hashTable[key]->tokenID = TK_REAL;
+
+    keyword = "endwhile";
+    key = calcHash(keyword);
+    strncpy(hashTable[key]->keyword, keyword, LEXEME_MAX_LEN);
+    hashTable[key]->tokenID = TK_ENDWHILE;
+
+    keyword = "if";
+    key = calcHash(keyword);
+    strncpy(hashTable[key]->keyword, keyword, LEXEME_MAX_LEN);
+    hashTable[key]->tokenID = TK_IF;
+
+    keyword = "endif";
+    key = calcHash(keyword);
+    strncpy(hashTable[key]->keyword, keyword, LEXEME_MAX_LEN);
+    hashTable[key]->tokenID = TK_ENDIF;
+    
+        keyword = "then";
+    key = calcHash(keyword);
+    strncpy(hashTable[key]->keyword, keyword, LEXEME_MAX_LEN);
+    hashTable[key]->tokenID = TK_THEN;
+
+    keyword = "read";
+    key = calcHash(keyword);
+    strncpy(hashTable[key]->keyword, keyword, LEXEME_MAX_LEN);
+    hashTable[key]->tokenID = TK_READ;
+
+    keyword = "write";
+    key = calcHash(keyword);
+    strncpy(hashTable[key]->keyword, keyword, LEXEME_MAX_LEN);
+    hashTable[key]->tokenID = TK_WRITE;
+
+    keyword = "return";
+    key = calcHash(keyword);
+    strncpy(hashTable[key]->keyword, keyword, LEXEME_MAX_LEN);
+    hashTable[key]->tokenID = TK_RETURN;
+
+    keyword = "call";
+    key = calcHash(keyword);
+    strncpy(hashTable[key]->keyword, keyword, LEXEME_MAX_LEN);
+    hashTable[key]->tokenID = TK_CALL;
+
+    keyword = "record";
+    key = calcHash(keyword);
+    strncpy(hashTable[key]->keyword, keyword, LEXEME_MAX_LEN);
+    hashTable[key]->tokenID = TK_RECORD;
+
+    keyword = "endrecord";
+    key = calcHash(keyword);
+    strncpy(hashTable[key]->keyword, keyword, LEXEME_MAX_LEN);
+    hashTable[key]->tokenID = TK_ENDRECORD;
+
+    keyword = "else";
+    key = calcHash(keyword);
+    strncpy(hashTable[key]->keyword, keyword, LEXEME_MAX_LEN);
+    hashTable[key]->tokenID = TK_ELSE;
+     
+}
+
+tokenType searchHashTable(char *lexeme){
+    int hash = calcHash(lexeme);
+    entry hashEntry = *hashTable[hash];
+    if(hashEntry.keyword == NULL)
+    {
+        return TK_FIELDID;
+    }
+    else
+    {
+            if(strcmp(hashEntry.keyword , lexeme)==0)
+            {
+                return hashEntry.tokenID;
+            }
+            else{
+                return TK_FIELDID;
+            }
+    }
+}
+
 void initializeLexer(FILE *inputFile)
 {
     dfaState = 0;
@@ -247,7 +417,9 @@ void initializeLexer(FILE *inputFile)
     lexemeBeginPointer =0;
     forwardBufferPointer = 0;
     sourceCode = inputFile;
-    //Call initialise hashTable, and populate HashTable with keywords
+
+    initializeHashTable();
+    populateHashTable();
     populateBuffer(sourceCode);
 }
 

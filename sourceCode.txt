@@ -1,7 +1,28 @@
-start
-abcdefgh<
-a <___ b+ 34;
-b <___ c - 3.45;;
-c <___ 3.56E02 + 3.45E+01 - 4.55E-01;
-%dfjbfjsfa
+with
+parameters
 end
+while
+union
+endunion
+definetype
+as
+type
+_main
+global
+parameter
+list
+input
+output
+int
+real
+endwhile
+if
+then
+endif
+read
+write
+return
+call 
+record
+endrecord
+else
