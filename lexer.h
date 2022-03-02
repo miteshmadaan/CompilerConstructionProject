@@ -14,7 +14,6 @@ void retract(int retractNum);
 void initializeHashTable();
 void populateHashTable();
 int calcHash(char *lexeme);
-void insertHashTable(struct entry *entryInput);
-TOKEN searchHashTable(char *lexeme);//return TK_FIELDID if not keyword
+tokenType searchHashTable(char *lexeme);//return TK_FIELDID if not keyword
 
 #endif
