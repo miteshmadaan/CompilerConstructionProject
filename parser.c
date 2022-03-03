@@ -221,3 +221,38 @@ void parseInputSourceCode(FILE* sourceFile,parseTable t,Grm g,parseTree root,int
 		}
 	} while(token.tokenType!=TK_EOF);
 }
+
+void getGram(char *fname, Grm g)
+{
+     int i=0;
+	
+	FILE* gf;
+	gf=fopen(fname,"r");
+	if(gf==NULL){
+		return;
+	}
+	while(i<NUM_NTERMINALS)
+	{
+		fscanf(gf,"%d",&(g[i].rulesNum));
+		g[i].prodRules=(int**)malloc((g[i].rulesNum)*sizeof(int*));
+    		for (int j=0; j<g[i].rulesNum; j++) 
+        	 g[i].prodRules[j]= (int *)malloc((RULE_MAX_LEN+1) * sizeof(int));	
+		
+		int k,id;
+		char temp[ID_MAX_SIZE];
+		char tempo[ID_MAX_SIZE];
+		
+		for(int j=0;j<(g[i].rulesNum);j++)
+		{
+			fscanf(gf,"%s%d",temp,&k);
+			g[i].prodRules[j][0]=k;
+			for(int m=1;m<k+1;m++)
+			{
+				fscanf(gf,"%s",tempo);
+				id=parseIdStr(tempo);
+				g[i].prodRules[j][m]=id;				
+			}			
+		}
+		i++;
+	}
+}
