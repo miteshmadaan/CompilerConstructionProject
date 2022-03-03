@@ -1,7 +1,6 @@
 #ifndef DEFFORPARSER_H
 #define DEFFORPARSER_H
 
-#include <stdbool.h>
 #include "defForLexer.h"
 
 #define NUM_NTERMINALS 57

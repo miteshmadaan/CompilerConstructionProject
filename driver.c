@@ -33,15 +33,15 @@ int main(int argc, char *argv[])
     FILE *sourceCode;
     Grm grammar;
     grammar = (NTERMINAL*)malloc(sizeof(NTERMINAL) * NUM_NTERMINALS);
-    getGram("grammar.txt", g);
+    getGram("grammar.txt", grammar);
     FirstSet firstSet=(FirstSet)malloc(NUM_NTERMINALS*sizeof(FIRST));
     FollowSet followSet=(FollowSet)malloc(NUM_NTERMINALS*sizeof(FIRST));
-    buildFirstSet(g,firstSet);
-    getFollowSets(g, followSet,firstSet);
+    buildFirstSet(grammar,firstSet);
+    getFollowSets(grammar, followSet,firstSet);
     parseTable t;
     parseTree root=malloc(sizeof(treeNode)),ast=NULL;
     int error = 0;
-    createParseTable(firstSet,followSet,g,t);
+    createParseTable(firstSet,followSet,grammar,t);
 
     if(argc < 2)
     {
