@@ -8,6 +8,7 @@
 #define NUM_RULES 95
 #define RULE_MAX_LEN 15
 #define NTERMINAL_OFFSET 12345
+#define ID_MAX_SIZE 30
 
 typedef enum nonTerminals{
 program = NTERMINAL_OFFSET,
