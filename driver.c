@@ -1,6 +1,9 @@
 #include<stdio.h>
-#include "defForLexer.h"
+#include<stdlib.h>
+#include<time.h>
+
 #include "lexer.h"
+#include "parser.h"
 
 void removeComments(FILE *inputFile)
 {
@@ -28,6 +31,18 @@ void removeComments(FILE *inputFile)
 int main(int argc, char *argv[])
 {
     FILE *sourceCode;
+    Grm grammar;
+    grammar = (NTERMINAL*)malloc(sizeof(NTERMINAL) * NUM_NTERMINALS);
+    getGram("grammar.txt", g);
+    FirstSet firstSet=(FirstSet)malloc(NUM_NTERMINALS*sizeof(FIRST));
+    FollowSet followSet=(FollowSet)malloc(NUM_NTERMINALS*sizeof(FIRST));
+    buildFirstSet(g,firstSet);
+    getFollowSets(g, followSet,firstSet);
+    parseTable t;
+    parseTree root=malloc(sizeof(treeNode)),ast=NULL;
+    int error = 0;
+    createParseTable(firstSet,followSet,g,t);
+
     if(argc < 2)
     {
         printf("insufficient command line arguments");
