@@ -107,16 +107,13 @@ void createParseTable(FirstSet firstSet,FollowSet followSet,Grm g,parseTable t)
 	}
 }
 
-/*
-void parseInputSourceCode(FILE* sourceFile,parseTable t,Grm g,parseTree root,int* error);
-
-void parseInputSourceCode(FILE* sourceFile,Table t,Grammar g,parseTree root,int* error)
+void parseInputSourceCode(FILE* sourceFile,parseTable t,Grm g,parseTree root,int* error)
 {
 	root->nonTerminal=program;
 	root->numChild=2;
 	parseTree leaf=NULL,parent=NULL,current;
-	Stack stack=newStack();
-	tokenInfo token ;
+	Stack stack=createStack();
+	TOKEN token ;
 	push(stack,TK_EOF,leaf);
 	push(stack,program,root);
 	int flag=1,terminal,nonTermID,productionNo,ruleLen;
@@ -124,11 +121,11 @@ void parseInputSourceCode(FILE* sourceFile,Table t,Grammar g,parseTree root,int*
 	int* rule;
 	do{
 		if(flag)
-		getNextToken(sourceFile,&token);
+		token = getNextTokenFromDFA();
 		if(token.tokenType==TK_ERROR)
 		{
-			printf("\n\nLEXICAL ERROR AT LINE NO: %lld   %s\n",token.lineNum,token.lexeme);
-			//if(top1(stack)->parent->id < NO_OF_TERMINALS)
+			printf("\n\nLEXICAL ERROR AT LINE NO: %d   %s\n",token.lineNumber,token.strLexeme);
+			//if(top1(stack)->parent->id < NUM_TERMINALS)
 			//{
 				pop(stack);
 				continue;
@@ -139,77 +136,77 @@ void parseInputSourceCode(FILE* sourceFile,Table t,Grammar g,parseTree root,int*
 		if(token.tokenType==TK_EOF)
 		break ;
 		flag=0 ;
-		top=top1(stack) ;
+		top=KeyAtTopElement(stack) ;
 		terminal=token.tokenType ;
 		current=top->parent;
-		if(top->id<NO_OF_TERMINALS)
+		if(top->id<NUM_TERMINALS)
 		{
-			if(top->id!=terminal && top->id!=eps)
+			if(top->id!=terminal && top->id!=58)
 			{
-				printf("\n\nPARSER ERROR AT LINE NO: %lld The token %s for lexeme %s does not match with the expected token %s\n",token.lineNum,tokenRepr(terminal),token.lexeme,tokenRepr(top->id));
+				printf("\n\nPARSER ERROR AT LINE NO: %d The token %s for lexeme %s does not match with the expected token %s\n",token.lineNumber,tokenRepr(terminal),token.strLexeme,tokenRepr(top->id));
 				*error=1;
 				pop(stack);
 			}
 			else{
 				pop(stack);
-				current->terminal->lineNum=token.lineNum;
+				current->terminal->lineNumber=token.lineNumber;
 				current->terminal->tokenType=top->id;
-				if(top->id==eps)
+				if(top->id==58)
 				{
 					continue;
 				}
 				int lenn=0;
-				while(token.lexeme[lenn]!='\0')
+				while(token.strLexeme[lenn]!='\0')
 				{
-					current->terminal->lexeme[lenn]=token.lexeme[lenn];
+					current->terminal->strLexeme[lenn]=token.strLexeme[lenn];
 					lenn++;
 				}
-				for(int i=lenn;i<MAX_LEXEME_SIZE;i++)
-				current->terminal->lexeme[i]='\0';
+				for(int i=lenn;i<LEXEME_MAX_LEN;i++)
+				current->terminal->strLexeme[i]='\0';
 				flag=1;
 			}
 		}
 		else{
-			nonTermID=t[top->id-NONTERMINAL_OFFSET][terminal].nonTerm;
-			productionNo=t[top->id-NONTERMINAL_OFFSET][terminal].productionNum;
+			nonTermID=t[top->id-NTERMINAL_OFFSET][terminal].nonTerm;
+			productionNo=t[top->id-NTERMINAL_OFFSET][terminal].productionNum;
 			if(nonTermID==-1 || productionNo==-1)
 			{
-				printf("\n\nPARSING ERROR AT LINE NO: %lld\n",token.lineNum);
+				printf("\n\nPARSING ERROR AT LINE NO: %d\n",token.lineNumber);
 				*error =1;
-				getNextToken(sourceFile,&token);
+				token = getNextTokenFromDFA();
 				if(token.tokenType==TK_ERROR)
-				printf("\n\nERROR2:LINE NO: %lld\n",token.lineNum);
-				while(token.tokenType!=TK_EOF && t[top->id-NONTERMINAL_OFFSET][token.tokenType].syn==-1)
+				printf("\n\nERROR2:LINE NO: %d\n",token.lineNumber);
+				while(token.tokenType!=TK_EOF && t[top->id-NTERMINAL_OFFSET][token.tokenType].syn==-1)
 				{
-					getNextToken(sourceFile,&token);
+					token = getNextTokenFromDFA();
 					if(token.tokenType==TK_ERROR)
-					printf("\n\nERROR2:LINE NO: %lld\n",token.lineNum);
+					printf("\n\nERROR2:LINE NO: %d\n",token.lineNumber);
 				}
 				
 				if(token.tokenType==TK_EOF)
 					return;
 				
-				if(t[top->id-NONTERMINAL_OFFSET][token.tokenType].syn==1)
+				if(t[top->id-NTERMINAL_OFFSET][token.tokenType].syn==1)
 				pop(stack);
 				continue;
 			}
-			rule=g[nonTermID].rules[productionNo];
+			rule=g[nonTermID].prodRules[productionNo];
 			ruleLen=rule[0];
-			current->children = malloc(ruleLen*sizeof(parsetree));
+			current->children = malloc(ruleLen*sizeof(treeNode));
 			current->numChild = ruleLen;
 			current->numChildAST = ruleLen;
 			current->nonTerminal=top->id;
 			
 			for(int i=1;i<=ruleLen;i++)
 			{
-				if(rule[i]<NO_OF_TERMINALS)
+				if(rule[i]<NUM_TERMINALS)
 				{
-					current->children[i-1].terminal=malloc(sizeof(tokenInfo));
+					current->children[i-1].terminal=malloc(sizeof(TOKEN));
 					current->children[i-1].numChild=0 ;
 					current->children[i-1].numChildAST=0;
 					current->children[i-1].nonTerminal=-1;
 					current->children[i-1].children=NULL;
-					current->children[i-1].tp = NULL;
+					// current->children[i-1].tp = NULL;
 				}
 				else{
 					current->children[i].nonTerminal=rule[i];
@@ -218,10 +215,9 @@ void parseInputSourceCode(FILE* sourceFile,Table t,Grammar g,parseTree root,int*
 			pop(stack);
 			for(int i=ruleLen;i>0;i--)
 			{
-				//if(rule[i]!=eps)
+				//if(rule[i]!=58)
 				push(stack,rule[i],&(current->children[i-1]));
 			}
 		}
 	} while(token.tokenType!=TK_EOF);
 }
-*/
