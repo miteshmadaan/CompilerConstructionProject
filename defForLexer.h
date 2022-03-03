@@ -8,6 +8,7 @@
 #ifndef DEFFORLEXER_H
 #define DEFFORLEXER_H
 
+#include <stdio.h>
 
 #define LEXEME_MAX_LEN 100
 #define BUFFER_SIZE 10000

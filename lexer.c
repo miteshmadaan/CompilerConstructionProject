@@ -666,9 +666,8 @@ TOKEN getNextTokenFromDFA(){
                     dfaState = 11;
                 }
                 else{
-                    retract(3);
-                    dfaState = 0;
-                    return makeToken(TK_NUM);
+                    retract(1);
+                    dfaState = 61;
                 }
                 break;
 
@@ -691,9 +690,8 @@ TOKEN getNextTokenFromDFA(){
                     dfaState = 14;
                 }
                 else{
-                    retract(2);
-                    dfaState = 0;
-                    return makeToken(TK_RNUM);
+                    retract(1);
+                    dfaState = 61;
                 }
                 break;
 
@@ -703,23 +701,19 @@ TOKEN getNextTokenFromDFA(){
                     dfaState = 14;
                 }
                 else{
-                    retract(3);
-                    dfaState = 0;
-                    return makeToken(TK_RNUM);
+                    retract(1);
+                    dfaState = 61;
                 }
                 break;
 
-            case 14: //Special Case
+            case 14:
                 ch = getCharFromBuffer();
                 if((ch >= '0') && (ch <= '9')){
                     dfaState = 15;
                 }
                 else{
-                    while(buffer[forwardBufferPointer] != 'E'){
-                        retract(1);
-                    }
-                    dfaState = 0;
-                    return makeToken(TK_RNUM);
+                    retract(1);
+                    dfaState = 61;
                 }
                 break;
 
