@@ -1,15 +1,15 @@
-#include "parserDef.h"
-struct key{
+#include "defForParser.h"
+typedef struct key{
 	int id;
 	parseTree parent;
 } * Key;
 
-struct stackElement{
+typedef struct stackElement{
 	Key k;
 	stackElement next;
 }* stackElement;
 
-struct stack{
+typedef struct stack{
 	int count;
 	stackElement head;
 	stackElement tail;
