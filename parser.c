@@ -2,12 +2,42 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+
 #include "lexer.h"
 #include "parser.h"
-// #include "utils.h"
 #include "stack.h"
+#include "parserHashTable.h"
 
 bool check[NUM_NTERMINALS];
+
+char* listTokens[] = {};
+
+char* strRepId[] = {};
+		  
+int parseIdStr(char *idStr) 
+{
+	//return the id of string stored in hashtable
+    parserKaTable* lookuptable = makeParserHashTable(220);
+    return getTokenTypePHT(idStr,lookuptable);	
+}
+
+char *idRepr(int id) 
+{
+		if(id>=NTERMINAL_OFFSET && id<NTERMINAL_OFFSET+NUM_NTERMINALS)
+		return strRepId[id-NTERMINAL_OFFSET+NUM_NTERMINALS-1];
+		else if(id>=0 && id<=55)
+		return strRepId[id];
+		else
+		return "";
+}
+
+char *tokenRepr(int id) 
+{
+	if(id >= 0 && id <=55)
+		return listTokens[id];
+	else
+		return "";
+}
 
 void printParseTree(parseTree root)
 {
@@ -18,7 +48,7 @@ void printParseTree(parseTree root)
 		current=&(root->children[i]);
 		if(!current)
 		printf("NULL\n");
-		if(current->numChildAST==0 && current->terminal->tokenType==58)
+		if(current->numChildAST==0 && current->terminal->tokenType==eps)
 		continue;
 		if(current->numChildAST>0)
 		{
@@ -30,7 +60,7 @@ void printParseTree(parseTree root)
 		else{
 			printf("%s\t\t",current->terminal->strLexeme);
 			printf("%d\t\t",current->terminal->lineNumber);
-			printf("%d\t\t",tokenRepr(current->terminal->tokenType));
+			printf("%s\t\t",tokenRepr(current->terminal->tokenType));
 			if(current->terminal->tokenType==TK_NUM)
 				printf("%d\t\t",current->terminal->intLexeme);
             else if(current->terminal->tokenType==TK_RNUM)
@@ -88,15 +118,15 @@ void createParseTable(FirstSet firstSet,FollowSet followSet,Grm g,parseTable t)
 					t[i][k].syn=1;	
 			
 		        for(int k=0;k<NUM_TERMINALS;k++)
-		        if(firstRule[k] && k!=58)
+		        if(firstRule[k] && k!=eps)
 		        {
 		        	t[i][k].nonTerm = i;
         			t[i][k].productionNum= j;
         		}
-		        if(firstRule[58])
+		        if(firstRule[eps])
 		        {
 		        	for(int k=0;k<NUM_TERMINALS;k++)
-		        	if(followRule[k] && k!=58)
+		        	if(followRule[k] && k!=eps)
 		        	{
 					t[i][k].nonTerm = i;
 					t[i][k].productionNum= j;
@@ -141,7 +171,7 @@ void parseInputSourceCode(FILE* sourceFile,parseTable t,Grm g,parseTree root,int
 		current=top->parent;
 		if(top->id<NUM_TERMINALS)
 		{
-			if(top->id!=terminal && top->id!=58)
+			if(top->id!=terminal && top->id!=eps)
 			{
 				printf("\n\nPARSER ERROR AT LINE NO: %d The token %s for lexeme %s does not match with the expected token %s\n",token.lineNumber,tokenRepr(terminal),token.strLexeme,tokenRepr(top->id));
 				*error=1;
@@ -151,7 +181,7 @@ void parseInputSourceCode(FILE* sourceFile,parseTable t,Grm g,parseTree root,int
 				pop(stack);
 				current->terminal->lineNumber=token.lineNumber;
 				current->terminal->tokenType=top->id;
-				if(top->id==58)
+				if(top->id==eps)
 				{
 					continue;
 				}
@@ -215,7 +245,7 @@ void parseInputSourceCode(FILE* sourceFile,parseTable t,Grm g,parseTree root,int
 			pop(stack);
 			for(int i=ruleLen;i>0;i--)
 			{
-				//if(rule[i]!=58)
+				//if(rule[i]!=eps)
 				push(stack,rule[i],&(current->children[i-1]));
 			}
 		}
@@ -259,7 +289,7 @@ void getGram(char *fname, Grm g)
 
 int* add(int* answer, int* addit){
 	for(int i=0;i<=NUM_TERMINALS;i++)
-	if(addit[i] && i!=58) answer[i]=1;
+	if(addit[i] && i!=eps) answer[i]=1;
 	return answer;
 }
 
@@ -291,12 +321,12 @@ int* tem1;
 					check[array1[i][m]-NTERMINAL_OFFSET]=1;
 				}
 				answer=add(answer,firstSet[array1[i][m]-NTERMINAL_OFFSET]);
-				if(!tem1[58])
+				if(!tem1[eps])
 				break;
 				m++;
 			}
 			if(m>array1[i][0])
-			answer[58]=1;
+			answer[eps]=1;
 		}
 	}
 	firstSet[produc]=answer;
@@ -326,7 +356,7 @@ void firstString(int* b,int* firstRule,int index,FirstSet firstSet)
 		}
         	else{
       			int* temp = firstSet[b[i] - NTERMINAL_OFFSET];
-      			if(temp[58] == 0)
+      			if(temp[eps] == 0)
       			{
       				firstRule = add(firstRule, temp);
       				break;
@@ -338,14 +368,14 @@ void firstString(int* b,int* firstRule,int index,FirstSet firstSet)
 		} 
 	}
         if(flg0 == 1)
-        firstRule[58] = 1;
+        firstRule[eps] = 1;
 }
 
 void add2(int* answer,int* add0,int* flg0)
 {
 	for(int i=0;i<NUM_TERMINALS;i++)
 	{
-		if(add0[i] && i!=58)
+		if(add0[i] && i!=eps)
 		{
 			if(!answer[i])
 			*flg0=1;
@@ -387,7 +417,7 @@ int index=0;
 			if(!*flg2) *flg2=flg3;
 			followSet[rule[i]-NTERMINAL_OFFSET]=temp;
 		}
-		if(firstRule[58] || flg0)
+		if(firstRule[eps] || flg0)
 		{
 			for(int j=0;j<NUM_TERMINALS;j++)
 			{

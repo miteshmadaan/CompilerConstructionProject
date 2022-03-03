@@ -179,7 +179,7 @@ void fillingPHT(parserKaTable* lookUpTable)
 	addElementInPHT( lookUpTable, "TK_ENDUNION",TK_ENDUNION);
 	addElementInPHT( lookUpTable, "TK_DEFINETYPE",TK_DEFINETYPE);
 	addElementInPHT( lookUpTable, "TK_AS",TK_AS);
-	addElementInPHT( lookUpTable, "eps",58);
+	addElementInPHT( lookUpTable, "eps",59);
 
 }
 

@@ -16,4 +16,8 @@ void parseInputSourceCode(FILE* sourceFile,parseTable t,Grm g,parseTree root,int
 void printParseTree(parseTree root);
 void firstString(int* b,int* firstRule,int index,FirstSet firstSet);
 
+int parseIdStr(char *idStr);
+char *idRepr(int id);
+char *tokenRepr(int id);
+
 #endif
