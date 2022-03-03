@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
-
+#include <time.h>
 #include "lexer.h"
 #include "parser.h"
 
@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
                 }
                 initializeLexer(sourceCode);
                 int errorFound = 0;
-                parseInputSourceCode(sourceCode,t,grammar,root, errorFound);
+                parseInputSourceCode(sourceCode,t,grammar,root, &errorFound);
 
                 if(errorFound==1){
                     break;
@@ -123,7 +123,40 @@ int main(int argc, char *argv[])
             }
             else if(option =='4')
             {
-                printf("needs to be implemented\n");
+                clock_t start_time, end_time;
+
+                double total_CPU_time, total_CPU_time_in_seconds;
+
+                start_time = clock();
+
+                printf("\n----------------Lexer and Parser module invoked---------------\n");
+                sourceCode =fopen(argv[1],"r");
+                fseek(sourceCode,0,SEEK_SET);
+                if(sourceCode==NULL){
+                    printf("Error cannot open file\n");
+                    exit(0);
+                }
+                initializeLexer(sourceCode);
+                int errorFound = 0;
+                parseInputSourceCode(sourceCode,t,grammar,root, &errorFound);
+
+                if(errorFound==1){
+                    break;
+                }
+                if(root==NULL){
+                    break;
+                }
+
+                fclose(sourceCode);
+
+                end_time = clock();
+
+                total_CPU_time = (double) (end_time - start_time);
+
+                total_CPU_time_in_seconds = total_CPU_time / CLOCKS_PER_SEC;
+
+                // Print both total_CPU_time and total_CPU_time_in_seconds
+                printf("total_CPU_time = %f and total_CPU_time_in_seconds %f\n", total_CPU_time , total_CPU_time_in_seconds);
             }
             else
             {
