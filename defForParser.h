@@ -9,12 +9,6 @@
 #define RULE_MAX_LEN 15
 #define NTERMINAL_OFFSET 12345
 
-typedef treeNode* parseTree;
-typedef FIRST* FirstSet;
-typedef FIRST* FollowSet;
-typedef PTEntry parseTable[NUM_NTERMINALS][NUM_TERMINALS];
-
-
 typedef enum nonTerminals{
 program = NTERMINAL_OFFSET,
 mainFunction,
@@ -89,7 +83,7 @@ typedef struct treeNode
 	TOKEN* terminal;
     int ruleNo;
 	int nonTerminal;
-	treeNode* children;
+	struct treeNode* children;
 	// struct tablePointer* tp;
 } treeNode;
 
@@ -100,5 +94,10 @@ typedef struct PTEntry
 	int productionNum;
 	int syn;
 }PTEntry;
+
+typedef treeNode* parseTree;
+typedef FIRST* FirstSet;
+typedef FIRST* FollowSet;
+typedef PTEntry parseTable[NUM_NTERMINALS][NUM_TERMINALS];
 
 #endif
