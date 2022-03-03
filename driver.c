@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     getFollowSets(grammar, followSet,firstSet);
     parseTable t;
     parseTree root=malloc(sizeof(treeNode)),ast=NULL;
-    int error = 0;
+    
     createParseTable(firstSet,followSet,grammar,t);
 
     if(argc < 2)
@@ -51,7 +51,12 @@ int main(int argc, char *argv[])
         char option = '5';
         while(option != '0')
         {
-            printf("Choose your option\n");
+            printf("\nChoose your option:\n");
+            printf("Option 0: Exit\n");
+            printf("Option 1: Remove Comments from code\n");
+            printf("Option 2: Print the stream of tokens\n");
+            printf("Option 3: Print the parse tree\n");
+            printf("Option 4: Print the time taken by lexer and parser\n");
             scanf("%c" , &option);
             if(option =='\n')
             {
@@ -60,21 +65,61 @@ int main(int argc, char *argv[])
             printf("your option is %c\n" , option);
             if(option == '1')
             {
+                printf("\n----------------Removing comments from code---------------\n");
                 sourceCode =fopen(argv[1],"r");
+                fseek(sourceCode,0,SEEK_SET);
+                if(sourceCode==NULL){
+                    printf("Error cannot open file\n");
+                    exit(0);
+                }
                 removeComments(sourceCode);
                 fclose(sourceCode);
+                printf("\n----------------------------------------------------------\n");
+                
             }
             else if(option == '2')
             {
+                printf("\n----------------Lexer module invoked---------------\n");
                 printf("analysing file : %s\n" , argv[1]);
                 sourceCode =fopen(argv[1],"r");
+                fseek(sourceCode,0,SEEK_SET);
+                if(sourceCode==NULL){
+                    printf("Error cannot open file\n");
+                    exit(0);
+                }
                 initializeLexer(sourceCode);
                 tokenizeSource();
                 fclose(sourceCode);
+                printf("\n----------------------------------------------------------\n");
             }
             else if(option == '3')
             {
-                printf("needs to be implemented\n");
+                printf("\n----------------Lexer and Parser module invoked---------------\n");
+                sourceCode =fopen(argv[1],"r");
+                fseek(sourceCode,0,SEEK_SET);
+                if(sourceCode==NULL){
+                    printf("Error cannot open file\n");
+                    exit(0);
+                }
+                initializeLexer(sourceCode);
+                int errorFound = 0;
+                parseInputSourceCode(sourceCode,t,grammar,root, errorFound);
+
+                if(errorFound==1){
+                    break;
+                }
+                if(root==NULL){
+                    break;
+                }
+
+                printf("\nlexeme\t\tCurrentNode\t\tlineno\t\ttokenName\t\tvalueIfNumber\t\tparentNodeSymbol\t\tisLeafNode(yes/no)\t\tNodeSymbol\t\t\n\n");
+                printf("----\t\troot\t\t----\t\t----\t\t----\t\tROOT\t\tno  \t\tprogram\t\t\n\n");
+                printParseTree(root);
+                printf("\nInput source code is syntactically correct..........\n\n");
+                printf("\t\t\t\tParsing succesfull\n\n");
+
+                fclose(sourceCode);
+                printf("\n----------------------------------------------------------\n");
             }
             else if(option =='4')
             {
