@@ -1,3 +1,10 @@
+/* 
+* Mitesh Madaan             2018B5A70901P
+* Shreyas Das               2019A7PS0111P
+* Rahul Taak                2019A7PS0012P
+* Manik Chopra              2019A7PS0144P
+* Muppirisetty R Bharadwaj  2019A7PS0025P
+*/
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
@@ -30,6 +37,9 @@ void removeComments(FILE *inputFile)
 
 int main(int argc, char *argv[])
 {
+    printf("Implementation details of code:\n");
+    printf("1) FIRST and FOLLOW set automated\n");
+    printf("2) Both lexical analyser and syntax analyser modules implemented\n");
     FILE *sourceCode;
     Grm grammar;
     grammar = (NTERMINAL*)malloc(sizeof(NTERMINAL) * NUM_NTERMINALS);

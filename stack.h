@@ -1,3 +1,10 @@
+/* 
+* Mitesh Madaan             2018B5A70901P
+* Shreyas Das               2019A7PS0111P
+* Rahul Taak                2019A7PS0012P
+* Manik Chopra              2019A7PS0144P
+* Muppirisetty R Bharadwaj  2019A7PS0025P
+*/
 #include "defForParser.h"
 typedef struct key{
 	int id;
