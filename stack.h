@@ -2,24 +2,26 @@
 typedef struct key{
 	int id;
 	parseTree parent;
-} * Key;
+}key;
+typedef key* Key;
 
 typedef struct stackElement{
 	Key k;
-	stackElement next;
-}* stackElement;
+	struct stackElement* next;
+}stackElement;
+typedef stackElement* StackElement;
 
 typedef struct stack{
 	int count;
-	stackElement head;
-	stackElement tail;
-}* Stack;
-
+	stackElement* head;
+	stackElement* tail;
+}stack;
+typedef stack* Stack;
 
 Stack createStack();
-void insertElementAtBottom(Stack s, stackElement e);
+void insertElementAtBottom(Stack s, StackElement e);
 void push(Stack s, int id, parseTree pt);
 void pop(Stack s);
 Key KeyAtTopElement(Stack s);
-stackElement createElement(Key k);
+StackElement createElement(Key k);
 Key createKey(int id, parseTree pt);

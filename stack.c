@@ -1,5 +1,5 @@
 #include "stack.h"
-
+#include <stdlib.h>
 
 Stack createStack(){
 	Stack parserKaStack = malloc(sizeof( struct stack));
@@ -9,7 +9,7 @@ Stack createStack(){
 	return parserKaStack;
 }
 
-void insertElementAtBottom(Stack parserKaStack, stackElement e){
+void insertElementAtBottom(Stack parserKaStack, StackElement e){
 	if(parserKaStack->count == 0){
 		e->next = NULL;
 		parserKaStack->head = e;
@@ -34,9 +34,9 @@ Key KeyAtTopElement(Stack parserKaStack){
 }
 
 		
-stackElement createElement(Key k)
+StackElement createElement(Key k)
 {
-	stackElement a = malloc(sizeof(struct stackElement));
+	StackElement a = malloc(sizeof(struct stackElement));
 	a->k = k;
 	a->next=NULL;
 	return a;
@@ -51,8 +51,8 @@ Key createKey(int id, parseTree pt){
 }
 		
 void push(Stack parserKaStack, int id, parseTree pt){
-	Key key = newKey(id, pt);
-	stackElement e = newElement(key);
+	Key key = createKey(id, pt);
+	StackElement e = createElement(key);
 	if(parserKaStack->count == 0){
 		parserKaStack->head = e;
 		parserKaStack->tail=e;
@@ -71,15 +71,15 @@ void pop(Stack parserKaStack){
 		printf("Stack is empty\n");
 	}
     else if(parserKaStack->count > 1){
-		stackElement enext = parserKaStack->head->next;
-		stackElement curr = parserKaStack->head;
+		StackElement enext = parserKaStack->head->next;
+		StackElement curr = parserKaStack->head;
         curr->next = NULL;
 		parserKaStack->head = enext;
         parserKaStack->count--;
 		free(curr);
 	}
 	else if(parserKaStack->count == 1){
-		stackElement curr = parserKaStack->head;
+		StackElement curr = parserKaStack->head;
         parserKaStack->tail = NULL;
 		parserKaStack->head = NULL;
         parserKaStack->count = 0;
