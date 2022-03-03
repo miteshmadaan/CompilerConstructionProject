@@ -942,9 +942,8 @@ TOKEN getNextTokenFromDFA(){
                 }
                 else
                 {
-                    retract(2);
-                    dfaState = 0;
-                    return makeToken(TK_LT);
+                    retract(1);
+                    dfaState = 61;
                 }
                 break;
 
@@ -956,9 +955,8 @@ TOKEN getNextTokenFromDFA(){
                 }
                 else
                 {
-                    retract(3);
-                    dfaState = 0;
-                    return makeToken(TK_LT);
+                    retract(1);
+                    dfaState = 61;
                 }
                 break;
 
