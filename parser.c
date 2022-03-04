@@ -63,46 +63,46 @@ char *tokenRepr(int id)
 		return "";
 }
 
-void printParseTree(parseTree root)
+void printParseTree(FILE* parserOutput,parseTree root)
 {
 	parseTree current;
-	int class;
+	int class=0;
 	for(int i=0;i<root->numChild;i++)
 	{
 		current=&(root->children[i]);
 		if(!current)
-		printf("NULL\n");
+			fprintf(parserOutput,"NULL\n");
+		
 		if(current->numChildAST==0 && current->terminal->tokenType==eps)
-		continue;
+			continue;
+	
 		if(current->numChildAST>0)
 		{
-			printf("-------\t\t");
-			printf("-------\t\t");
-			printf("-------\t\t");
-			printf("-------\t\t");
+			fprintf(parserOutput,"----\t\t");//lexeme of current node
+			fprintf(parserOutput,"----\t\t");//linenumber
+			fprintf(parserOutput,"----\t\t");//tokenname
+			fprintf(parserOutput,"----\t\t");//valueifNumber
+			fprintf(parserOutput,"%s\t\t",idRepr(root->nonTerminal));//parentnodesymbol
+			fprintf(parserOutput,"NO\t\t");//isleaf
+			fprintf(parserOutput,"%s\t\t",idRepr(current->nonTerminal));//current node symbol
 		}
 		else{
-			printf("%s\t\t",current->terminal->strLexeme);
-			printf("%d\t\t",current->terminal->lineNumber);
-			printf("%s\t\t",tokenRepr(current->terminal->tokenType));
+			fprintf(parserOutput,"%s\t\t",current->terminal->strLexeme);
+			fprintf(parserOutput,"%d\t\t",current->terminal->lineNumber);
+			fprintf(parserOutput,"%s\t\t",tokenRepr(current->terminal->tokenType));
 			if(current->terminal->tokenType==TK_NUM)
-				printf("%d\t\t",current->terminal->intLexeme);
+				fprintf(parserOutput,"%d\t\t",current->terminal->intLexeme);
             else if(current->terminal->tokenType==TK_RNUM)
-                printf("%0.5lf\t\t",current->terminal->reallexeme);
-			else printf("-------\t\t");	
+                fprintf(parserOutput,"%s\t\t",current->terminal->strLexeme);
+			else fprintf(parserOutput,"-------\t\t");	
+		
+			fprintf(parserOutput,"%s\t\t",idRepr(root->nonTerminal));//parentnodesymbol
+		
+			fprintf(parserOutput,"YES\t\t");//isleaf
+			fprintf(parserOutput,"-------\t\t");
 		}
-		printf("%s\t\t",idRepr(root->nonTerminal));
-		if(current->numChildAST==0)
-		{
-			printf("YES\t\t");
-			printf("-------\t\t");
-		}
-		else{
-			printf("NO\t\t");
-			printf("%s\t\t",idRepr(current->nonTerminal));
-		}
-		printf("\n");
-		printParseTree(current);
+		fprintf(parserOutput,"\n");
+		printParseTree(parserOutput, current);
 	}
 }
 

@@ -20,7 +20,7 @@ void findFollow(int nTerminalNum, int prodNum, Grm g, FollowSet followSet, First
 void createParseTable(FirstSet firstSet,FollowSet followSet,Grm g,parseTable t);
 void add2(int* answer,int* add0,int* flg0);
 void parseInputSourceCode(FILE* sourceFile,parseTable t,Grm g,parseTree root,int* error);
-void printParseTree(parseTree root);
+void printParseTree(FILE* parserOutput,parseTree root);
 void firstString(int* b,int* firstRule,int index,FirstSet firstSet);
 
 int parseIdStr(char *idStr);

@@ -40,7 +40,9 @@ int main(int argc, char *argv[])
     printf("Implementation details of code:\n");
     printf("1) FIRST and FOLLOW set automated\n");
     printf("2) Both lexical analyser and syntax analyser modules implemented\n");
-    FILE *sourceCode;
+    printf("3) lexical analyser module works on all testcases\n");
+    printf("4) Parser module compiles but segmentation fault\n\n");
+    FILE *sourceCode, *parserOutput;
     Grm grammar;
     grammar = (NTERMINAL*)malloc(sizeof(NTERMINAL) * NUM_NTERMINALS);
     getGram("grammar.txt", grammar);
@@ -53,7 +55,7 @@ int main(int argc, char *argv[])
     
     createParseTable(firstSet,followSet,grammar,t);
 
-    if(argc < 2)
+    if(argc < 3)
     {
         printf("insufficient command line arguments");
     }
@@ -111,6 +113,13 @@ int main(int argc, char *argv[])
                     printf("Error cannot open file\n");
                     exit(0);
                 }
+                parserOutput =fopen(argv[2],"w");
+                fseek(parserOutput,0,SEEK_SET);
+                if(parserOutput==NULL){
+                    printf("Error cannot create parser output file\n");
+                    exit(0);
+                }
+                
                 initializeLexer(sourceCode);
                 int errorFound = 0;
                 parseInputSourceCode(sourceCode,t,grammar,root, &errorFound);
@@ -119,16 +128,25 @@ int main(int argc, char *argv[])
                     break;
                 }
                 if(root==NULL){
-                    break;
+                    fprintf(parserOutput,"NULL\n");
                 }
 
-                printf("\nlexeme\t\tCurrentNode\t\tlineno\t\ttokenName\t\tvalueIfNumber\t\tparentNodeSymbol\t\tisLeafNode(yes/no)\t\tNodeSymbol\t\t\n\n");
-                printf("----\t\troot\t\t----\t\t----\t\t----\t\tROOT\t\tno  \t\tprogram\t\t\n\n");
-                printParseTree(root);
+                fprintf(parserOutput,"\nlexeme of CurrentNode\t\tlineno\t\ttokenName\t\tvalueIfNumber\t\tparentNodeSymbol\t\tisLeafNode(yes/no)\t\tNodeSymbol\t\t\n\n");
+                fprintf(parserOutput,"----\t\t");
+                fprintf(parserOutput,"----\t\t");
+                fprintf(parserOutput,"----\t\t");
+                fprintf(parserOutput,"----\t\t");
+                fprintf(parserOutput,"ROOT\t\t");
+                fprintf(parserOutput,"NO\t\t");
+                fprintf(parserOutput,"program\t\t");
+                fprintf(parserOutput,"\n");
+		
+                printParseTree(parserOutput,root);
                 printf("\nInput source code is syntactically correct..........\n\n");
                 printf("\t\t\t\tParsing succesfull\n\n");
 
                 fclose(sourceCode);
+                fclose(parserOutput);
                 printf("\n----------------------------------------------------------\n");
             }
             else if(option =='4')
@@ -137,8 +155,7 @@ int main(int argc, char *argv[])
 
                 double total_CPU_time, total_CPU_time_in_seconds;
 
-                start_time = clock();
-
+                
                 printf("\n----------------Lexer and Parser module invoked---------------\n");
                 sourceCode =fopen(argv[1],"r");
                 fseek(sourceCode,0,SEEK_SET);
@@ -146,20 +163,23 @@ int main(int argc, char *argv[])
                     printf("Error cannot open file\n");
                     exit(0);
                 }
+
+                start_time = clock();
+                
                 initializeLexer(sourceCode);
                 int errorFound = 0;
                 parseInputSourceCode(sourceCode,t,grammar,root, &errorFound);
+
+                end_time = clock();
 
                 if(errorFound==1){
                     break;
                 }
                 if(root==NULL){
-                    break;
+                    printf("NULL\n");
                 }
 
                 fclose(sourceCode);
-
-                end_time = clock();
 
                 total_CPU_time = (double) (end_time - start_time);
 
