@@ -10,7 +10,7 @@
 
 #include "defForLexer.h"
 
-#define NUM_NTERMINALS 57
+#define NUM_NTERMINALS 53
 #define NUM_TERMINALS 60
 #define NUM_RULES 95
 #define RULE_MAX_LEN 15
