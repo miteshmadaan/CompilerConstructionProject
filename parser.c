@@ -48,7 +48,7 @@ int parseIdStr(char *idStr)
 char *idRepr(int id) 
 {
 		if(id>=NTERMINAL_OFFSET && id<NTERMINAL_OFFSET+NUM_NTERMINALS)
-		return strRepId[id-NTERMINAL_OFFSET+NUM_NTERMINALS-1];
+		return strRepId[id-NTERMINAL_OFFSET+NUM_TERMINALS];
 		else if(id>=0 && id<=59)
 		return strRepId[id];
 		else
@@ -57,7 +57,7 @@ char *idRepr(int id)
 
 char *tokenRepr(int id) 
 {
-	if(id >= 0 && id <=55)
+	if(id >= 0 && id <=59)
 		return listTokens[id];
 	else
 		return "";
@@ -278,8 +278,8 @@ void parseInputSourceCode(FILE* sourceFile,parseTable t,Grm g,parseTree root,int
 
 void getGram(char *fname, Grm g)
 {
-     int i=0;
-	
+    int i=0,random;
+
 	FILE* gf;
 	gf=fopen(fname,"r");
 	if(gf==NULL){
@@ -290,7 +290,7 @@ void getGram(char *fname, Grm g)
 		fscanf(gf,"%d",&(g[i].rulesNum));
 		g[i].prodRules=(int**)malloc((g[i].rulesNum)*sizeof(int*));
     		for (int j=0; j<g[i].rulesNum; j++) 
-        	 g[i].prodRules[j]= (int *)malloc((RULE_MAX_LEN+1) * sizeof(int));	
+        	g[i].prodRules[j]= (int *)malloc((RULE_MAX_LEN+1) * sizeof(int));	
 		
 		int k,id;
 		char temp[ID_MAX_SIZE];
@@ -304,8 +304,8 @@ void getGram(char *fname, Grm g)
 			{
 				fscanf(gf,"%s",tempo);
 				id=parseIdStr(tempo);
-				g[i].prodRules[j][m]=id;				
-			}			
+				g[i].prodRules[j][m]=id;
+			}
 		}
 		i++;
 	}
@@ -361,9 +361,11 @@ int* calculateFirst(int produc,Grm g,FirstSet firstSet)
 void buildFirstSet(Grm g,FirstSet firstSet)
 {
 	int* nouse;
-	for(int i=0;i<NUM_NTERMINALS;i++)
-	if(!check[i])
-	nouse=calculateFirst(i,g,firstSet);
+	for(int i=0;i<NUM_NTERMINALS;i++){
+		if(!check[i]){
+			nouse=calculateFirst(i,g,firstSet);
+		}
+	}		
 }
 
 //-----------------------------------------------------------------------------------------------------
