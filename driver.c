@@ -10,7 +10,6 @@
 #include<time.h>
 #include <time.h>
 #include "lexer.h"
-#include "parser.h"
 
 void removeComments(FILE *inputFile)
 {
@@ -37,23 +36,14 @@ void removeComments(FILE *inputFile)
 
 int main(int argc, char *argv[])
 {
-    printf("Implementation details of code:\n");
-    printf("1) FIRST and FOLLOW set automated\n");
-    printf("2) Both lexical analyser and syntax analyser modules implemented\n");
-    printf("3) lexical analyser module works on all testcases\n");
-    printf("4) Parser module compiles but segmentation fault\n\n");
-    FILE *sourceCode, *parserOutput;
-    Grm grammar;
-    grammar = (NTERMINAL*)malloc(sizeof(NTERMINAL) * NUM_NTERMINALS);
-    getGram("grammar.txt", grammar);
-    FirstSet firstSet=(FirstSet)malloc(NUM_NTERMINALS*sizeof(FIRST));
-    FollowSet followSet=(FollowSet)malloc(NUM_NTERMINALS*sizeof(FIRST));
-    buildFirstSet(grammar,firstSet);
-    getFollowSets(grammar, followSet,firstSet);
-    parseTable t;
-    parseTree root=malloc(sizeof(treeNode)),ast=NULL;
-    
-    createParseTable(firstSet,followSet,grammar,t);
+    printf("\nImplementation details of code:\n");
+    printf("1) First and Follow sets are automated\n");
+    printf("2) Lexical analyser and Parser module implemented\n");
+    printf("3) Lexical module working on all test cases\n");
+    printf("4) Parser module compiling, but segmentation errors\n");
+    printf("5) Parser module not called in driver.c due to segmentation error\n");
+    printf("6) Parse tree could not be constructed\n\n");
+    FILE *sourceCode;
 
     if(argc < 3)
     {
@@ -67,13 +57,17 @@ int main(int argc, char *argv[])
             printf("Option 0: Exit\n");
             printf("Option 1: Remove Comments from code\n");
             printf("Option 2: Print the stream of tokens\n");
-            printf("Option 3: Print the parse tree\n");
-            printf("Option 4: Print the time taken by lexer and parser\n");
+            printf("Option 3: Parser Module removed due to unresolved errors\n");
+            printf("Option 4: Print the time taken by lexer\n");
             scanf("%c" , &option);
             if(option =='\n')
             {
                 scanf("%c" , &option);
             }
+            if(option == '0')
+                {
+                    break;
+                }
             printf("your option is %c\n" , option);
             if(option == '1')
             {
@@ -106,48 +100,9 @@ int main(int argc, char *argv[])
             }
             else if(option == '3')
             {
-                printf("\n----------------Lexer and Parser module invoked---------------\n");
-                sourceCode =fopen(argv[1],"r");
-                fseek(sourceCode,0,SEEK_SET);
-                if(sourceCode==NULL){
-                    printf("Error cannot open file\n");
-                    exit(0);
-                }
-                parserOutput =fopen(argv[2],"w");
-                fseek(parserOutput,0,SEEK_SET);
-                if(parserOutput==NULL){
-                    printf("Error cannot create parser output file\n");
-                    exit(0);
-                }
+                printf("\n----------------Parser module not available due to segmentation error ---------------\n");
                 
-                initializeLexer(sourceCode);
-                int errorFound = 0;
-                parseInputSourceCode(sourceCode,t,grammar,root, &errorFound);
-
-                if(errorFound==1){
-                    break;
-                }
-                if(root==NULL){
-                    fprintf(parserOutput,"NULL\n");
-                }
-
-                fprintf(parserOutput,"\nlexeme of CurrentNode\t\tlineno\t\ttokenName\t\tvalueIfNumber\t\tparentNodeSymbol\t\tisLeafNode(yes/no)\t\tNodeSymbol\t\t\n\n");
-                fprintf(parserOutput,"----\t\t");
-                fprintf(parserOutput,"----\t\t");
-                fprintf(parserOutput,"----\t\t");
-                fprintf(parserOutput,"----\t\t");
-                fprintf(parserOutput,"ROOT\t\t");
-                fprintf(parserOutput,"NO\t\t");
-                fprintf(parserOutput,"program\t\t");
-                fprintf(parserOutput,"\n");
-		
-                printParseTree(parserOutput,root);
-                printf("\nInput source code is syntactically correct..........\n\n");
-                printf("\t\t\t\tParsing succesfull\n\n");
-
-                fclose(sourceCode);
-                fclose(parserOutput);
-                printf("\n----------------------------------------------------------\n");
+                
             }
             else if(option =='4')
             {
@@ -155,31 +110,30 @@ int main(int argc, char *argv[])
 
                 double total_CPU_time, total_CPU_time_in_seconds;
 
+                start_time = clock();
+
+                printf("\n----------------Lexer module invoked---------------\n");
+                printf("\n----------------Time taken only for only lexical analysis---------------\n");
                 
-                printf("\n----------------Lexer and Parser module invoked---------------\n");
                 sourceCode =fopen(argv[1],"r");
                 fseek(sourceCode,0,SEEK_SET);
                 if(sourceCode==NULL){
                     printf("Error cannot open file\n");
                     exit(0);
                 }
-
-                start_time = clock();
-                
                 initializeLexer(sourceCode);
-                int errorFound = 0;
-                parseInputSourceCode(sourceCode,t,grammar,root, &errorFound);
+                TOKEN tokenFromDfa;
+                while(1)
+                {
+                    tokenFromDfa = getNextTokenFromDFA();
+                    if (tokenFromDfa.tokenType == TK_EOF)
+                    {
+                        break;
+                    }
+                }
+                fclose(sourceCode);
 
                 end_time = clock();
-
-                if(errorFound==1){
-                    break;
-                }
-                if(root==NULL){
-                    printf("NULL\n");
-                }
-
-                fclose(sourceCode);
 
                 total_CPU_time = (double) (end_time - start_time);
 
