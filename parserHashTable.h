@@ -9,7 +9,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "defForLexer.h"
+#include "lexerDef.h"
 
 struct parserelement{
 	char* lexeme;

@@ -5,7 +5,7 @@
 * Manik Chopra              2019A7PS0144P
 * Muppirisetty R Bharadwaj  2019A7PS0025P
 */
-#include "defForParser.h"
+#include "parserDef.h"
 typedef struct key{
 	int id;
 	parseTree parent;

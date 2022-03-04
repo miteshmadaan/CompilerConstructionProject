@@ -8,7 +8,7 @@
 #ifndef LEXER_H
 #define LEXER_H
 
-#include "defForLexer.h"
+#include "lexerDef.h"
 
 TOKEN makeToken(tokenType tokenTypeInput);
 void initializeLexer(FILE *sourceCode);

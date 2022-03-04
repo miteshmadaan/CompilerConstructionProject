@@ -8,8 +8,8 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include "defForLexer.h"
-#include "defForParser.h"
+#include "lexerDef.h"
+#include "parserDef.h"
 
 int* calculateFirst(int produc,Grm g,FirstSet firstSet);
 int* add(int* ans, int* addit);
