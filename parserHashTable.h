@@ -1,4 +1,5 @@
 /* 
+* Group No. 46
 * Mitesh Madaan             2018B5A70901P
 * Shreyas Das               2019A7PS0111P
 * Rahul Taak                2019A7PS0012P
@@ -9,7 +10,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "defForLexer.h"
+#include "lexerDef.h"
 
 struct parserelement{
 	char* lexeme;

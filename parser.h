@@ -1,4 +1,5 @@
 /* 
+* Group No. 46
 * Mitesh Madaan             2018B5A70901P
 * Shreyas Das               2019A7PS0111P
 * Rahul Taak                2019A7PS0012P
@@ -8,8 +9,8 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include "defForLexer.h"
-#include "defForParser.h"
+#include "lexerDef.h"
+#include "parserDef.h"
 
 int* calculateFirst(int produc,Grm g,FirstSet firstSet);
 int* add(int* ans, int* addit);

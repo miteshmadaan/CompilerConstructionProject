@@ -1,14 +1,15 @@
 /* 
+* Group No. 46
 * Mitesh Madaan             2018B5A70901P
 * Shreyas Das               2019A7PS0111P
 * Rahul Taak                2019A7PS0012P
 * Manik Chopra              2019A7PS0144P
 * Muppirisetty R Bharadwaj  2019A7PS0025P
 */
-#ifndef DEFFORPARSER_H
-#define DEFFORPARSER_H
+#ifndef PARSERDEF_H
+#define PARSERDEF_H
 
-#include "defForLexer.h"
+#include "lexerDef.h"
 
 #define NUM_NTERMINALS 53
 #define NUM_TERMINALS 60
