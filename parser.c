@@ -312,6 +312,78 @@ void getGram(char *fname, Grm g)
 	}
 }
 
+void getFirst(char *fname, FirstSet firstSet){
+
+	int i=0;
+
+	FILE* ff;
+	ff=fopen(fname,"r");
+	if(ff==NULL){
+		return;
+	}
+	printf("\n\nFirst Sets\n\n");
+	while(i<5)
+	{
+		int k,id;
+		char temp[ID_MAX_SIZE];
+		char tempo[ID_MAX_SIZE];
+
+			fscanf(ff,"%s%d",temp,&k);
+			printf("%s : {",temp);
+			for(int m=1;m<=k;m++)
+			{
+				fscanf(ff,"%s",tempo);
+				printf(", %s",tempo);
+				id=parseIdStr(tempo);
+				firstSet[i][id]=1;
+			}
+			printf("}\n");
+			for(int l = 0; l<NUM_TERMINALS; l++){
+				printf("%d ",firstSet[i][l]);
+			}
+			printf("\n");
+		i++;
+
+	}
+	return;
+}
+
+void getFollow(char *fname, FollowSet followSet){
+
+	int i=0;
+
+	FILE* ff;
+	ff=fopen(fname,"r");
+	if(ff==NULL){
+		return;
+	}
+	printf("\n\nFollow Sets\n\n");
+	while(i<5)
+	{
+		int k,id;
+		char temp[ID_MAX_SIZE];
+		char tempo[ID_MAX_SIZE];
+
+			fscanf(ff,"%s%d",temp,&k);
+			printf("%s : {",temp);
+			for(int m=1;m<=k;m++)
+			{
+				fscanf(ff,"%s",tempo);
+				printf(", %s",tempo);
+				id=parseIdStr(tempo);
+				followSet[i][id]=1;
+			}
+			printf("}\n");
+			for(int l = 0; l<NUM_TERMINALS; l++){
+				printf("%d ",followSet[i][l]);
+			}
+			printf("\n");
+		i++;
+
+	}
+	return;
+}
+
 int* add(int* answer, int* addit){
 	for(int i=0;i<=NUM_TERMINALS;i++)
 	if(addit[i] && i!=eps) answer[i]=1;
@@ -342,7 +414,7 @@ int* calculateFirst(int produc,Grm g,FirstSet firstSet)
 				if(!check[array1[i][m]-NTERMINAL_OFFSET])
 				{
 					tem1=calculateFirst(array1[i][m]-NTERMINAL_OFFSET,g,firstSet);
-					(firstSet[array1[i][m]-NTERMINAL_OFFSET])=tem1;
+					// (firstSet[array1[i][m]-NTERMINAL_OFFSET])=tem1;
 					check[array1[i][m]-NTERMINAL_OFFSET]=1;
 				}
 				answer=add(answer,firstSet[array1[i][m]-NTERMINAL_OFFSET]);
@@ -354,7 +426,7 @@ int* calculateFirst(int produc,Grm g,FirstSet firstSet)
 			answer[eps]=1;
 		}
 	}
-	firstSet[produc]=answer;
+	// firstSet[produc]=answer;
 	check[produc]=1;
 	return answer;
 }
@@ -442,7 +514,7 @@ int index=0;
 			temp=followSet[rule[i]-NTERMINAL_OFFSET];
 			add2(temp,firstRule,&flg3);
 			if(!*flg2) *flg2=flg3;
-			followSet[rule[i]-NTERMINAL_OFFSET]=temp;
+			// followSet[rule[i]-NTERMINAL_OFFSET]=temp;
 		}
 		if(firstRule[eps] || flg0)
 		{
@@ -465,7 +537,7 @@ int index=0;
 void getFollowSets(Grm g, FollowSet follow0, FirstSet first0){
 	for(int i=0;i<NUM_NTERMINALS;i++)
 	{
-		follow0[i]=malloc(sizeof(int)*NUM_TERMINALS);
+		// follow0[i]=malloc(sizeof(int)*NUM_TERMINALS);
 		for(int j=0;j<NUM_TERMINALS;j++)
 		follow0[i][j]=0;
 	}

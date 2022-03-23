@@ -1,0 +1,7 @@
+program 1 $
+mainFunction 1 $
+otherFunctions 1 TK_MAIN
+function 2 TK_FUNID TK_MAIN
+input_par 2 TK_SEM TK_OUTPUT
+output_par 1 TK_SEM
+parameter_list 1 TK_SQR

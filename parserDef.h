@@ -33,9 +33,11 @@ constructedDatatype,
 remaining_list,
 stmts,
 typeDefinitions,
+actualOrRedefined,
 typeDefinition,
 fieldDefinitions,
 fieldDefinition,
+fieldType,
 moreFields,
 declarations,
 declaration,
@@ -44,7 +46,9 @@ otherStmts,
 stmt,
 assignmentStmt,
 singleOrRecId,
-singleOrRecIdPrime,
+option_single_constructed,
+oneExpansion,
+moreExpansions,
 funCallStmt,
 outputParameters,
 inputParameters,
@@ -52,7 +56,6 @@ iterativeStmt,
 conditionalStmt,
 elsePart,
 ioStmt,
-allVar,
 arithmeticExpression,
 expPrime,
 term,
@@ -60,8 +63,6 @@ termPrime,
 factor,
 highPrecedenceOperators,
 lowPrecedenceOperators,
-all,
-temp,
 booleanExpression,
 var,
 logicalOp,
@@ -70,21 +71,17 @@ returnStmt,
 optionalReturn,
 idList,
 more_ids,
-actualOrRedifined,
-fieldType,
-option_single_constructed,
-oneExpansion,
-moreExpansions,
 definetypestmt,
 A
-}nonTerminals;
+}
+nonTerminals;
 
 typedef struct NTERMINAL{
     int rulesNum;
     int** prodRules;
 }NTERMINAL;
 
-typedef NTERMINAL* Grm;
+typedef NTERMINAL Grm[NUM_NTERMINALS];
 
 typedef struct treeNode
 {
@@ -97,7 +94,6 @@ typedef struct treeNode
 	// struct tablePointer* tp;
 } treeNode;
 
-typedef int* FIRST;
 typedef struct PTEntry
 {
 	int nonTerm;
@@ -106,8 +102,8 @@ typedef struct PTEntry
 }PTEntry;
 
 typedef treeNode* parseTree;
-typedef FIRST* FirstSet;
-typedef FIRST* FollowSet;
+typedef int FirstSet[NUM_NTERMINALS][NUM_TERMINALS];
+typedef int FollowSet[NUM_NTERMINALS][NUM_TERMINALS];
 typedef PTEntry parseTable[NUM_NTERMINALS][NUM_TERMINALS];
 
 #endif

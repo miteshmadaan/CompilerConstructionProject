@@ -188,6 +188,7 @@ void fillingPHT(parserKaTable* lookUpTable)
 	addElementInPHT( lookUpTable, "TK_DEFINETYPE",TK_DEFINETYPE);
 	addElementInPHT( lookUpTable, "TK_AS",TK_AS);
 	addElementInPHT( lookUpTable, "eps",59);
+	addElementInPHT( lookUpTable, "$",59);
 
 }
 

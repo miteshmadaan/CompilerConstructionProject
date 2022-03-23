@@ -1,0 +1,6 @@
+program 2 TK_FUNID TK_MAIN
+mainFunction 1 TK_MAIN
+otherFunctions 2 TK_FUNID eps
+function 1 TK_FUNID
+input_par 1 TK_INPUT  
+output_par 2 TK_OUTPUT eps

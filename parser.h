@@ -12,6 +12,10 @@
 #include "lexerDef.h"
 #include "parserDef.h"
 
+void initializeParser(FILE *grammarFile, FILE *firstFile, FILE *followFile);
+void getFirst(char *fname, FirstSet firstSet);
+void getFollow(char *fname, FollowSet followSet);
+
 int* calculateFirst(int produc,Grm g,FirstSet firstSet);
 int* add(int* ans, int* addit);
 void buildFirstSet(Grm g, FirstSet firstSet);

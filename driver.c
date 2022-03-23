@@ -11,6 +11,7 @@
 #include<time.h>
 #include <time.h>
 #include "lexer.h"
+#include "parser.h"
 
 void removeComments(FILE *inputFile)
 {
@@ -45,7 +46,17 @@ int main(int argc, char *argv[])
     printf("5) Parser module not called in driver.c due to segmentation error\n");
     printf("6) Parse tree could not be constructed\n\n");
     FILE *sourceCode;
+    Grm grammar;
+    getGram("grammar.txt",grammar);
 
+    FirstSet firstSet;
+    getFirst("first.txt",firstSet);
+    
+    FollowSet followSet;
+    getFollow("follow.txt",followSet);
+    
+    return 0;
+    
     if(argc < 3)
     {
         printf("insufficient command line arguments");
