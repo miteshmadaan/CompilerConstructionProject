@@ -24,10 +24,10 @@ void getFollowSets(Grm g, FollowSet follow0, FirstSet first0);
 void findFollow(int nTerminalNum, int prodNum, Grm g, FollowSet followSet, FirstSet firstSet,int* flg2);
 void add2(int* answer,int* add0,int* flg0);
 
-void createParseTable(FirstSet firstSet,FollowSet followSet,Grm g,parseTable t);
+void createParseTable();
 void parseInputSourceCode(FILE* sourceFile,parseTable t,Grm g,parseTree root,int* error);
 void printParseTree(FILE* parserOutput,parseTree root);
-void firstString(int* b,int* firstRule,int index,FirstSet firstSet);
+void firstString(int* b,int* firstRule,int index);
 
 int parseIdStr(char *idStr);
 char *idRepr(int id);

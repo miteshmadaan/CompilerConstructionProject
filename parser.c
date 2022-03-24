@@ -107,8 +107,7 @@ void printParseTree(FILE* parserOutput,parseTree root)
 	}
 }
 
-void createParseTable(FirstSet firstSet,FollowSet followSet,Grm g,parseTable t)
-{
+void createParseTable(){
     int ruleArray[RULE_MAX_LEN];
 	int** rules;
 	int* rule;
@@ -116,15 +115,19 @@ void createParseTable(FirstSet firstSet,FollowSet followSet,Grm g,parseTable t)
 	for(int i = 0; i < NUM_NTERMINALS; i++)
         for(int j = 0; j < NUM_TERMINALS; j++)
         {
-        	t[i][j].nonTerm = -1;
-        	t[i][j].productionNum= -1;
-        	t[i][j].syn=-1;
+        	parsetable[i][j].nonTerm = -1;
+        	parsetable[i][j].productionNum= -1;
+        	parsetable[i][j].syn=-1;
         }	
+	
 	for(int i=0;i<NUM_NTERMINALS;i++)
-	{
-		NTERMINAL nonTerm=g[i];
+	{	
+		NTERMINAL nonTerm=grammar[i];
+		
 		rules=nonTerm.prodRules;
+		
 		int* followRule=followSet[i];
+		
 		for(int j=0;j<nonTerm.rulesNum;j++)
 		{
 			rule=rules[j];
@@ -132,32 +135,33 @@ void createParseTable(FirstSet firstSet,FollowSet followSet,Grm g,parseTable t)
 			int index=0,flag=0;
 			for(int k=1;k<=rule[0];k++)
 				ruleArray[index++]=rule[k];
-			firstString(ruleArray,firstRule,index,firstSet);
+			firstString(ruleArray,firstRule,index);
 			
+
 			for(int k=0;k<NUM_TERMINALS;k++)
 				if(firstSet[i][k])
-					t[i][k].syn=0;	
-					
+					parsetable[i][k].syn=0;	
+			
 			for(int k=0;k<NUM_TERMINALS;k++)
 				if(followSet[i][k])
-					t[i][k].syn=1;	
+					parsetable[i][k].syn=1;	
 			
 		        for(int k=0;k<NUM_TERMINALS;k++)
 		        if(firstRule[k] && k!=eps)
 		        {
-		        	t[i][k].nonTerm = i;
-        			t[i][k].productionNum= j;
+		        	parsetable[i][k].nonTerm = i;
+        			parsetable[i][k].productionNum= j;
         		}
 		        if(firstRule[eps])
 		        {
 		        	for(int k=0;k<NUM_TERMINALS;k++)
 		        	if(followRule[k] && k!=eps)
 		        	{
-					t[i][k].nonTerm = i;
-					t[i][k].productionNum= j;
+					parsetable[i][k].nonTerm = i;
+					parsetable[i][k].productionNum= j;
         			}
 		        }
-		        ruleNo++;
+			
 		}
 	}
 }
@@ -284,14 +288,20 @@ void initializeParser(){
     
     followSet = (FollowSet)malloc(NUM_NTERMINALS*sizeof(int*));
     
+	parsetable = (parseTable)malloc(NUM_NTERMINALS*sizeof(PTEntry*));
+
     for(int i=0; i<NUM_NTERMINALS; i++){
         firstSet[i] = (int*) malloc(NUM_TERMINALS*sizeof(int));
         followSet[i] = (int*) malloc(NUM_TERMINALS*sizeof(int));
+		parsetable[i] = (PTEntry*)malloc(NUM_TERMINALS*sizeof(PTEntry));
     }
+
+	// root = (parseTree)malloc(sizeof(treeNode));
 
     getGram("grammar.txt",grammar);
     getFirst("first.txt",firstSet);    
     getFollow("follow.txt",followSet);
+	createParseTable();
     
 	return;
 }
@@ -462,11 +472,11 @@ void buildFirstSet(Grm g,FirstSet firstSet)
 
 //-----------------------------------------------------------------------------------------------------
 
-void firstString(int* b,int* firstRule,int index,FirstSet firstSet)
+void firstString(int* b,int* firstRule,int index)
 {
 	int flg0=0;
 	for(int i = 0; i < index; i++)
-	{
+	{	printf("abc\n");
 		if(b[i] < NUM_TERMINALS)
 		{
 	       		firstRule[b[i]] = 1;
@@ -529,7 +539,7 @@ int index=0;
 			
 			for(int k=i+1;k<=ruleSize;k++)
 			b[index++]=rule[k];
-			firstString(b,firstRule,index,firstSet);
+			firstString(b,firstRule,index);
 			temp=followSet[rule[i]-NTERMINAL_OFFSET];
 			add2(temp,firstRule,&flg3);
 			if(!*flg2) *flg2=flg3;

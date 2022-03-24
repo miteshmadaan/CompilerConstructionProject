@@ -104,10 +104,12 @@ typedef struct PTEntry
 typedef treeNode* parseTree;
 typedef int** FirstSet;
 typedef int** FollowSet;
-typedef PTEntry parseTable[NUM_NTERMINALS][NUM_TERMINALS];
+typedef PTEntry** parseTable;
 
 Grm grammar;
 FirstSet firstSet;
 FollowSet followSet;
+parseTable parsetable;
+parseTree root;
 
 #endif
