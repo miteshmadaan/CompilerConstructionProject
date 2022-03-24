@@ -1,6 +1,53 @@
-program 2 TK_FUNID TK_MAIN
+program	2 TK_FUNID TK_MAIN
 mainFunction 1 TK_MAIN
-otherFunctions 2 TK_FUNID eps
+otherFunctions	2 TK_FUNID eps
 function 1 TK_FUNID
-input_par 1 TK_INPUT  
+input_par 1 TK_INPUT
 output_par 2 TK_OUTPUT eps
+parameter_list 4 TK_INT TK_REAL TK_RECORD TK_UNION
+dataType 4 TK_INT TK_REAL TK_RECORD TK_UNION
+primitiveDatatype 2 TK_INT TK_REAL
+constructedDatatype 3 TK_RECORD TK_UNION TK_RUID
+remaining_list 2 TK_COMMA eps
+stmts 12 TK_RECORD TK_UNION TK_TYPE TK_ID TK_WHILE TK_IF TK_READ TK_WRITE TK_SQL TK_CALL TK_RETURN TK_DEFINETYPE
+typeDefinitions 4 TK_RECORD TK_UNION TK_DEFINETYPE eps
+actualOrRedefined 3 TK_RECORD TK_UNION TK_DEFINETYPE
+typeDefinition 2 TK_RECORD TK_UNION
+fieldDefinitions 1 TK_TYPE
+fieldDefinition	1 TK_TYPE
+fieldType 3 TK_INT TK_REAL TK_RUID
+moreFields 2 TK_TYPE eps
+declarations 2 TK_TYPE eps
+declaration	1 TK_TYPE
+global_or_not 2 TK_COLON eps
+otherStmts 8 TK_ID TK_WHILE TK_IF TK_READ TK_WRITE TK_SQL TK_CALL eps
+stmt 7 TK_ID TK_WHILE TK_IF TK_READ TK_WRITE TK_SQL TK_CALL
+assignmentStmt 1 TK_ID
+singleOrRecId 1 TK_ID
+option_single_constructed 2 eps TK_DOT
+oneExpansion 1 TK_DOT
+moreExpansions 2 eps TK_DOT
+funCallStmt 2 TK_SQL TK_CALL
+outputParameters 2 TK_SQL eps
+inputParameters 1 TK_SQL
+iterativeStmt 1 TK_WHILE
+conditionalStmt 1 TK_IF
+elsePart 2 TK_ELSE TK_ENDIF
+ioStmt 2 TK_READ TK_WRITE
+arithmeticExpression 4 TK_OP TK_ID TK_NUM TK_RNUM
+expPrime 3 TK_PLUS TK_MINUS eps
+term 4 TK_ID TK_NUM TK_RNUM TK_OP
+termPrime 3 TK_MUL TK_DIV eps
+factor 4 TK_OP TK_ID TK_NUM TK_RNUM
+highPrecedenceOperators 2 TK_MUL TK_DIV
+lowPrecedenceOperators 2 TK_PLUS TK_MINUS
+booleanExpression 5 TK_OP TK_ID TK_RNUM TK_NUM TK_NOT
+var 3 TK_ID TK_NUM TK_RNUM
+logicalOp 2 TK_AND TK_OR
+relationalOp 6 TK_LT TK_LE TK_EQ TK_GT TK_GE TK_NE
+returnStmt 1 TK_RETURN
+optionalReturn 2 TK_SQL eps
+idList 1 TK_ID
+more_ids 2 TK_COMMA eps
+definetypestmt 1 TK_DEFINETYPE
+A 2 TK_RECORD TK_UNION

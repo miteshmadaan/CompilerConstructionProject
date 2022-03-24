@@ -321,27 +321,27 @@ void getFirst(char *fname, FirstSet firstSet){
 	if(ff==NULL){
 		return;
 	}
-	printf("\n\nFirst Sets\n\n");
-	while(i<5)
+	// printf("\n\nFirst Sets\n\n");
+	while(i<NUM_NTERMINALS)
 	{
 		int k,id;
 		char temp[ID_MAX_SIZE];
 		char tempo[ID_MAX_SIZE];
 
 			fscanf(ff,"%s%d",temp,&k);
-			printf("%s : {",temp);
+			// printf("%s : {\n",temp);
 			for(int m=1;m<=k;m++)
 			{
 				fscanf(ff,"%s",tempo);
-				printf(", %s",tempo);
+				// printf(", %s",tempo);
 				id=parseIdStr(tempo);
 				firstSet[i][id]=1;
 			}
-			printf("}\n");
-			for(int l = 0; l<NUM_TERMINALS; l++){
-				printf("%d ",firstSet[i][l]);
-			}
-			printf("\n");
+			// printf("}\n");
+			// for(int l = 0; l<NUM_TERMINALS; l++){
+			// 	printf("%d ",firstSet[i][l]);
+			// }
+			// printf("\n");
 		i++;
 
 	}
@@ -357,27 +357,27 @@ void getFollow(char *fname, FollowSet followSet){
 	if(ff==NULL){
 		return;
 	}
-	printf("\n\nFollow Sets\n\n");
-	while(i<5)
+	// printf("\n\nFollow Sets\n\n");
+	while(i<NUM_NTERMINALS)
 	{
 		int k,id;
 		char temp[ID_MAX_SIZE];
 		char tempo[ID_MAX_SIZE];
 
 			fscanf(ff,"%s%d",temp,&k);
-			printf("%s : {",temp);
+			// printf("%s : {\n",temp);
 			for(int m=1;m<=k;m++)
 			{
 				fscanf(ff,"%s",tempo);
-				printf(", %s",tempo);
+				// printf(", %s",tempo);
 				id=parseIdStr(tempo);
 				followSet[i][id]=1;
 			}
-			printf("}\n");
-			for(int l = 0; l<NUM_TERMINALS; l++){
-				printf("%d ",followSet[i][l]);
-			}
-			printf("\n");
+			// printf("}\n");
+			// for(int l = 0; l<NUM_TERMINALS; l++){
+			// 	printf("%d ",followSet[i][l]);
+			// }
+			// printf("\n");
 		i++;
 
 	}

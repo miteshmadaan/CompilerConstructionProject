@@ -102,8 +102,8 @@ typedef struct PTEntry
 }PTEntry;
 
 typedef treeNode* parseTree;
-typedef int FirstSet[NUM_NTERMINALS][NUM_TERMINALS];
-typedef int FollowSet[NUM_NTERMINALS][NUM_TERMINALS];
+typedef int** FirstSet;
+typedef int** FollowSet;
 typedef PTEntry parseTable[NUM_NTERMINALS][NUM_TERMINALS];
 
 #endif
