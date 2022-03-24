@@ -81,7 +81,7 @@ typedef struct NTERMINAL{
     int** prodRules;
 }NTERMINAL;
 
-typedef NTERMINAL Grm[NUM_NTERMINALS];
+typedef NTERMINAL* Grm;
 
 typedef struct treeNode
 {
@@ -105,5 +105,9 @@ typedef treeNode* parseTree;
 typedef int** FirstSet;
 typedef int** FollowSet;
 typedef PTEntry parseTable[NUM_NTERMINALS][NUM_TERMINALS];
+
+Grm grammar;
+FirstSet firstSet;
+FollowSet followSet;
 
 #endif

@@ -46,23 +46,8 @@ int main(int argc, char *argv[])
     printf("5) Parser module not called in driver.c due to segmentation error\n");
     printf("6) Parse tree could not be constructed\n\n");
     FILE *sourceCode;
-    Grm grammar;
     
-    FirstSet firstSet;
-    firstSet = (FirstSet) malloc(NUM_NTERMINALS*sizeof(int*));
-    
-    FollowSet followSet;
-    followSet = (FollowSet)malloc(NUM_NTERMINALS*sizeof(int*));
-    
-    for(int i=0; i<NUM_NTERMINALS; i++){
-        firstSet[i] = (int*) malloc(NUM_TERMINALS*sizeof(int));
-        followSet[i] = (int*) malloc(NUM_TERMINALS*sizeof(int));
-    }
-
-    getGram("grammar.txt",grammar);
-    getFirst("first.txt",firstSet);    
-    getFollow("follow.txt",followSet);
-    
+    initializeParser();
     return 0;
     
     if(argc < 3)

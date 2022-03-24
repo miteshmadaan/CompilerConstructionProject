@@ -277,6 +277,25 @@ void parseInputSourceCode(FILE* sourceFile,parseTable t,Grm g,parseTree root,int
 	} while(token.tokenType!=TK_EOF);
 }
 
+void initializeParser(){
+    grammar = (Grm)malloc(NUM_NTERMINALS*sizeof(NTERMINAL));
+
+    firstSet = (FirstSet) malloc(NUM_NTERMINALS*sizeof(int*));
+    
+    followSet = (FollowSet)malloc(NUM_NTERMINALS*sizeof(int*));
+    
+    for(int i=0; i<NUM_NTERMINALS; i++){
+        firstSet[i] = (int*) malloc(NUM_TERMINALS*sizeof(int));
+        followSet[i] = (int*) malloc(NUM_TERMINALS*sizeof(int));
+    }
+
+    getGram("grammar.txt",grammar);
+    getFirst("first.txt",firstSet);    
+    getFollow("follow.txt",followSet);
+    
+	return;
+}
+
 void getGram(char *fname, Grm g)
 {
     int i=0,random;
