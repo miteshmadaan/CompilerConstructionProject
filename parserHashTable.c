@@ -68,58 +68,47 @@ void fillingPHT(parserKaTable* lookUpTable)
 	addElementInPHT( lookUpTable, "remaining_list", 12355);
 	addElementInPHT( lookUpTable, "stmts", 12356);
 	addElementInPHT( lookUpTable, "typeDefinitions", 12357);
-	addElementInPHT( lookUpTable, "typeDefinition", 12358);
-	addElementInPHT( lookUpTable, "fieldDefinitions", 12359);
-	addElementInPHT( lookUpTable, "fieldDefinition", 12360);
-	addElementInPHT( lookUpTable, "moreFields", 12361);
-	addElementInPHT( lookUpTable, "declarations",12362);
-	addElementInPHT( lookUpTable, "declaration", 12363);
-	addElementInPHT( lookUpTable, "global_or_not", 12364);
-	addElementInPHT( lookUpTable, "otherStmts", 12365);
-	addElementInPHT( lookUpTable, "stmt", 12366);
-	addElementInPHT( lookUpTable, "assignmentStmt", 12367);
-	addElementInPHT( lookUpTable, "singleOrRecId", 12368);
-	addElementInPHT( lookUpTable, "singleOrRecIdPrime", 12369);	
-	addElementInPHT( lookUpTable, "funCallStmt", 12370);
-	addElementInPHT( lookUpTable, "outputParameters", 12371);
-	addElementInPHT( lookUpTable, "inputParameters", 12372);
-	addElementInPHT( lookUpTable, "iterativeStmt",12373 );
-	addElementInPHT( lookUpTable, "conditionalStmt", 12374);	
-	addElementInPHT( lookUpTable, "elsePart", 12375);
-	addElementInPHT( lookUpTable, "ioStmt", 12376);
-	addElementInPHT( lookUpTable, "allVar", 12377);
-	addElementInPHT( lookUpTable, "arithmeticExpression", 12378);
-	addElementInPHT( lookUpTable, "expPrime", 12379);
-	addElementInPHT( lookUpTable, "term", 12380);
-	addElementInPHT( lookUpTable, "termPrime", 12381);
-	addElementInPHT( lookUpTable, "factor", 12382);
-	addElementInPHT( lookUpTable, "highPrecedenceOperators",12383);
-	addElementInPHT( lookUpTable, "lowPrecedenceOperators", 12384);
-	addElementInPHT( lookUpTable, "all", 12385);
-	addElementInPHT( lookUpTable, "temp",12386);
-	addElementInPHT( lookUpTable, "booleanExpression",12387);
-	addElementInPHT( lookUpTable, "var",12388);
-	addElementInPHT( lookUpTable, "logicalOp", 12389);
-	addElementInPHT( lookUpTable, "relationalOp", 12390);
-	addElementInPHT( lookUpTable, "returnStmt", 12391);
-	addElementInPHT( lookUpTable, "optionalReturn", 12392);
-	addElementInPHT( lookUpTable, "idList", 12393);
-	addElementInPHT( lookUpTable, "more_ids", 12394);
+	addElementInPHT( lookUpTable, "actualOrRedefined", 12358);
+	addElementInPHT( lookUpTable, "typeDefinition", 12359);
+	addElementInPHT( lookUpTable, "fieldDefinitions", 12360);
+	addElementInPHT( lookUpTable, "fieldDefinition", 12361);
+	addElementInPHT( lookUpTable, "fieldType", 12362);
+	addElementInPHT( lookUpTable, "moreFields", 12363);
+	addElementInPHT( lookUpTable, "declarations",12364);
+	addElementInPHT( lookUpTable, "declaration", 12365);
+	addElementInPHT( lookUpTable, "global_or_not", 12366);
+	addElementInPHT( lookUpTable, "otherStmts", 12367);
+	addElementInPHT( lookUpTable, "stmt", 12368);
+	addElementInPHT( lookUpTable, "assignmentStmt", 12369);
+	addElementInPHT( lookUpTable, "singleOrRecId", 12370);
+	addElementInPHT( lookUpTable, "option_single_constructed", 12371);	
+	addElementInPHT( lookUpTable, "oneExpansion", 12372);
+	addElementInPHT( lookUpTable, "moreExpansions", 12373);
+	addElementInPHT( lookUpTable, "funCallStmt", 12374);
+	addElementInPHT( lookUpTable, "outputParameters", 12375);
+	addElementInPHT( lookUpTable, "inputParameters", 12376);
+	addElementInPHT( lookUpTable, "iterativeStmt",12377);
+	addElementInPHT( lookUpTable, "conditionalStmt", 12378);	
+	addElementInPHT( lookUpTable, "elsePart", 12379);
+	addElementInPHT( lookUpTable, "ioStmt", 12380);
+	addElementInPHT( lookUpTable, "arithmeticExpression", 12381);
+	addElementInPHT( lookUpTable, "expPrime", 12382);
+	addElementInPHT( lookUpTable, "term", 12383);
+	addElementInPHT( lookUpTable, "termPrime", 12384);
+	addElementInPHT( lookUpTable, "factor", 12385);
+	addElementInPHT( lookUpTable, "highPrecedenceOperators",12386);
+	addElementInPHT( lookUpTable, "lowPrecedenceOperators", 12387);
+	addElementInPHT( lookUpTable, "booleanExpression",12388);
+	addElementInPHT( lookUpTable, "var",12389);
+	addElementInPHT( lookUpTable, "logicalOp", 12390);
+	addElementInPHT( lookUpTable, "relationalOp", 12391);
+	addElementInPHT( lookUpTable, "returnStmt", 12392);
+	addElementInPHT( lookUpTable, "optionalReturn", 12393);
+	addElementInPHT( lookUpTable, "idList", 12394);
+	addElementInPHT( lookUpTable, "more_ids", 12395);
+	addElementInPHT( lookUpTable, "definetypestmt", 12396);
+	addElementInPHT( lookUpTable, "A", 12397);
 
-
-
-
-	addElementInPHT( lookUpTable, "actualOrRedifined", 12395);
-	addElementInPHT( lookUpTable, "fieldType", 12396);
-	addElementInPHT( lookUpTable, "option_single_constructed", 12397);
-	addElementInPHT( lookUpTable, "oneExpansion", 12398);
-	addElementInPHT( lookUpTable, "moreExpansions", 12399);
-	addElementInPHT( lookUpTable, "definetypestmt", 12400);
-	addElementInPHT( lookUpTable, "A", 12401);
-	
-
-	
-	
 	addElementInPHT( lookUpTable, "TK_ASSIGNOP", TK_ASSIGNOP);
 	addElementInPHT( lookUpTable, "TK_COMMENT", TK_COMMENT);
 	addElementInPHT( lookUpTable, "TK_FIELDID", TK_FIELDID);
@@ -132,8 +121,10 @@ void fillingPHT(parserKaTable* lookUpTable)
 	addElementInPHT( lookUpTable, "TK_PARAMETERS", TK_PARAMETERS);
 	addElementInPHT( lookUpTable, "TK_END", TK_END);
 	addElementInPHT( lookUpTable, "TK_WHILE", TK_WHILE);
-	addElementInPHT( lookUpTable, "TK_INT", TK_INT);
-	addElementInPHT( lookUpTable, "TK_REAL", TK_REAL);
+	addElementInPHT( lookUpTable, "TK_UNION",TK_UNION);
+	addElementInPHT( lookUpTable, "TK_ENDUNION",TK_ENDUNION);
+	addElementInPHT( lookUpTable, "TK_DEFINETYPE",TK_DEFINETYPE);
+	addElementInPHT( lookUpTable, "TK_AS",TK_AS);
 	addElementInPHT( lookUpTable, "TK_TYPE", TK_TYPE);
 	addElementInPHT( lookUpTable, "TK_MAIN", TK_MAIN);
 	addElementInPHT( lookUpTable, "TK_GLOBAL", TK_GLOBAL);
@@ -143,10 +134,12 @@ void fillingPHT(parserKaTable* lookUpTable)
 	addElementInPHT( lookUpTable, "TK_SQR", TK_SQR);
 	addElementInPHT( lookUpTable, "TK_INPUT", TK_INPUT);
 	addElementInPHT( lookUpTable, "TK_OUTPUT", TK_OUTPUT);
+	addElementInPHT( lookUpTable, "TK_INT", TK_INT);
+	addElementInPHT( lookUpTable, "TK_REAL", TK_REAL);
+	addElementInPHT( lookUpTable, "TK_COMMA", TK_COMMA);
 	addElementInPHT( lookUpTable, "TK_SEM", TK_SEM);
 	addElementInPHT( lookUpTable, "TK_COLON", TK_COLON);
 	addElementInPHT( lookUpTable, "TK_DOT", TK_DOT);
-	addElementInPHT( lookUpTable, "TK_COMMA", TK_COMMA);
 	addElementInPHT( lookUpTable, "TK_ENDWHILE", TK_ENDWHILE);
 	addElementInPHT( lookUpTable, "TK_OP", TK_OP);
 	addElementInPHT( lookUpTable, "TK_CL", TK_CL);
@@ -173,22 +166,10 @@ void fillingPHT(parserKaTable* lookUpTable)
 	addElementInPHT( lookUpTable, "TK_GT", TK_GT);
 	addElementInPHT( lookUpTable, "TK_GE", TK_GE);
 	addElementInPHT( lookUpTable, "TK_NE", TK_NE);
-
-
-
-
-	addElementInPHT( lookUpTable, "TK_EOF", TK_EOF);
-	
 	addElementInPHT( lookUpTable, "TK_ERROR",TK_ERROR);
-
-
-
-	addElementInPHT( lookUpTable, "TK_UNION",TK_UNION);
-	addElementInPHT( lookUpTable, "TK_ENDUNION",TK_ENDUNION);
-	addElementInPHT( lookUpTable, "TK_DEFINETYPE",TK_DEFINETYPE);
-	addElementInPHT( lookUpTable, "TK_AS",TK_AS);
+	addElementInPHT( lookUpTable, "TK_EOF", TK_EOF);
 	addElementInPHT( lookUpTable, "eps",59);
-
+	addElementInPHT( lookUpTable, "$",59);
 }
 
 

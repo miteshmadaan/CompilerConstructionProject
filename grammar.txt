@@ -66,7 +66,7 @@ stmt 1 conditionalStmt
 stmt 1 ioStmt
 stmt 1 funCallStmt
 1
-assignmentStmt 4 SingleOrRecId TK_ASSIGNOP arithmeticExpression TK_SEM
+assignmentStmt 4 singleOrRecId TK_ASSIGNOP arithmeticExpression TK_SEM
 1
 singleOrRecId 2 TK_ID option_single_constructed
 2
@@ -118,7 +118,7 @@ booleanExpression 7 TK_OP booleanExpression TK_CL logicalOp TK_OP booleanExpress
 booleanExpression 3 var relationalOp var
 booleanExpression 4 TK_NOT TK_OP booleanExpression TK_CL
 3
-var 1 singleorRecId
+var 1 singleOrRecId
 var 1 TK_NUM
 var 1 TK_RNUM
 2

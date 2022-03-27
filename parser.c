@@ -107,62 +107,75 @@ void printParseTree(FILE* parserOutput,parseTree root)
 	}
 }
 
-void createParseTable(FirstSet firstSet,FollowSet followSet,Grm g,parseTable t)
-{
-    int ruleArray[RULE_MAX_LEN];
-	int** rules;
-	int* rule;
-	int ruleNo=0;
-	for(int i = 0; i < NUM_NTERMINALS; i++)
+void createParseTable(){
+	for(int i = 0; i < NUM_NTERMINALS; i++){
         for(int j = 0; j < NUM_TERMINALS; j++)
         {
-        	t[i][j].nonTerm = -1;
-        	t[i][j].productionNum= -1;
-        	t[i][j].syn=-1;
-        }	
-	for(int i=0;i<NUM_NTERMINALS;i++)
-	{
-		NTERMINAL nonTerm=g[i];
-		rules=nonTerm.prodRules;
-		int* followRule=followSet[i];
-		for(int j=0;j<nonTerm.rulesNum;j++)
-		{
-			rule=rules[j];
-			int* firstRule=malloc(sizeof(int)*NUM_TERMINALS);
-			int index=0,flag=0;
-			for(int k=1;k<=rule[0];k++)
-				ruleArray[index++]=rule[k];
-			firstString(ruleArray,firstRule,index,firstSet);
+        	parsetable[i][j].nonTerm = -1;
+        	parsetable[i][j].productionNum= -1;
+        	parsetable[i][j].syn=-1;
+        }
+	}
+
+	int *arr1, *arr2;
+	arr1 = (int*)malloc(NUM_TERMINALS*sizeof(int));
+	// arr2 = (int*)malloc(NUM_TERMINALS*sizeof(int));
+
+	int num_rules;
+	int rule_len;
+
+	for(int i=0; i<NUM_NTERMINALS; i++){
+		// printf("%d\n",i);
+		num_rules = grammar[i].rulesNum;
+		
+		for(int k=0;k<NUM_TERMINALS;k++)
+			if(firstSet[i][k]==1)
+				parsetable[i][k].syn=0;	
 			
-			for(int k=0;k<NUM_TERMINALS;k++)
-				if(firstSet[i][k])
-					t[i][k].syn=0;	
-					
-			for(int k=0;k<NUM_TERMINALS;k++)
-				if(followSet[i][k])
-					t[i][k].syn=1;	
-			
-		        for(int k=0;k<NUM_TERMINALS;k++)
-		        if(firstRule[k] && k!=eps)
-		        {
-		        	t[i][k].nonTerm = i;
-        			t[i][k].productionNum= j;
-        		}
-		        if(firstRule[eps])
-		        {
-		        	for(int k=0;k<NUM_TERMINALS;k++)
-		        	if(followRule[k] && k!=eps)
-		        	{
-					t[i][k].nonTerm = i;
-					t[i][k].productionNum= j;
-        			}
-		        }
-		        ruleNo++;
+		for(int k=0;k<NUM_TERMINALS;k++)
+			if(followSet[i][k]==1)
+				parsetable[i][k].syn=1;	
+		
+		for(int j=0; j<num_rules; j++){
+			// printf("rule no. %d\n",j);
+			rule_len = grammar[i].prodRules[j][0];
+			//populate arr1 here
+			firstString(grammar[i].prodRules[j],arr1,rule_len);
+
+			for(int k=0; k<NUM_TERMINALS; k++){
+				if((arr1[k]==1) && (k!=eps)){
+					parsetable[i][k].nonTerm = i;
+					parsetable[i][k].productionNum = j;
+				}
+			}
+
+			if(arr1[eps]==1){
+				arr2 = followSet[i];
+				for(int k=0; k<NUM_TERMINALS; k++){
+					if(arr2[k]==1){
+						parsetable[i][k].nonTerm = i;
+						parsetable[i][k].productionNum = j;
+					}
+				}
+			}
 		}
+	}
+	return;
+}
+
+void printParseTable() {
+	PTEntry holder;
+	for (int i=0; i<NUM_NTERMINALS; i++) {
+		printf("Parse Table for %d\n", i);
+		for (int j=0; j<NUM_TERMINALS; j++) {
+			printf("%d ",parsetable[i][j].productionNum);
+		}
+		printf("\n");
+
 	}
 }
 
-void parseInputSourceCode(FILE* sourceFile,parseTable t,Grm g,parseTree root,int* error)
+void parseInputSourceCode(FILE* sourceFile,int* error)
 {
 	root->nonTerminal=program;
 	root->numChild=2;
@@ -222,8 +235,8 @@ void parseInputSourceCode(FILE* sourceFile,parseTable t,Grm g,parseTree root,int
 			}
 		}
 		else{
-			nonTermID=t[top->id-NTERMINAL_OFFSET][terminal].nonTerm;
-			productionNo=t[top->id-NTERMINAL_OFFSET][terminal].productionNum;
+			nonTermID=parsetable[top->id-NTERMINAL_OFFSET][terminal].nonTerm;
+			productionNo=parsetable[top->id-NTERMINAL_OFFSET][terminal].productionNum;
 			if(nonTermID==-1 || productionNo==-1)
 			{
 				printf("\n\nPARSING ERROR AT LINE NO: %d\n",token.lineNumber);
@@ -231,7 +244,7 @@ void parseInputSourceCode(FILE* sourceFile,parseTable t,Grm g,parseTree root,int
 				token = getNextTokenFromDFA();
 				if(token.tokenType==TK_ERROR)
 				printf("\n\nERROR2:LINE NO: %d\n",token.lineNumber);
-				while(token.tokenType!=TK_EOF && t[top->id-NTERMINAL_OFFSET][token.tokenType].syn==-1)
+				while(token.tokenType!=TK_EOF && parsetable[top->id-NTERMINAL_OFFSET][token.tokenType].syn==-1)
 				{
 					token = getNextTokenFromDFA();
 					if(token.tokenType==TK_ERROR)
@@ -241,11 +254,11 @@ void parseInputSourceCode(FILE* sourceFile,parseTable t,Grm g,parseTree root,int
 				if(token.tokenType==TK_EOF)
 					return;
 				
-				if(t[top->id-NTERMINAL_OFFSET][token.tokenType].syn==1)
+				if(parsetable[top->id-NTERMINAL_OFFSET][token.tokenType].syn==1)
 				pop(stack);
 				continue;
 			}
-			rule=g[nonTermID].prodRules[productionNo];
+			rule=grammar[nonTermID].prodRules[productionNo];
 			ruleLen=rule[0];
 			current->children = malloc(ruleLen*sizeof(treeNode));
 			current->numChild = ruleLen;
@@ -275,6 +288,31 @@ void parseInputSourceCode(FILE* sourceFile,parseTable t,Grm g,parseTree root,int
 			}
 		}
 	} while(token.tokenType!=TK_EOF);
+}
+
+void initializeParser(){
+    grammar = (Grm)malloc(NUM_NTERMINALS*sizeof(NTERMINAL));
+
+    firstSet = (FirstSet) malloc(NUM_NTERMINALS*sizeof(int*));
+    
+    followSet = (FollowSet)malloc(NUM_NTERMINALS*sizeof(int*));
+    
+	parsetable = (parseTable)malloc(NUM_NTERMINALS*sizeof(PTEntry*));
+
+    for(int i=0; i<NUM_NTERMINALS; i++){
+        firstSet[i] = (int*) malloc(NUM_TERMINALS*sizeof(int));
+        followSet[i] = (int*) malloc(NUM_TERMINALS*sizeof(int));
+		parsetable[i] = (PTEntry*)malloc(NUM_TERMINALS*sizeof(PTEntry));
+    }
+
+	// root = (parseTree)malloc(sizeof(treeNode));
+
+    getGram("grammar.txt",grammar);
+    getFirst("first.txt",firstSet);    
+    getFollow("follow.txt",followSet);
+	createParseTable();
+    
+	return;
 }
 
 void getGram(char *fname, Grm g)
@@ -310,6 +348,89 @@ void getGram(char *fname, Grm g)
 		}
 		i++;
 	}
+
+	// for(int i=0; i<NUM_NTERMINALS; i++){
+	// 	printf("Grammar for %d\n",i);
+	// 	for(int j=0; j<grammar[i].rulesNum; j++){
+	// 		printf("Rule no. %d\n",j);
+	// 		for(int k=1; k<=grammar[i].prodRules[j][0];k++){
+	// 			printf("%d\t",grammar[i].prodRules[j][k]);
+	// 		}
+	// 		printf("\n");
+	// 	}
+	// }
+}
+
+void getFirst(char *fname, FirstSet firstSet){
+
+	int i=0;
+
+	FILE* ff;
+	ff=fopen(fname,"r");
+	if(ff==NULL){
+		return;
+	}
+	// printf("\n\nFirst Sets\n\n");
+	while(i<NUM_NTERMINALS)
+	{
+		int k,id;
+		char temp[ID_MAX_SIZE];
+		char tempo[ID_MAX_SIZE];
+
+			fscanf(ff,"%s%d",temp,&k);
+			// printf("%s : {\n",temp);
+			for(int m=1;m<=k;m++)
+			{
+				fscanf(ff,"%s",tempo);
+				// printf(", %s",tempo);
+				id=parseIdStr(tempo);
+				firstSet[i][id]=1;
+			}
+			// printf("}\n");
+			// for(int l = 0; l<NUM_TERMINALS; l++){
+			// 	printf("%d ",firstSet[i][l]);
+			// }
+			// printf("\n");
+		i++;
+
+	}
+	return;
+}
+
+void getFollow(char *fname, FollowSet followSet){
+
+	int i=0;
+
+	FILE* ff;
+	ff=fopen(fname,"r");
+	if(ff==NULL){
+		return;
+	}
+	// printf("\n\nFollow Sets\n\n");
+	while(i<NUM_NTERMINALS)
+	{
+		int k,id;
+		char temp[ID_MAX_SIZE];
+		char tempo[ID_MAX_SIZE];
+
+			fscanf(ff,"%s%d",temp,&k);
+			// printf("%s : {\n",temp);
+			for(int m=1;m<=k;m++)
+			{
+				fscanf(ff,"%s",tempo);
+				// printf(", %s",tempo);
+				id=parseIdStr(tempo);
+				followSet[i][id]=1;
+			}
+			// printf("}\n");
+			// for(int l = 0; l<NUM_TERMINALS; l++){
+			// 	printf("%d ",followSet[i][l]);
+			// }
+			// printf("\n");
+		i++;
+
+	}
+	return;
 }
 
 int* add(int* answer, int* addit){
@@ -342,7 +463,7 @@ int* calculateFirst(int produc,Grm g,FirstSet firstSet)
 				if(!check[array1[i][m]-NTERMINAL_OFFSET])
 				{
 					tem1=calculateFirst(array1[i][m]-NTERMINAL_OFFSET,g,firstSet);
-					(firstSet[array1[i][m]-NTERMINAL_OFFSET])=tem1;
+					// (firstSet[array1[i][m]-NTERMINAL_OFFSET])=tem1;
 					check[array1[i][m]-NTERMINAL_OFFSET]=1;
 				}
 				answer=add(answer,firstSet[array1[i][m]-NTERMINAL_OFFSET]);
@@ -354,7 +475,7 @@ int* calculateFirst(int produc,Grm g,FirstSet firstSet)
 			answer[eps]=1;
 		}
 	}
-	firstSet[produc]=answer;
+	// firstSet[produc]=answer;
 	check[produc]=1;
 	return answer;
 }
@@ -371,11 +492,11 @@ void buildFirstSet(Grm g,FirstSet firstSet)
 
 //-----------------------------------------------------------------------------------------------------
 
-void firstString(int* b,int* firstRule,int index,FirstSet firstSet)
+void firstString(int* b,int* firstRule,int index)
 {
 	int flg0=0;
-	for(int i = 0; i < index; i++)
-	{
+	for(int i = 1; i <= index; i++)
+	{	
 		if(b[i] < NUM_TERMINALS)
 		{
 	       		firstRule[b[i]] = 1;
@@ -390,7 +511,7 @@ void firstString(int* b,int* firstRule,int index,FirstSet firstSet)
       			}	
       			else{
       				firstRule = add(firstRule, temp);
-      				if(i == index-1){flg0 = 1;}
+      				if(i == index){flg0 = 1;}
       			}
 		} 
 	}
@@ -438,11 +559,11 @@ int index=0;
 			
 			for(int k=i+1;k<=ruleSize;k++)
 			b[index++]=rule[k];
-			firstString(b,firstRule,index,firstSet);
+			firstString(b,firstRule,index);
 			temp=followSet[rule[i]-NTERMINAL_OFFSET];
 			add2(temp,firstRule,&flg3);
 			if(!*flg2) *flg2=flg3;
-			followSet[rule[i]-NTERMINAL_OFFSET]=temp;
+			// followSet[rule[i]-NTERMINAL_OFFSET]=temp;
 		}
 		if(firstRule[eps] || flg0)
 		{
@@ -465,7 +586,7 @@ int index=0;
 void getFollowSets(Grm g, FollowSet follow0, FirstSet first0){
 	for(int i=0;i<NUM_NTERMINALS;i++)
 	{
-		follow0[i]=malloc(sizeof(int)*NUM_TERMINALS);
+		// follow0[i]=malloc(sizeof(int)*NUM_TERMINALS);
 		for(int j=0;j<NUM_TERMINALS;j++)
 		follow0[i][j]=0;
 	}
