@@ -18,6 +18,7 @@
 #define NTERMINAL_OFFSET 12345
 #define ID_MAX_SIZE 30
 #define eps 59
+#define dollar 59
 
 typedef enum nonTerminals{
 program = NTERMINAL_OFFSET,

@@ -48,6 +48,19 @@ int main(int argc, char *argv[])
     FILE *sourceCode;
     
     initializeParser();
+    int error=0;
+    // printParseTable();
+    printf("analysing file : %s\n" , argv[1]);
+                sourceCode =fopen(argv[1],"r");
+                fseek(sourceCode,0,SEEK_SET);
+                if(sourceCode==NULL){
+                    printf("Error cannot open file\n");
+                    exit(0);
+                }
+                initializeLexer(sourceCode);
+                
+                // parseInputSourceCode(sourceCode,&error);
+                fclose(sourceCode);
     return 0;
     
     if(argc < 3)
