@@ -90,6 +90,8 @@ int calcHash(char *lexeme){
 //This function is called when the dfa identifies a lexeme as toke and now needs to return it as token struct
 TOKEN makeToken(tokenType tokenTypeInput)
 {
+    specialErrorMessage = 0;
+    memset(errorMessage,0,ERROR_MAX_LEN);
     TOKEN token;
     token.lineNumber = lineNumber;
     int lexemeSize=0;
@@ -115,19 +117,23 @@ TOKEN makeToken(tokenType tokenTypeInput)
         case TK_FIELDID:
             if(lexemeSize > 20){
                 token.tokenType = TK_ERROR;
+                specialErrorMessage = 1;
+                strncpy(errorMessage,"Error: Field Identifier is longer than the prescribed length of 20 characters.",ERROR_MAX_LEN);
             }
             else{
                 // token.tokenType = search in lookup table
                 token.tokenType = searchHashTable(lexeme);
+                strncpy(token.strLexeme, lexeme, LEXEME_MAX_LEN);
             }
             token.lexemeType = STRING;
-            strncpy(token.strLexeme, lexeme, LEXEME_MAX_LEN);
             return token;
             break;
 
         case TK_FUNID:
             if(lexemeSize > 30){
                 token.tokenType = TK_ERROR;
+                specialErrorMessage = 1;
+                strncpy(errorMessage,"Error: Function Identifier is longer than the prescribed length of 30 characters.",ERROR_MAX_LEN);
             }
             else{
                 if(strcmp(lexeme, "_main") == 0){
@@ -136,9 +142,9 @@ TOKEN makeToken(tokenType tokenTypeInput)
                 else{
                     token.tokenType = TK_FUNID;
                 }
+                strncpy(token.strLexeme, lexeme, LEXEME_MAX_LEN);
             }
             token.lexemeType = STRING;
-            strncpy(token.strLexeme, lexeme, LEXEME_MAX_LEN);
             return token;
             break;
 
@@ -160,6 +166,7 @@ TOKEN makeToken(tokenType tokenTypeInput)
         case TK_ERROR:
             token.tokenType = TK_ERROR;
             token.lexemeType = STRING;
+            specialErrorMessage = 0;
             strncpy(token.strLexeme, lexeme, LEXEME_MAX_LEN);
             return token;
             break;
@@ -177,12 +184,14 @@ TOKEN makeToken(tokenType tokenTypeInput)
         default:
             if(lexemeSize > 20){
                 token.tokenType = TK_ERROR;
+                specialErrorMessage = 1;
+                strncpy(errorMessage,"Error: Variable Identifier is longer than the prescribed length of 20 characters.",ERROR_MAX_LEN);
             }
             else{
                 token.tokenType = tokenTypeInput;
+                strncpy(token.strLexeme, lexeme, LEXEME_MAX_LEN);
             }
             token.lexemeType = STRING;
-            strncpy(token.strLexeme, lexeme, LEXEME_MAX_LEN);
             return token;
             break;
 
@@ -221,7 +230,12 @@ void tokenizeSource(){
         }
         else if(tokenFromDfa.tokenType == TK_ERROR){
             printf("Line no. %d\t",tokenFromDfa.lineNumber);
-            printf("Error : Unknown Symbol<%s>\n",tokenFromDfa.strLexeme);
+            if(specialErrorMessage==1){
+                printf("%s\n",errorMessage);
+            }
+            else{
+                printf("Error : Unknown Symbol <%s>\n",tokenFromDfa.strLexeme);
+            }
         }
         else
         {   printf("Line no. %d\t",tokenFromDfa.lineNumber);
