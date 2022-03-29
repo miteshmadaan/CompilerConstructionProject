@@ -24,7 +24,6 @@ void findFollow(int nTerminalNum, int prodNum, Grm g, FollowSet followSet, First
 void add2(int* answer,int* add0,int* flg0);
 
 void createParseTable();
-void printParseTable();
 void parseInputSourceCode(int* error);
 void printParseTree(FILE* parserOutput,parseTree root);
 void firstString(int* b,int* firstRule,int index);

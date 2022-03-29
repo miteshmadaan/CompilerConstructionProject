@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     FILE *sourceCode;
     
     initializeParser();
-    // return 0;
+    
     int error=0;
     printf("analysing file : sourceCode.txt\n");
     sourceCode =fopen("sourceCode.txt","r");

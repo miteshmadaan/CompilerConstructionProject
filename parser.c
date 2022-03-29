@@ -14,7 +14,6 @@
 #include "lexer.h"
 #include "parser.h"
 #include "stack.h"
-#include "parserHashTable.h"
 
 bool check[NUM_NTERMINALS];
 
@@ -201,7 +200,6 @@ char* strRepId[] ={
 int parseIdStr(char *idStr) 
 {
 	//return the id of string stored in hashtable
-    parserKaTable* lookuptable = makeParserHashTable(220);
     return getTokenTypePHT(idStr,lookuptable);	
 }
 
@@ -320,20 +318,7 @@ void createParseTable(){
 			}
 		}
 	}
-	// printParseTable();
 	return;
-}
-
-void printParseTable() {
-	
-	for (int i=0; i<NUM_NTERMINALS; i++) {
-		printf("Parse Table for %d\n", i);
-		for (int j=0; j<NUM_TERMINALS; j++) {
-			printf("%d ",parsetable[i][j].productionNum);
-		}
-		printf("\n");
-
-	}
 }
 
 void parseInputSourceCode(int* error){
@@ -478,9 +463,10 @@ void initializeParser(){
     }
 
 	root = (parseTree)malloc(sizeof(treeNode));
-
+	
+	lookuptable = makeParserHashTable(220);
     getGram("grammar.txt",grammar);
-    getFirst("first.txt",firstSet);    
+    getFirst("first.txt",firstSet);
     getFollow("follow.txt",followSet);
 	createParseTable();
     
@@ -521,16 +507,6 @@ void getGram(char *fname, Grm g)
 		i++;
 	}
 
-	// for(int i=0; i<NUM_NTERMINALS; i++){
-	// 	printf("Grammar for %d\n",i);
-	// 	for(int j=0; j<grammar[i].rulesNum; j++){
-	// 		printf("Rule no. %d\n",j);
-	// 		for(int k=1; k<=grammar[i].prodRules[j][0];k++){
-	// 			printf("%d\t",grammar[i].prodRules[j][k]);
-	// 		}
-	// 		printf("\n");
-	// 	}
-	// }
 }
 
 void getFirst(char *fname, FirstSet firstSet){
@@ -542,7 +518,6 @@ void getFirst(char *fname, FirstSet firstSet){
 	if(ff==NULL){
 		return;
 	}
-	// printf("\n\nFirst Sets\n\n");
 	while(i<NUM_NTERMINALS)
 	{
 		int k,id;
@@ -550,19 +525,13 @@ void getFirst(char *fname, FirstSet firstSet){
 		char tempo[ID_MAX_SIZE];
 
 			fscanf(ff,"%s%d",temp,&k);
-			// printf("%s : {\n",temp);
 			for(int m=1;m<=k;m++)
 			{
 				fscanf(ff,"%s",tempo);
-				// printf(", %s",tempo);
 				id=parseIdStr(tempo);
 				firstSet[i][id]=1;
 			}
-			// printf("}\n");
-			// for(int l = 0; l<NUM_TERMINALS; l++){
-			// 	printf("%d ",firstSet[i][l]);
-			// }
-			// printf("\n");
+			
 		i++;
 
 	}
@@ -578,7 +547,6 @@ void getFollow(char *fname, FollowSet followSet){
 	if(ff==NULL){
 		return;
 	}
-	// printf("\n\nFollow Sets\n\n");
 	while(i<NUM_NTERMINALS)
 	{
 		int k,id;
@@ -586,19 +554,12 @@ void getFollow(char *fname, FollowSet followSet){
 		char tempo[ID_MAX_SIZE];
 
 			fscanf(ff,"%s%d",temp,&k);
-			// printf("%s : {\n",temp);
 			for(int m=1;m<=k;m++)
 			{
 				fscanf(ff,"%s",tempo);
-				// printf(", %s",tempo);
 				id=parseIdStr(tempo);
 				followSet[i][id]=1;
 			}
-			// printf("}\n");
-			// for(int l = 0; l<NUM_TERMINALS; l++){
-			// 	printf("%d ",followSet[i][l]);
-			// }
-			// printf("\n");
 		i++;
 
 	}
