@@ -15,6 +15,7 @@
 #define BUFFER_SIZE 10000
 #define HASHTABLE_SIZE 163
 #define PRIME 53
+#define ERROR_MAX_LEN 100
 
 int retractCount;
 int lineNumber;
@@ -23,8 +24,11 @@ int forwardBufferPointer;
 int lexemeBeginPointer;
 char lexeme[LEXEME_MAX_LEN];
 char buffer[BUFFER_SIZE];
+char errorMessage[ERROR_MAX_LEN];
+int specialErrorMessage;
 struct entry *hashTable[HASHTABLE_SIZE];
 FILE *sourceCode;
+
 
 typedef enum {
 #include "tokenTypes.txt"

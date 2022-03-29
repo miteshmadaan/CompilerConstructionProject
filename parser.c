@@ -14,35 +14,192 @@
 #include "lexer.h"
 #include "parser.h"
 #include "stack.h"
-#include "parserHashTable.h"
 
 bool check[NUM_NTERMINALS];
 
-char* listTokens[] = {"TK_ASSIGNOP", "TK_COMMENT", "TK_FIELDID", "TK_ID", "TK_NUM", "TK_RNUM", "TK_FUNID", "TK_RUID", "TK_WITH", 
-"TK_PARAMETERS", "TK_END", "TK_WHILE", "TK_INT", "TK_REAL", "TK_TYPE", "TK_MAIN", "TK_GLOBAL", "TK_PARAMETER", "TK_LIST", 
-"TK_SQL", "TK_SQR", "TK_INPUT", "TK_OUTPUT", "TK_SEM", "TK_COLON", "TK_DOT", "TK_COMMA", "TK_ENDWHILE", "TK_OP", "TK_CL", 
-"TK_IF", "TK_THEN", "TK_ENDIF", "TK_READ", "TK_WRITE", "TK_RETURN", "TK_PLUS", "TK_MINUS", "TK_MUL", "TK_DIV", "TK_CALL", 
-"TK_RECORD", "TK_ENDRECORD", "TK_ELSE", "TK_AND", "TK_OR", "TK_NOT", "TK_LT", "TK_LE", "TK_EQ", "TK_GT", "TK_GE", "TK_NE", "TK_EOF", 
-"TK_ERROR", "TK_UNION", "TK_ENDUNION", "TK_DEFINETYPE", "TK_AS", "eps"};
+char* listTokens[] = {
+"TK_ASSIGNOP",
+"TK_COMMENT",
+"TK_FIELDID",
+"TK_ID",
+"TK_NUM",
+"TK_RNUM",
+"TK_FUNID",
+"TK_RUID",
+"TK_WITH",
+"TK_PARAMETERS",
+"TK_END",
+"TK_WHILE",
+"TK_UNION",
+"TK_ENDUNION",
+"TK_DEFINETYPE",
+"TK_AS",
+"TK_TYPE",
+"TK_MAIN",
+"TK_GLOBAL",
+"TK_PARAMETER",
+"TK_LIST",
+"TK_SQL",
+"TK_SQR",
+"TK_INPUT",
+"TK_OUTPUT",
+"TK_INT",
+"TK_REAL",
+"TK_COMMA",
+"TK_SEM",
+"TK_COLON",
+"TK_DOT",
+"TK_ENDWHILE",
+"TK_OP",
+"TK_CL",
+"TK_IF",
+"TK_THEN",
+"TK_ENDIF",
+"TK_READ",
+"TK_WRITE",
+"TK_RETURN",
+"TK_PLUS",
+"TK_MINUS",
+"TK_MUL",
+"TK_DIV",
+"TK_CALL",
+"TK_RECORD",
+"TK_ENDRECORD",
+"TK_ELSE",
+"TK_AND",
+"TK_OR",
+"TK_NOT",
+"TK_LT",
+"TK_LE",
+"TK_EQ",
+"TK_GT",
+"TK_GE",
+"TK_NE",
+"TK_ERROR",
+"TK_EOF",
+"eps"
+};
 
-char* strRepId[] = 
-{"'<---'","TK_COMMENT","field identifier","identifier","numeric constant","real constant","function id","record id","'with'",
-"'parameters'","'end'","'while'","'int'","'real'","'type'","'_main'","'global'","'parameter'","'list'","'['","']'","'input'","'output'",
-"';'" , "':'" , "'.'" , "','", "'endwhile'", "'('" ,"')'" , "'if'" , "'then'" , "'endif'" , "'read'" , "'write'" , 
-"'return'" , "'+'" , "'-'" , "'*'" , "'/'" , "'call'" , "'record'" , "'endrecord'" , "'else'" , "'&&&'" , "'@@@'" , "'~'" , "'<'", 
-"'<='" , "'=='" , "'>'" , "'>='" , "'!='" , "end of file" ,"error" ,"'union'", "'endunion'", "'definetype'", "'as'","eps","program" , 
-"mainFunction" , "otherFunctions" , "function" , "input_par" , "output_par" , "parameter_list" , "dataType" , "primitiveDatatype" , 
-"constructedDatatype" , "remaining_list" , "stmts" , "typeDefinitions" ,"typeDefinition" , "fieldDefinitions" , "fieldDefinition" , 
-"moreFields" , "declarations" , "declaration" , "global_or_not" , "otherStmts" , "stmt" , "assignmentStmt" , "singleOrRecId" , "singleOrRecIdPrime" , 
-"funCallStmt" , "outputParameters" , "inputParameters" , "iterartiveStmt" , "conditionalStmt" , "elsePart" , "ioStmt" , "allVar", 
-"arithmeticExpression" , "expPrime" , "term" ,"termPrime" , "factor" , "highPrecedenceOperators" , "lowPrecedenceOperators" , 
-"all" , "temp" , "booleanExpression" , "var" ,"logicalOp" , "relationalOp" , "returnStmt" , "optionalReturn" , "idList" , 
-"more_ids", "actualOrRedifined", "fieldType", "option_single_constructed", "oneExpansion", "moreExpansions", "definetypestmt", "A"};
-		  
+char* strRepId[] ={
+"'ASSIGNOP'",
+"'COMMENT'",
+"'FIELDID'",
+"'ID'",
+"'NUM'",
+"'RNUM'",
+"'FUNID'",
+"'RUID'",
+"'WITH'",
+"'PARAMETERS'",
+"'END'",
+"'WHILE'",
+"'UNION'",
+"'ENDUNION'",
+"'DEFINETYPE'",
+"'AS'",
+"'TYPE'",
+"'MAIN'",
+"'GLOBAL'",
+"'PARAMETER'",
+"'LIST'",
+"'SQL'",
+"'SQR'",
+"'INPUT'",
+"'OUTPUT'",
+"'INT'",
+"'REAL'",
+"'COMMA'",
+"'SEM'",
+"'COLON'",
+"'DOT'",
+"'ENDWHILE'",
+"'OP'",
+"'CL'",
+"'IF'",
+"'THEN'",
+"'ENDIF'",
+"'READ'",
+"'WRITE'",
+"'RETURN'",
+"'PLUS'",
+"'MINUS'",
+"'MUL'",
+"'DIV'",
+"'CALL'",
+"'RECORD'",
+"'ENDRECORD'",
+"'ELSE'",
+"'AND'",
+"'OR'",
+"'NOT'",
+"'LT'",
+"'LE'",
+"'EQ'",
+"'GT'",
+"'GE'",
+"'NE'",
+"'ERROR'",
+"'EOF'",
+"'eps'",
+"program", 
+"mainFunction", 
+"otherFunctions", 
+"function", 
+"input_par", 
+"output_par",
+"parameter_list", 
+"dataType", 
+"primitiveDatatype", 
+"constructedDatatype", 
+"remaining_list", 
+"stmts", 
+"typeDefinitions", 
+"actualOrRedefined", 
+"typeDefinition", 
+"fieldDefinitions",
+"fieldDefinition", 
+"fieldType", 
+"moreFields", 
+"declarations",
+"declaration", 
+"global_or_not", 
+"otherStmts", 
+"stmt", 
+"assignmentStmt", 
+"singleOrRecId",
+"option_single_constructed", 
+"oneExpansion", 
+"moreExpansions", 
+"funCallStmt", 
+"outputParameters", 
+"inputParameters", 
+"iterativeStmt",
+"conditionalStmt", 
+"elsePart", 
+"ioStmt",
+"arithmeticExpression", 
+"expPrime", 
+"term", 
+"termPrime", 
+"factor", 
+"highPrecedenceOperators",
+"lowPrecedenceOperators", 
+"booleanExpression",
+"var",
+"logicalOp",
+"relationalOp", 
+"returnStmt", 
+"optionalReturn", 
+"idList", 
+"more_ids", 
+"definetypestmt", 
+"A"
+};
+//terminals in natural language + eps + nonterminals list
+
 int parseIdStr(char *idStr) 
 {
 	//return the id of string stored in hashtable
-    parserKaTable* lookuptable = makeParserHashTable(220);
     return getTokenTypePHT(idStr,lookuptable);	
 }
 
@@ -119,7 +276,6 @@ void createParseTable(){
 
 	int *arr1, *arr2;
 	arr1 = (int*)malloc(NUM_TERMINALS*sizeof(int));
-	// arr2 = (int*)malloc(NUM_TERMINALS*sizeof(int));
 
 	int num_rules;
 	int rule_len;
@@ -146,10 +302,12 @@ void createParseTable(){
 				if((arr1[k]==1) && (k!=eps)){
 					parsetable[i][k].nonTerm = i;
 					parsetable[i][k].productionNum = j;
+					arr1[k] = 0;
 				}
 			}
 
 			if(arr1[eps]==1){
+				arr1[eps] = 0;
 				arr2 = followSet[i];
 				for(int k=0; k<NUM_TERMINALS; k++){
 					if(arr2[k]==1){
@@ -163,33 +321,27 @@ void createParseTable(){
 	return;
 }
 
-void printParseTable() {
-	PTEntry holder;
-	for (int i=0; i<NUM_NTERMINALS; i++) {
-		printf("Parse Table for %d\n", i);
-		for (int j=0; j<NUM_TERMINALS; j++) {
-			printf("%d ",parsetable[i][j].productionNum);
-		}
-		printf("\n");
-
-	}
-}
-
-void parseInputSourceCode(FILE* sourceFile,int* error)
-{
-	root->nonTerminal=program;
+void parseInputSourceCode(int* error){
+	root->nonTerminal=(int)program;
 	root->numChild=2;
+	
 	parseTree leaf=NULL,parent=NULL,current;
 	Stack stack=createStack();
-	TOKEN token ;
+	TOKEN token;
+	
 	push(stack,TK_EOF,leaf);
 	push(stack,program,root);
 	int flag=1,terminal,nonTermID,productionNo,ruleLen;
 	Key top;
 	int* rule;
+	
 	do{
-		if(flag)
-		token = getNextTokenFromDFA();
+		
+		if(flag){
+			token = getNextTokenFromDFA();
+			// printf("token: %d at line:%d\n",token.tokenType,token.lineNumber);
+			// printf("dff1\n");
+		}
 		if(token.tokenType==TK_ERROR)
 		{
 			printf("\n\nLEXICAL ERROR AT LINE NO: %d   %s\n",token.lineNumber,token.strLexeme);
@@ -202,11 +354,15 @@ void parseInputSourceCode(FILE* sourceFile,int* error)
 		if(token.tokenType==TK_COMMENT)
 		continue;
 		if(token.tokenType==TK_EOF)
-		break ;
-		flag=0 ;
+		break;
+		flag=0;
+		
 		top=KeyAtTopElement(stack) ;
+		// printf("top ID: %d\n",top->id);
 		terminal=token.tokenType ;
 		current=top->parent;
+		
+		
 		if(top->id<NUM_TERMINALS)
 		{
 			if(top->id!=terminal && top->id!=eps)
@@ -254,8 +410,7 @@ void parseInputSourceCode(FILE* sourceFile,int* error)
 				if(token.tokenType==TK_EOF)
 					return;
 				
-				if(parsetable[top->id-NTERMINAL_OFFSET][token.tokenType].syn==1)
-				pop(stack);
+				if(parsetable[top->id-NTERMINAL_OFFSET][token.tokenType].syn==1)	pop(stack);
 				continue;
 			}
 			rule=grammar[nonTermID].prodRules[productionNo];
@@ -287,7 +442,9 @@ void parseInputSourceCode(FILE* sourceFile,int* error)
 				push(stack,rule[i],&(current->children[i-1]));
 			}
 		}
+	
 	} while(token.tokenType!=TK_EOF);
+	return;
 }
 
 void initializeParser(){
@@ -305,10 +462,11 @@ void initializeParser(){
 		parsetable[i] = (PTEntry*)malloc(NUM_TERMINALS*sizeof(PTEntry));
     }
 
-	// root = (parseTree)malloc(sizeof(treeNode));
-
+	root = (parseTree)malloc(sizeof(treeNode));
+	
+	lookuptable = makeParserHashTable(220);
     getGram("grammar.txt",grammar);
-    getFirst("first.txt",firstSet);    
+    getFirst("first.txt",firstSet);
     getFollow("follow.txt",followSet);
 	createParseTable();
     
@@ -349,16 +507,6 @@ void getGram(char *fname, Grm g)
 		i++;
 	}
 
-	// for(int i=0; i<NUM_NTERMINALS; i++){
-	// 	printf("Grammar for %d\n",i);
-	// 	for(int j=0; j<grammar[i].rulesNum; j++){
-	// 		printf("Rule no. %d\n",j);
-	// 		for(int k=1; k<=grammar[i].prodRules[j][0];k++){
-	// 			printf("%d\t",grammar[i].prodRules[j][k]);
-	// 		}
-	// 		printf("\n");
-	// 	}
-	// }
 }
 
 void getFirst(char *fname, FirstSet firstSet){
@@ -370,7 +518,6 @@ void getFirst(char *fname, FirstSet firstSet){
 	if(ff==NULL){
 		return;
 	}
-	// printf("\n\nFirst Sets\n\n");
 	while(i<NUM_NTERMINALS)
 	{
 		int k,id;
@@ -378,19 +525,13 @@ void getFirst(char *fname, FirstSet firstSet){
 		char tempo[ID_MAX_SIZE];
 
 			fscanf(ff,"%s%d",temp,&k);
-			// printf("%s : {\n",temp);
 			for(int m=1;m<=k;m++)
 			{
 				fscanf(ff,"%s",tempo);
-				// printf(", %s",tempo);
 				id=parseIdStr(tempo);
 				firstSet[i][id]=1;
 			}
-			// printf("}\n");
-			// for(int l = 0; l<NUM_TERMINALS; l++){
-			// 	printf("%d ",firstSet[i][l]);
-			// }
-			// printf("\n");
+			
 		i++;
 
 	}
@@ -406,7 +547,6 @@ void getFollow(char *fname, FollowSet followSet){
 	if(ff==NULL){
 		return;
 	}
-	// printf("\n\nFollow Sets\n\n");
 	while(i<NUM_NTERMINALS)
 	{
 		int k,id;
@@ -414,83 +554,17 @@ void getFollow(char *fname, FollowSet followSet){
 		char tempo[ID_MAX_SIZE];
 
 			fscanf(ff,"%s%d",temp,&k);
-			// printf("%s : {\n",temp);
 			for(int m=1;m<=k;m++)
 			{
 				fscanf(ff,"%s",tempo);
-				// printf(", %s",tempo);
 				id=parseIdStr(tempo);
 				followSet[i][id]=1;
 			}
-			// printf("}\n");
-			// for(int l = 0; l<NUM_TERMINALS; l++){
-			// 	printf("%d ",followSet[i][l]);
-			// }
-			// printf("\n");
 		i++;
 
 	}
 	return;
 }
-
-int* add(int* answer, int* addit){
-	for(int i=0;i<=NUM_TERMINALS;i++)
-	if(addit[i] && i!=eps) answer[i]=1;
-	return answer;
-}
-
-int* calculateFirst(int produc,Grm g,FirstSet firstSet)
-{
-	int* answer=(int*)malloc(NUM_TERMINALS*sizeof(int));
-	NTERMINAL nonTermSpec=g[produc];
-	int* tem1;
-	
-	int** array1=nonTermSpec.prodRules;
-	int array1Size=nonTermSpec.rulesNum;
-	for(int i=0;i<array1Size;i++)
-	{
-		if(array1[i][1]<NUM_TERMINALS)
-		 	answer[array1[i][1]]=1;
-		else{
-			int m=1;
-			while(m<=array1[i][0])
-			{
-				if(array1[i][m]<NUM_TERMINALS)
-				{
-					answer[array1[i][m]]=1;
-					break;
-				}
-				if(!check[array1[i][m]-NTERMINAL_OFFSET])
-				{
-					tem1=calculateFirst(array1[i][m]-NTERMINAL_OFFSET,g,firstSet);
-					// (firstSet[array1[i][m]-NTERMINAL_OFFSET])=tem1;
-					check[array1[i][m]-NTERMINAL_OFFSET]=1;
-				}
-				answer=add(answer,firstSet[array1[i][m]-NTERMINAL_OFFSET]);
-				if(!tem1[eps])
-				break;
-				m++;
-			}
-			if(m>array1[i][0])
-			answer[eps]=1;
-		}
-	}
-	// firstSet[produc]=answer;
-	check[produc]=1;
-	return answer;
-}
-		
-void buildFirstSet(Grm g,FirstSet firstSet)
-{
-	int* nouse;
-	for(int i=0;i<NUM_NTERMINALS;i++){
-		if(!check[i]){
-			nouse=calculateFirst(i,g,firstSet);
-		}
-	}		
-}
-
-//-----------------------------------------------------------------------------------------------------
 
 void firstString(int* b,int* firstRule,int index)
 {
@@ -519,87 +593,8 @@ void firstString(int* b,int* firstRule,int index)
         firstRule[eps] = 1;
 }
 
-void add2(int* answer,int* add0,int* flg0)
-{
-	for(int i=0;i<NUM_TERMINALS;i++)
-	{
-		if(add0[i] && i!=eps)
-		{
-			if(!answer[i])
-			*flg0=1;
-			answer[i]=1;
-		}
-	}
-}
-
-void findFollow(int nTerminalNum, int prodNum, Grm g, FollowSet followSet, FirstSet firstSet,int* flg2)
-{
-	int *nextFirst,*temp,*temp2,*tem3;
-int flg0=0,flg3=0;
-int** rules=g[nTerminalNum].prodRules;
-	int* rule=rules[prodNum];
-	
-	int ruleSize=rule[0];
-	
-	for(int i=1;i<=ruleSize;i++)
-	{
-		flg0=0;
-		if(rule[i]<NUM_TERMINALS)
-		continue;
-		int* firstRule=malloc(sizeof(int)*NUM_TERMINALS);
-		if(i==ruleSize)
-		flg0=1;
-		else
-		{
-			flg3=0;
-			for(int j=0;j<NUM_TERMINALS;j++)
-			firstRule[j]=0;
-			int b[RULE_MAX_LEN];
-int index=0;
-			
-			for(int k=i+1;k<=ruleSize;k++)
-			b[index++]=rule[k];
-			firstString(b,firstRule,index);
-			temp=followSet[rule[i]-NTERMINAL_OFFSET];
-			add2(temp,firstRule,&flg3);
-			if(!*flg2) *flg2=flg3;
-			// followSet[rule[i]-NTERMINAL_OFFSET]=temp;
-		}
-		if(firstRule[eps] || flg0)
-		{
-			for(int j=0;j<NUM_TERMINALS;j++)
-			{
-				tem3=followSet[rule[i]-NTERMINAL_OFFSET];
-				if(followSet[nTerminalNum][j])
-				{
-					if(!tem3[j])
-					{
-						*flg2=1;
-					}
-					tem3[j]=1;
-				}
-			}
-		}
-	}
-}
-		
-void getFollowSets(Grm g, FollowSet follow0, FirstSet first0){
-	for(int i=0;i<NUM_NTERMINALS;i++)
-	{
-		// follow0[i]=malloc(sizeof(int)*NUM_TERMINALS);
-		for(int j=0;j<NUM_TERMINALS;j++)
-		follow0[i][j]=0;
-	}
-
-	follow0[0][TK_EOF] = 1;
-	int flg0;
-	while(1){
-		flg0=0;
-		for(int i = 0; i < NUM_NTERMINALS; i++){
-			for(int j = 0; j < g[i].rulesNum; j++){
-				findFollow(i, j, g, follow0, first0,&flg0);
-			}
-		} 
-		if(flg0==0) break;
-	}        
+int* add(int* answer, int* addit){
+	for(int i=0;i<=NUM_TERMINALS;i++)
+	if(addit[i] && i!=eps) answer[i]=1;
+	return answer;
 }

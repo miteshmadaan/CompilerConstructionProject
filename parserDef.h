@@ -10,6 +10,7 @@
 #define PARSERDEF_H
 
 #include "lexerDef.h"
+#include "parserHashTable.h"
 
 #define NUM_NTERMINALS 53
 #define NUM_TERMINALS 60
@@ -112,5 +113,6 @@ FirstSet firstSet;
 FollowSet followSet;
 parseTable parsetable;
 parseTree root;
+parserKaTable* lookuptable;
 
 #endif

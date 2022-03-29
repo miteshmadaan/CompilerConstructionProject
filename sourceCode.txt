@@ -1,28 +1,6 @@
-with
-parameters
-end
-while
-union
-endunion
-definetype
-as
-type
 _main
-global
-parameter
-list
-input
-output
-int
-real
-endwhile
-if
-then
-endif
-read
-write
-return
-call 
-record
-endrecord
-else
+	type int :b3;
+    type real :c4bd56;
+	b3 <--- 7;
+	return;
+end
