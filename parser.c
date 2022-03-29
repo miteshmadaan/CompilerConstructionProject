@@ -566,65 +566,6 @@ void getFollow(char *fname, FollowSet followSet){
 	return;
 }
 
-int* add(int* answer, int* addit){
-	for(int i=0;i<=NUM_TERMINALS;i++)
-	if(addit[i] && i!=eps) answer[i]=1;
-	return answer;
-}
-
-int* calculateFirst(int produc,Grm g,FirstSet firstSet)
-{
-	int* answer=(int*)malloc(NUM_TERMINALS*sizeof(int));
-	NTERMINAL nonTermSpec=g[produc];
-	int* tem1;
-	
-	int** array1=nonTermSpec.prodRules;
-	int array1Size=nonTermSpec.rulesNum;
-	for(int i=0;i<array1Size;i++)
-	{
-		if(array1[i][1]<NUM_TERMINALS)
-		 	answer[array1[i][1]]=1;
-		else{
-			int m=1;
-			while(m<=array1[i][0])
-			{
-				if(array1[i][m]<NUM_TERMINALS)
-				{
-					answer[array1[i][m]]=1;
-					break;
-				}
-				if(!check[array1[i][m]-NTERMINAL_OFFSET])
-				{
-					tem1=calculateFirst(array1[i][m]-NTERMINAL_OFFSET,g,firstSet);
-					// (firstSet[array1[i][m]-NTERMINAL_OFFSET])=tem1;
-					check[array1[i][m]-NTERMINAL_OFFSET]=1;
-				}
-				answer=add(answer,firstSet[array1[i][m]-NTERMINAL_OFFSET]);
-				if(!tem1[eps])
-				break;
-				m++;
-			}
-			if(m>array1[i][0])
-			answer[eps]=1;
-		}
-	}
-	// firstSet[produc]=answer;
-	check[produc]=1;
-	return answer;
-}
-		
-void buildFirstSet(Grm g,FirstSet firstSet)
-{
-	int* nouse;
-	for(int i=0;i<NUM_NTERMINALS;i++){
-		if(!check[i]){
-			nouse=calculateFirst(i,g,firstSet);
-		}
-	}		
-}
-
-//-----------------------------------------------------------------------------------------------------
-
 void firstString(int* b,int* firstRule,int index)
 {
 	int flg0=0;
@@ -652,87 +593,8 @@ void firstString(int* b,int* firstRule,int index)
         firstRule[eps] = 1;
 }
 
-void add2(int* answer,int* add0,int* flg0)
-{
-	for(int i=0;i<NUM_TERMINALS;i++)
-	{
-		if(add0[i] && i!=eps)
-		{
-			if(!answer[i])
-			*flg0=1;
-			answer[i]=1;
-		}
-	}
-}
-
-void findFollow(int nTerminalNum, int prodNum, Grm g, FollowSet followSet, FirstSet firstSet,int* flg2)
-{
-	int *nextFirst,*temp,*temp2,*tem3;
-int flg0=0,flg3=0;
-int** rules=g[nTerminalNum].prodRules;
-	int* rule=rules[prodNum];
-	
-	int ruleSize=rule[0];
-	
-	for(int i=1;i<=ruleSize;i++)
-	{
-		flg0=0;
-		if(rule[i]<NUM_TERMINALS)
-		continue;
-		int* firstRule=malloc(sizeof(int)*NUM_TERMINALS);
-		if(i==ruleSize)
-		flg0=1;
-		else
-		{
-			flg3=0;
-			for(int j=0;j<NUM_TERMINALS;j++)
-			firstRule[j]=0;
-			int b[RULE_MAX_LEN];
-int index=0;
-			
-			for(int k=i+1;k<=ruleSize;k++)
-			b[index++]=rule[k];
-			firstString(b,firstRule,index);
-			temp=followSet[rule[i]-NTERMINAL_OFFSET];
-			add2(temp,firstRule,&flg3);
-			if(!*flg2) *flg2=flg3;
-			// followSet[rule[i]-NTERMINAL_OFFSET]=temp;
-		}
-		if(firstRule[eps] || flg0)
-		{
-			for(int j=0;j<NUM_TERMINALS;j++)
-			{
-				tem3=followSet[rule[i]-NTERMINAL_OFFSET];
-				if(followSet[nTerminalNum][j])
-				{
-					if(!tem3[j])
-					{
-						*flg2=1;
-					}
-					tem3[j]=1;
-				}
-			}
-		}
-	}
-}
-		
-void getFollowSets(Grm g, FollowSet follow0, FirstSet first0){
-	for(int i=0;i<NUM_NTERMINALS;i++)
-	{
-		// follow0[i]=malloc(sizeof(int)*NUM_TERMINALS);
-		for(int j=0;j<NUM_TERMINALS;j++)
-		follow0[i][j]=0;
-	}
-
-	follow0[0][TK_EOF] = 1;
-	int flg0;
-	while(1){
-		flg0=0;
-		for(int i = 0; i < NUM_NTERMINALS; i++){
-			for(int j = 0; j < g[i].rulesNum; j++){
-				findFollow(i, j, g, follow0, first0,&flg0);
-			}
-		} 
-		if(flg0==0) break;
-	}        
+int* add(int* answer, int* addit){
+	for(int i=0;i<=NUM_TERMINALS;i++)
+	if(addit[i] && i!=eps) answer[i]=1;
+	return answer;
 }
