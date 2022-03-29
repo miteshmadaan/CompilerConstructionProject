@@ -1,6 +1,6 @@
 1
 program 2 otherFunctions mainFunction
-1 
+1
 mainFunction 3 TK_MAIN stmts TK_END
 2
 otherFunctions 2 function otherFunctions

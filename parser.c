@@ -18,27 +18,186 @@
 
 bool check[NUM_NTERMINALS];
 
-char* listTokens[] = {"TK_ASSIGNOP", "TK_COMMENT", "TK_FIELDID", "TK_ID", "TK_NUM", "TK_RNUM", "TK_FUNID", "TK_RUID", "TK_WITH", 
-"TK_PARAMETERS", "TK_END", "TK_WHILE", "TK_INT", "TK_REAL", "TK_TYPE", "TK_MAIN", "TK_GLOBAL", "TK_PARAMETER", "TK_LIST", 
-"TK_SQL", "TK_SQR", "TK_INPUT", "TK_OUTPUT", "TK_SEM", "TK_COLON", "TK_DOT", "TK_COMMA", "TK_ENDWHILE", "TK_OP", "TK_CL", 
-"TK_IF", "TK_THEN", "TK_ENDIF", "TK_READ", "TK_WRITE", "TK_RETURN", "TK_PLUS", "TK_MINUS", "TK_MUL", "TK_DIV", "TK_CALL", 
-"TK_RECORD", "TK_ENDRECORD", "TK_ELSE", "TK_AND", "TK_OR", "TK_NOT", "TK_LT", "TK_LE", "TK_EQ", "TK_GT", "TK_GE", "TK_NE", "TK_EOF", 
-"TK_ERROR", "TK_UNION", "TK_ENDUNION", "TK_DEFINETYPE", "TK_AS", "eps"};
+char* listTokens[] = {
+"TK_ASSIGNOP",
+"TK_COMMENT",
+"TK_FIELDID",
+"TK_ID",
+"TK_NUM",
+"TK_RNUM",
+"TK_FUNID",
+"TK_RUID",
+"TK_WITH",
+"TK_PARAMETERS",
+"TK_END",
+"TK_WHILE",
+"TK_UNION",
+"TK_ENDUNION",
+"TK_DEFINETYPE",
+"TK_AS",
+"TK_TYPE",
+"TK_MAIN",
+"TK_GLOBAL",
+"TK_PARAMETER",
+"TK_LIST",
+"TK_SQL",
+"TK_SQR",
+"TK_INPUT",
+"TK_OUTPUT",
+"TK_INT",
+"TK_REAL",
+"TK_COMMA",
+"TK_SEM",
+"TK_COLON",
+"TK_DOT",
+"TK_ENDWHILE",
+"TK_OP",
+"TK_CL",
+"TK_IF",
+"TK_THEN",
+"TK_ENDIF",
+"TK_READ",
+"TK_WRITE",
+"TK_RETURN",
+"TK_PLUS",
+"TK_MINUS",
+"TK_MUL",
+"TK_DIV",
+"TK_CALL",
+"TK_RECORD",
+"TK_ENDRECORD",
+"TK_ELSE",
+"TK_AND",
+"TK_OR",
+"TK_NOT",
+"TK_LT",
+"TK_LE",
+"TK_EQ",
+"TK_GT",
+"TK_GE",
+"TK_NE",
+"TK_ERROR",
+"TK_EOF",
+"eps"
+};
 
-char* strRepId[] = 
-{"'<---'","TK_COMMENT","field identifier","identifier","numeric constant","real constant","function id","record id","'with'",
-"'parameters'","'end'","'while'","'int'","'real'","'type'","'_main'","'global'","'parameter'","'list'","'['","']'","'input'","'output'",
-"';'" , "':'" , "'.'" , "','", "'endwhile'", "'('" ,"')'" , "'if'" , "'then'" , "'endif'" , "'read'" , "'write'" , 
-"'return'" , "'+'" , "'-'" , "'*'" , "'/'" , "'call'" , "'record'" , "'endrecord'" , "'else'" , "'&&&'" , "'@@@'" , "'~'" , "'<'", 
-"'<='" , "'=='" , "'>'" , "'>='" , "'!='" , "end of file" ,"error" ,"'union'", "'endunion'", "'definetype'", "'as'","eps","program" , 
-"mainFunction" , "otherFunctions" , "function" , "input_par" , "output_par" , "parameter_list" , "dataType" , "primitiveDatatype" , 
-"constructedDatatype" , "remaining_list" , "stmts" , "typeDefinitions" ,"typeDefinition" , "fieldDefinitions" , "fieldDefinition" , 
-"moreFields" , "declarations" , "declaration" , "global_or_not" , "otherStmts" , "stmt" , "assignmentStmt" , "singleOrRecId" , "singleOrRecIdPrime" , 
-"funCallStmt" , "outputParameters" , "inputParameters" , "iterartiveStmt" , "conditionalStmt" , "elsePart" , "ioStmt" , "allVar", 
-"arithmeticExpression" , "expPrime" , "term" ,"termPrime" , "factor" , "highPrecedenceOperators" , "lowPrecedenceOperators" , 
-"all" , "temp" , "booleanExpression" , "var" ,"logicalOp" , "relationalOp" , "returnStmt" , "optionalReturn" , "idList" , 
-"more_ids", "actualOrRedifined", "fieldType", "option_single_constructed", "oneExpansion", "moreExpansions", "definetypestmt", "A"};
-		  
+char* strRepId[] ={
+"'ASSIGNOP'",
+"'COMMENT'",
+"'FIELDID'",
+"'ID'",
+"'NUM'",
+"'RNUM'",
+"'FUNID'",
+"'RUID'",
+"'WITH'",
+"'PARAMETERS'",
+"'END'",
+"'WHILE'",
+"'UNION'",
+"'ENDUNION'",
+"'DEFINETYPE'",
+"'AS'",
+"'TYPE'",
+"'MAIN'",
+"'GLOBAL'",
+"'PARAMETER'",
+"'LIST'",
+"'SQL'",
+"'SQR'",
+"'INPUT'",
+"'OUTPUT'",
+"'INT'",
+"'REAL'",
+"'COMMA'",
+"'SEM'",
+"'COLON'",
+"'DOT'",
+"'ENDWHILE'",
+"'OP'",
+"'CL'",
+"'IF'",
+"'THEN'",
+"'ENDIF'",
+"'READ'",
+"'WRITE'",
+"'RETURN'",
+"'PLUS'",
+"'MINUS'",
+"'MUL'",
+"'DIV'",
+"'CALL'",
+"'RECORD'",
+"'ENDRECORD'",
+"'ELSE'",
+"'AND'",
+"'OR'",
+"'NOT'",
+"'LT'",
+"'LE'",
+"'EQ'",
+"'GT'",
+"'GE'",
+"'NE'",
+"'ERROR'",
+"'EOF'",
+"'eps'",
+"program", 
+"mainFunction", 
+"otherFunctions", 
+"function", 
+"input_par", 
+"output_par",
+"parameter_list", 
+"dataType", 
+"primitiveDatatype", 
+"constructedDatatype", 
+"remaining_list", 
+"stmts", 
+"typeDefinitions", 
+"actualOrRedefined", 
+"typeDefinition", 
+"fieldDefinitions",
+"fieldDefinition", 
+"fieldType", 
+"moreFields", 
+"declarations",
+"declaration", 
+"global_or_not", 
+"otherStmts", 
+"stmt", 
+"assignmentStmt", 
+"singleOrRecId",
+"option_single_constructed", 
+"oneExpansion", 
+"moreExpansions", 
+"funCallStmt", 
+"outputParameters", 
+"inputParameters", 
+"iterativeStmt",
+"conditionalStmt", 
+"elsePart", 
+"ioStmt",
+"arithmeticExpression", 
+"expPrime", 
+"term", 
+"termPrime", 
+"factor", 
+"highPrecedenceOperators",
+"lowPrecedenceOperators", 
+"booleanExpression",
+"var",
+"logicalOp",
+"relationalOp", 
+"returnStmt", 
+"optionalReturn", 
+"idList", 
+"more_ids", 
+"definetypestmt", 
+"A"
+};
+//terminals in natural language + eps + nonterminals list
+
 int parseIdStr(char *idStr) 
 {
 	//return the id of string stored in hashtable
@@ -161,7 +320,7 @@ void createParseTable(){
 			}
 		}
 	}
-	printParseTable();
+	// printParseTable();
 	return;
 }
 
@@ -177,8 +336,7 @@ void printParseTable() {
 	}
 }
 
-void parseInputSourceCode(int* error)
-{
+void parseInputSourceCode(int* error){
 	root->nonTerminal=(int)program;
 	root->numChild=2;
 	
@@ -194,30 +352,31 @@ void parseInputSourceCode(int* error)
 	
 	do{
 		
-		token = getNextTokenFromDFA();
-		printf("token: %d at line:%d\n",token.tokenType,token.lineNumber);
-		printf("dff1\n");
-		// if(token.tokenType==TK_ERROR)
-		// {
-		// 	printf("\n\nLEXICAL ERROR AT LINE NO: %d   %s\n",token.lineNumber,token.strLexeme);
-		// 	//if(top1(stack)->parent->id < NUM_TERMINALS)
-		// 	//{
-		// 		pop(stack);
-		// 		continue;
-		// 	///}
-		// }
-		// if(token.tokenType==TK_COMMENT)
-		// continue;
-		// if(token.tokenType==TK_EOF)
-		// break;
+		if(flag){
+			token = getNextTokenFromDFA();
+			// printf("token: %d at line:%d\n",token.tokenType,token.lineNumber);
+			// printf("dff1\n");
+		}
+		if(token.tokenType==TK_ERROR)
+		{
+			printf("\n\nLEXICAL ERROR AT LINE NO: %d   %s\n",token.lineNumber,token.strLexeme);
+			//if(top1(stack)->parent->id < NUM_TERMINALS)
+			//{
+				pop(stack);
+				continue;
+			///}
+		}
+		if(token.tokenType==TK_COMMENT)
+		continue;
+		if(token.tokenType==TK_EOF)
+		break;
 		flag=0;
-		printf("dff2\n");
+		
 		top=KeyAtTopElement(stack) ;
-		printf("top ID: %d\n",top->id);
+		// printf("top ID: %d\n",top->id);
 		terminal=token.tokenType ;
 		current=top->parent;
 		
-		printf("dff3\n");
 		
 		if(top->id<NUM_TERMINALS)
 		{
@@ -266,8 +425,7 @@ void parseInputSourceCode(int* error)
 				if(token.tokenType==TK_EOF)
 					return;
 				
-				if(parsetable[top->id-NTERMINAL_OFFSET][token.tokenType].syn==1)
-				pop(stack);
+				if(parsetable[top->id-NTERMINAL_OFFSET][token.tokenType].syn==1)	pop(stack);
 				continue;
 			}
 			rule=grammar[nonTermID].prodRules[productionNo];
@@ -299,8 +457,7 @@ void parseInputSourceCode(int* error)
 				push(stack,rule[i],&(current->children[i-1]));
 			}
 		}
-		printf("dff4\n");
-		
+	
 	} while(token.tokenType!=TK_EOF);
 	return;
 }
