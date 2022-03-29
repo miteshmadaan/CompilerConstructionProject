@@ -25,7 +25,7 @@ void add2(int* answer,int* add0,int* flg0);
 
 void createParseTable();
 void printParseTable();
-void parseInputSourceCode(FILE* sourceFile,int* error);
+void parseInputSourceCode(int* error);
 void printParseTree(FILE* parserOutput,parseTree root);
 void firstString(int* b,int* firstRule,int index);
 int* add(int* ans, int* addit);

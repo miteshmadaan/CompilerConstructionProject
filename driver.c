@@ -9,7 +9,6 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
-#include <time.h>
 #include "lexer.h"
 #include "parser.h"
 
@@ -48,19 +47,23 @@ int main(int argc, char *argv[])
     FILE *sourceCode;
     
     initializeParser();
+    return 0;
     int error=0;
     // printParseTable();
-    printf("analysing file : %s\n" , argv[1]);
-                sourceCode =fopen(argv[1],"r");
+    printf("analysing file : sourceCode.txt\n");
+                sourceCode =fopen("sourceCode.txt","r");
                 fseek(sourceCode,0,SEEK_SET);
                 if(sourceCode==NULL){
                     printf("Error cannot open file\n");
                     exit(0);
                 }
                 initializeLexer(sourceCode);
+                // tokenizeSource();
+                parseInputSourceCode(&error);
+                // FILE *outputFile =fopen("out.txt","w");
                 
-                // parseInputSourceCode(sourceCode,&error);
-                fclose(sourceCode);
+                // printParseTree(outputFile,root);
+                // fclose(sourceCode);
     return 0;
     
     if(argc < 3)

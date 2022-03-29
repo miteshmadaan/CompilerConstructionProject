@@ -119,7 +119,6 @@ void createParseTable(){
 
 	int *arr1, *arr2;
 	arr1 = (int*)malloc(NUM_TERMINALS*sizeof(int));
-	// arr2 = (int*)malloc(NUM_TERMINALS*sizeof(int));
 
 	int num_rules;
 	int rule_len;
@@ -146,10 +145,12 @@ void createParseTable(){
 				if((arr1[k]==1) && (k!=eps)){
 					parsetable[i][k].nonTerm = i;
 					parsetable[i][k].productionNum = j;
+					arr1[k] = 0;
 				}
 			}
 
 			if(arr1[eps]==1){
+				arr1[eps] = 0;
 				arr2 = followSet[i];
 				for(int k=0; k<NUM_TERMINALS; k++){
 					if(arr2[k]==1){
@@ -160,11 +161,12 @@ void createParseTable(){
 			}
 		}
 	}
+	printParseTable();
 	return;
 }
 
 void printParseTable() {
-	PTEntry holder;
+	
 	for (int i=0; i<NUM_NTERMINALS; i++) {
 		printf("Parse Table for %d\n", i);
 		for (int j=0; j<NUM_TERMINALS; j++) {
@@ -175,38 +177,48 @@ void printParseTable() {
 	}
 }
 
-void parseInputSourceCode(FILE* sourceFile,int* error)
+void parseInputSourceCode(int* error)
 {
-	root->nonTerminal=program;
+	root->nonTerminal=(int)program;
 	root->numChild=2;
+	
 	parseTree leaf=NULL,parent=NULL,current;
 	Stack stack=createStack();
-	TOKEN token ;
+	TOKEN token;
+	
 	push(stack,TK_EOF,leaf);
 	push(stack,program,root);
 	int flag=1,terminal,nonTermID,productionNo,ruleLen;
 	Key top;
 	int* rule;
+	
 	do{
-		if(flag)
+		
 		token = getNextTokenFromDFA();
-		if(token.tokenType==TK_ERROR)
-		{
-			printf("\n\nLEXICAL ERROR AT LINE NO: %d   %s\n",token.lineNumber,token.strLexeme);
-			//if(top1(stack)->parent->id < NUM_TERMINALS)
-			//{
-				pop(stack);
-				continue;
-			///}
-		}
-		if(token.tokenType==TK_COMMENT)
-		continue;
-		if(token.tokenType==TK_EOF)
-		break ;
-		flag=0 ;
+		printf("token: %d at line:%d\n",token.tokenType,token.lineNumber);
+		printf("dff1\n");
+		// if(token.tokenType==TK_ERROR)
+		// {
+		// 	printf("\n\nLEXICAL ERROR AT LINE NO: %d   %s\n",token.lineNumber,token.strLexeme);
+		// 	//if(top1(stack)->parent->id < NUM_TERMINALS)
+		// 	//{
+		// 		pop(stack);
+		// 		continue;
+		// 	///}
+		// }
+		// if(token.tokenType==TK_COMMENT)
+		// continue;
+		// if(token.tokenType==TK_EOF)
+		// break;
+		flag=0;
+		printf("dff2\n");
 		top=KeyAtTopElement(stack) ;
+		printf("top ID: %d\n",top->id);
 		terminal=token.tokenType ;
 		current=top->parent;
+		
+		printf("dff3\n");
+		
 		if(top->id<NUM_TERMINALS)
 		{
 			if(top->id!=terminal && top->id!=eps)
@@ -287,7 +299,10 @@ void parseInputSourceCode(FILE* sourceFile,int* error)
 				push(stack,rule[i],&(current->children[i-1]));
 			}
 		}
+		printf("dff4\n");
+		
 	} while(token.tokenType!=TK_EOF);
+	return;
 }
 
 void initializeParser(){
@@ -305,7 +320,7 @@ void initializeParser(){
 		parsetable[i] = (PTEntry*)malloc(NUM_TERMINALS*sizeof(PTEntry));
     }
 
-	// root = (parseTree)malloc(sizeof(treeNode));
+	root = (parseTree)malloc(sizeof(treeNode));
 
     getGram("grammar.txt",grammar);
     getFirst("first.txt",firstSet);    
