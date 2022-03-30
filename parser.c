@@ -244,20 +244,24 @@ void printParseTree(FILE* parserOutput,parseTree root)
 			fprintf(parserOutput,"NO\t\t");//isleaf
 			fprintf(parserOutput,"%s\t\t",idRepr(current->nonTerminal));//current node symbol
 		}
-		else{
-			fprintf(parserOutput,"%s\t\t",current->terminal->strLexeme);
+		else
+		{
+			if(current->terminal->tokenType==TK_NUM){
+				fprintf(parserOutput,"%d\t\t",current->terminal->intLexeme);
+			}
+			else{
+				fprintf(parserOutput,"%s\t\t",current->terminal->strLexeme);
+			}
 			fprintf(parserOutput,"%d\t\t",current->terminal->lineNumber);
 			fprintf(parserOutput,"%s\t\t",tokenRepr(current->terminal->tokenType));
 			if(current->terminal->tokenType==TK_NUM)
 				fprintf(parserOutput,"%d\t\t",current->terminal->intLexeme);
             else if(current->terminal->tokenType==TK_RNUM)
                 fprintf(parserOutput,"%s\t\t",current->terminal->strLexeme);
-			else fprintf(parserOutput,"-------\t\t");	
-		
+			else fprintf(parserOutput,"----\t\t");
 			fprintf(parserOutput,"%s\t\t",idRepr(root->nonTerminal));//parentnodesymbol
-		
 			fprintf(parserOutput,"YES\t\t");//isleaf
-			fprintf(parserOutput,"-------\t\t");
+			fprintf(parserOutput,"----\t\t");
 		}
 		fprintf(parserOutput,"\n");
 		printParseTree(parserOutput, current);
