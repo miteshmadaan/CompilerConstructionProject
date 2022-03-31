@@ -9,7 +9,6 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include "lexerDef.h"
 #include "parserDef.h"
 
 void initializeParser();
@@ -18,13 +17,9 @@ void getFirst(char *fname, FirstSet firstSet);
 void getFollow(char *fname, FollowSet followSet);
 
 void createParseTable();
-void parseInputSourceCode(int* error);
+parseTree parseInputSourceCode(int* error);
 void printParseTree(FILE* parserOutput,parseTree root);
 void firstString(int* b,int* firstRule,int index);
 int* add(int* ans, int* addit);
-
-int parseIdStr(char *idStr);
-char *idRepr(int id);
-char *tokenRepr(int id);
 
 #endif
