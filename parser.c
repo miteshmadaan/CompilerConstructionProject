@@ -14,212 +14,9 @@
 #include "lexer.h"
 #include "parser.h"
 #include "stack.h"
+#include "utils.h"
 
 bool check[NUM_NTERMINALS];
-
-char* listTokens[] = {
-"TK_ASSIGNOP",
-"TK_COMMENT",
-"TK_FIELDID",
-"TK_ID",
-"TK_NUM",
-"TK_RNUM",
-"TK_FUNID",
-"TK_RUID",
-"TK_WITH",
-"TK_PARAMETERS",
-"TK_END",
-"TK_WHILE",
-"TK_UNION",
-"TK_ENDUNION",
-"TK_DEFINETYPE",
-"TK_AS",
-"TK_TYPE",
-"TK_MAIN",
-"TK_GLOBAL",
-"TK_PARAMETER",
-"TK_LIST",
-"TK_SQL",
-"TK_SQR",
-"TK_INPUT",
-"TK_OUTPUT",
-"TK_INT",
-"TK_REAL",
-"TK_COMMA",
-"TK_SEM",
-"TK_COLON",
-"TK_DOT",
-"TK_ENDWHILE",
-"TK_OP",
-"TK_CL",
-"TK_IF",
-"TK_THEN",
-"TK_ENDIF",
-"TK_READ",
-"TK_WRITE",
-"TK_RETURN",
-"TK_PLUS",
-"TK_MINUS",
-"TK_MUL",
-"TK_DIV",
-"TK_CALL",
-"TK_RECORD",
-"TK_ENDRECORD",
-"TK_ELSE",
-"TK_AND",
-"TK_OR",
-"TK_NOT",
-"TK_LT",
-"TK_LE",
-"TK_EQ",
-"TK_GT",
-"TK_GE",
-"TK_NE",
-"TK_ERROR",
-"TK_EOF",
-"eps"
-};
-
-char* strRepId[] ={
-"'ASSIGNOP'",
-"'COMMENT'",
-"'FIELDID'",
-"'ID'",
-"'NUM'",
-"'RNUM'",
-"'FUNID'",
-"'RUID'",
-"'WITH'",
-"'PARAMETERS'",
-"'END'",
-"'WHILE'",
-"'UNION'",
-"'ENDUNION'",
-"'DEFINETYPE'",
-"'AS'",
-"'TYPE'",
-"'MAIN'",
-"'GLOBAL'",
-"'PARAMETER'",
-"'LIST'",
-"'SQL'",
-"'SQR'",
-"'INPUT'",
-"'OUTPUT'",
-"'INT'",
-"'REAL'",
-"'COMMA'",
-"'SEM'",
-"'COLON'",
-"'DOT'",
-"'ENDWHILE'",
-"'OP'",
-"'CL'",
-"'IF'",
-"'THEN'",
-"'ENDIF'",
-"'READ'",
-"'WRITE'",
-"'RETURN'",
-"'PLUS'",
-"'MINUS'",
-"'MUL'",
-"'DIV'",
-"'CALL'",
-"'RECORD'",
-"'ENDRECORD'",
-"'ELSE'",
-"'AND'",
-"'OR'",
-"'NOT'",
-"'LT'",
-"'LE'",
-"'EQ'",
-"'GT'",
-"'GE'",
-"'NE'",
-"'ERROR'",
-"'EOF'",
-"'eps'",
-"program", 
-"mainFunction", 
-"otherFunctions", 
-"function", 
-"input_par", 
-"output_par",
-"parameter_list", 
-"dataType", 
-"primitiveDatatype", 
-"constructedDatatype", 
-"remaining_list", 
-"stmts", 
-"typeDefinitions", 
-"actualOrRedefined", 
-"typeDefinition", 
-"fieldDefinitions",
-"fieldDefinition", 
-"fieldType", 
-"moreFields", 
-"declarations",
-"declaration", 
-"global_or_not", 
-"otherStmts", 
-"stmt", 
-"assignmentStmt", 
-"singleOrRecId",
-"option_single_constructed", 
-"oneExpansion", 
-"moreExpansions", 
-"funCallStmt", 
-"outputParameters", 
-"inputParameters", 
-"iterativeStmt",
-"conditionalStmt", 
-"elsePart", 
-"ioStmt",
-"arithmeticExpression", 
-"expPrime", 
-"term", 
-"termPrime", 
-"factor", 
-"highPrecedenceOperators",
-"lowPrecedenceOperators", 
-"booleanExpression",
-"var",
-"logicalOp",
-"relationalOp", 
-"returnStmt", 
-"optionalReturn", 
-"idList", 
-"more_ids", 
-"definetypestmt", 
-"A"
-};
-//terminals in natural language + eps + nonterminals list
-
-int parseIdStr(char *idStr) 
-{
-	//return the id of string stored in hashtable
-    return getTokenTypePHT(idStr,lookuptable);	
-}
-
-char *idRepr(int id) 
-{
-		if(id>=NTERMINAL_OFFSET && id<NTERMINAL_OFFSET+NUM_NTERMINALS)
-		return strRepId[id-NTERMINAL_OFFSET+NUM_TERMINALS];
-		else if(id>=0 && id<=59)
-		return strRepId[id];
-		else
-		return "";
-}
-
-char *tokenRepr(int id) 
-{
-	if(id >= 0 && id <=59)
-		return listTokens[id];
-	else
-		return "";
-}
 
 void printParseTree(FILE* parserOutput,parseTree root)
 {
@@ -244,20 +41,24 @@ void printParseTree(FILE* parserOutput,parseTree root)
 			fprintf(parserOutput,"NO\t\t");//isleaf
 			fprintf(parserOutput,"%s\t\t",idRepr(current->nonTerminal));//current node symbol
 		}
-		else{
-			fprintf(parserOutput,"%s\t\t",current->terminal->strLexeme);
+		else
+		{
+			if(current->terminal->tokenType==TK_NUM){
+				fprintf(parserOutput,"%d\t\t",current->terminal->intLexeme);
+			}
+			else{
+				fprintf(parserOutput,"%s\t\t",current->terminal->strLexeme);
+			}
 			fprintf(parserOutput,"%d\t\t",current->terminal->lineNumber);
 			fprintf(parserOutput,"%s\t\t",tokenRepr(current->terminal->tokenType));
 			if(current->terminal->tokenType==TK_NUM)
 				fprintf(parserOutput,"%d\t\t",current->terminal->intLexeme);
             else if(current->terminal->tokenType==TK_RNUM)
                 fprintf(parserOutput,"%s\t\t",current->terminal->strLexeme);
-			else fprintf(parserOutput,"-------\t\t");	
-		
+			else fprintf(parserOutput,"----\t\t");
 			fprintf(parserOutput,"%s\t\t",idRepr(root->nonTerminal));//parentnodesymbol
-		
 			fprintf(parserOutput,"YES\t\t");//isleaf
-			fprintf(parserOutput,"-------\t\t");
+			fprintf(parserOutput,"----\t\t");
 		}
 		fprintf(parserOutput,"\n");
 		printParseTree(parserOutput, current);
@@ -321,7 +122,7 @@ void createParseTable(){
 	return;
 }
 
-void parseInputSourceCode(int* error){
+parseTree parseInputSourceCode(int* error){
 	root->nonTerminal=(int)program;
 	root->numChild=2;
 	
@@ -408,7 +209,7 @@ void parseInputSourceCode(int* error){
 				}
 				
 				if(token.tokenType==TK_EOF)
-					return;
+					return root;
 				
 				if(parsetable[top->id-NTERMINAL_OFFSET][token.tokenType].syn==1)	pop(stack);
 				continue;
@@ -444,7 +245,7 @@ void parseInputSourceCode(int* error){
 		}
 	
 	} while(token.tokenType!=TK_EOF);
-	return;
+	return root;
 }
 
 void initializeParser(){
