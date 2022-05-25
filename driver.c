@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     printf("5) Parser module not called in driver.c due to segmentation error\n");
     printf("6) Parse tree could not be constructed\n\n");
     FILE *sourceCode;
-    parseTree root;
+    parseTree root,ast;
     initializeParser();
     
     int error=0;
@@ -62,8 +62,8 @@ int main(int argc, char *argv[])
     root = parseInputSourceCode(&error);
     FILE *outputFile = fopen("new.txt","w");
     printParseTree(outputFile,root);
-    createAST();
-    printAST(root);
+    ast = createAST();
+    printAST(ast);
     fclose(sourceCode);
     return 0;
     
