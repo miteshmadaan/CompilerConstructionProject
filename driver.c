@@ -16,26 +16,30 @@
 
 void removeComments(FILE *inputFile, FILE *outputFile)
 {
-    char ch;
+    char ch = fgetc(inputFile);
     int comment = 0;
     
-    do{
-        ch = fgetc(inputFile);
+    while(ch!=EOF){
+        
         if(ch == '%')
         {
             comment = 1;
         }
         else if (ch == '\n')
         {
-            comment = 0;
+            if(comment==1){
+                comment = 0; 
+                ch = fgetc(inputFile);
+                continue;
+            }
         }
 
         if(comment==0)
         {
             fprintf(outputFile,"%c" , ch);
         }
-        
-    }while(ch!=EOF);
+        ch = fgetc(inputFile);
+    }
     printf("\n");
 }
 
@@ -48,13 +52,11 @@ int main(int argc, char *argv[])
     printf("4) Parser module working on all syntactically correct cases\n");
     printf("5) Parse tree constructed only for syntactically correct cases\n");
 
-    FILE *sourceCode;
-
-
+    FILE *sourceCode, *parserOutput;
     parseTree root;
     initializeParser();
     
-    if(argc < 2)
+    if(argc < 3)
     {
         printf("insufficient command line arguments");
     }
@@ -124,8 +126,8 @@ int main(int argc, char *argv[])
 
                 int error=0;
                 root = parseInputSourceCode(&error);
-                parserOutput = fopen("new.txt","w");
-                if(parserOutput = NULL){
+                parserOutput = fopen(argv[2],"w");
+                if(parserOutput == NULL){
                     printf("Error cannot open parse Tree Output file for writing");
                     exit(0);
                 }
@@ -141,8 +143,6 @@ int main(int argc, char *argv[])
 
                 double total_CPU_time, total_CPU_time_in_seconds;
 
-                start_time = clock();
-
                 printf("\n----------------Time taken for lexical analysis and Parsing---------------\n");
                 
                 sourceCode =fopen(argv[1],"r");
@@ -151,22 +151,26 @@ int main(int argc, char *argv[])
                     printf("Error cannot open file\n");
                     exit(0);
                 }
-                initializeLexer(sourceCode);
                 int error=0;
+                
+                start_time = clock();
+                initializeLexer(sourceCode);
                 root = parseInputSourceCode(&error);
+                end_time = clock();
+
                 parserOutput = fopen(argv[2],"w");
-                if(parserOutput =NULL){
+                if(parserOutput == NULL){
                     printf("Error cannot open parse Tree Output file for writing");
                     exit(0);
                 }
 
                 printParseTree(parserOutput,root);
+                
                 fclose(parserOutput);
                 fclose(sourceCode);
                 printf("\nParse Tree constructed succesfully\n");
 
-                end_time = clock();
-
+                
                 total_CPU_time = (double) (end_time - start_time);
 
                 total_CPU_time_in_seconds = total_CPU_time / CLOCKS_PER_SEC;
