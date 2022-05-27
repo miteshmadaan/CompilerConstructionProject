@@ -6,6 +6,7 @@
 * Manik Chopra              2019A7PS0144P
 * Muppirisetty R Bharadwaj  2019A7PS0025P
 */
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
@@ -13,12 +14,13 @@
 #include "parser.h"
 #include "AST.h"
 
-void removeComments(FILE *inputFile)
+void removeComments(FILE *inputFile, FILE *outputFile)
 {
-    char ch = '\n';
+    char ch;
     int comment = 0;
-    while(ch != EOF)
-    {
+    
+    do{
+        ch = fgetc(inputFile);
         if(ch == '%')
         {
             comment = 1;
@@ -27,12 +29,13 @@ void removeComments(FILE *inputFile)
         {
             comment = 0;
         }
+
         if(comment==0)
         {
-            printf("%c" , ch);
+            fprintf(outputFile,"%c" , ch);
         }
-        ch = fgetc(inputFile);
-    }
+        
+    }while(ch!=EOF);
     printf("\n");
 }
 
@@ -40,34 +43,18 @@ int main(int argc, char *argv[])
 {
     printf("\nImplementation details of code:\n");
     printf("1) First and Follow sets are automated\n");
-    printf("2) Lexical analyser and Parser module implemented\n");
+    printf("2) Lexical analyser and Parser module succesfully implemented\n");
     printf("3) Lexical module working on all test cases\n");
-    printf("4) Parser module compiling, but segmentation errors\n");
-    printf("5) Parser module not called in driver.c due to segmentation error\n");
-    printf("6) Parse tree could not be constructed\n\n");
+    printf("4) Parser module working on all syntactically correct cases\n");
+    printf("5) Parse tree constructed only for syntactically correct cases\n");
+
     FILE *sourceCode;
-    parseTree root,ast;
+
+
+    parseTree root;
     initializeParser();
     
-    int error=0;
-    printf("analysing file : sourceCode.txt\n");
-    sourceCode =fopen("sourceCode.txt","r");
-    fseek(sourceCode,0,SEEK_SET);
-    if(sourceCode==NULL){
-        printf("Error cannot open file\n");
-        exit(0);
-    }
-    initializeLexer(sourceCode);
-    // tokenizeSource();
-    root = parseInputSourceCode(&error);
-    FILE *outputFile = fopen("new.txt","w");
-    printParseTree(outputFile,root);
-    ast = createAST();
-    printAST(ast);
-    fclose(sourceCode);
-    return 0;
-    
-    if(argc < 3)
+    if(argc < 2)
     {
         printf("insufficient command line arguments");
     }
@@ -79,28 +66,31 @@ int main(int argc, char *argv[])
             printf("Option 0: Exit\n");
             printf("Option 1: Remove Comments from code\n");
             printf("Option 2: Print the stream of tokens\n");
-            printf("Option 3: Parser Module removed due to unresolved errors\n");
-            printf("Option 4: Print the time taken by lexer\n");
+            printf("Option 3: Generate the parse tree\n");
+            printf("Option 4: Print the time taken by lexer and parser\n");
             scanf("%c" , &option);
             if(option =='\n')
             {
                 scanf("%c" , &option);
             }
             if(option == '0')
-                {
+            {
                     break;
-                }
+            }
             printf("your option is %c\n" , option);
             if(option == '1')
             {
                 printf("\n----------------Removing comments from code---------------\n");
-                sourceCode =fopen(argv[1],"r");
+                printf("Reading file : %s\n" , argv[1]);
+                sourceCode =(FILE*)fopen(argv[1],"r");
                 fseek(sourceCode,0,SEEK_SET);
                 if(sourceCode==NULL){
                     printf("Error cannot open file\n");
                     exit(0);
                 }
-                removeComments(sourceCode);
+                FILE *unCommentedCode = fopen("unCommentedCode.txt","w");
+                removeComments(sourceCode,unCommentedCode);
+                fclose(unCommentedCode);
                 fclose(sourceCode);
                 printf("\n----------------------------------------------------------\n");
                 
@@ -122,9 +112,28 @@ int main(int argc, char *argv[])
             }
             else if(option == '3')
             {
-                printf("\n----------------Parser module not available due to segmentation error ---------------\n");
-                
-                
+                printf("\n----------------Parser module invoked ---------------\n");
+                printf("analysing file : %s\n" , argv[1]);
+                sourceCode =fopen(argv[1],"r");
+                fseek(sourceCode,0,SEEK_SET);
+                if(sourceCode==NULL){
+                    printf("Error cannot open file\n");
+                    exit(0);
+                }
+                initializeLexer(sourceCode);
+
+                int error=0;
+                root = parseInputSourceCode(&error);
+                parserOutput = fopen("new.txt","w");
+                if(parserOutput = NULL){
+                    printf("Error cannot open parse Tree Output file for writing");
+                    exit(0);
+                }
+                printParseTree(parserOutput,root);
+                fclose(parserOutput);
+                fclose(sourceCode);
+                printf("\nParse Tree constructed succesfully\n");
+                printf("\n----------------------------------------------------------\n");                
             }
             else if(option =='4')
             {
@@ -134,8 +143,7 @@ int main(int argc, char *argv[])
 
                 start_time = clock();
 
-                printf("\n----------------Lexer module invoked---------------\n");
-                printf("\n----------------Time taken only for only lexical analysis---------------\n");
+                printf("\n----------------Time taken for lexical analysis and Parsing---------------\n");
                 
                 sourceCode =fopen(argv[1],"r");
                 fseek(sourceCode,0,SEEK_SET);
@@ -144,16 +152,18 @@ int main(int argc, char *argv[])
                     exit(0);
                 }
                 initializeLexer(sourceCode);
-                TOKEN tokenFromDfa;
-                while(1)
-                {
-                    tokenFromDfa = getNextTokenFromDFA();
-                    if (tokenFromDfa.tokenType == TK_EOF)
-                    {
-                        break;
-                    }
+                int error=0;
+                root = parseInputSourceCode(&error);
+                parserOutput = fopen(argv[2],"w");
+                if(parserOutput =NULL){
+                    printf("Error cannot open parse Tree Output file for writing");
+                    exit(0);
                 }
+
+                printParseTree(parserOutput,root);
+                fclose(parserOutput);
                 fclose(sourceCode);
+                printf("\nParse Tree constructed succesfully\n");
 
                 end_time = clock();
 
